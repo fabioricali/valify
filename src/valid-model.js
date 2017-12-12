@@ -1,9 +1,11 @@
 const be = require('bejs');
 
 class ValidModel {
-    constructor() {
 
+    constructor(model, opts = {}) {
+        return data => true;
     }
+
 }
 
-module.exports = () => new ValidModel();
+module.exports = (model, opts) => new ValidModel(model, opts);
