@@ -1,0 +1,39 @@
+const be = require('bejs');
+const TYPES = require('./types');
+
+const CHECKS = [];
+
+CHECKS[TYPES.ALPHANUMERIC] = be.alphanumeric.bind(this);
+CHECKS[TYPES.ARGUMENT] = be.argument.bind(this);
+CHECKS[TYPES.ARRAY] = be.array.bind(this);
+CHECKS[TYPES.BOOLEAN] = be.boolean.bind(this);
+CHECKS[TYPES.BUFFER] = be.buffer.bind(this);
+CHECKS[TYPES.DATE] = be.date.bind(this);
+CHECKS[TYPES.ERROR] = be.error.bind(this);
+CHECKS[TYPES.FLOAT] = be.float.bind(this);
+CHECKS[TYPES.FLOAT32ARRAY] = be.float32Array.bind(this);
+CHECKS[TYPES.FLOAT64ARRAY] = be.float64Array.bind(this);
+CHECKS[TYPES.FUNCTION] = be.function.bind(this);
+CHECKS[TYPES.GENERATORFUNCTION] = be.generatorFunction.bind(this);
+CHECKS[TYPES.INT] = be.int.bind(this);
+CHECKS[TYPES.INT8ARRAY] = be.int8Array.bind(this);
+CHECKS[TYPES.INT16ARRAY] = be.int16Array.bind(this);
+CHECKS[TYPES.INT32ARRAY] = be.int32Array.bind(this);
+CHECKS[TYPES.MAP] = be.map.bind(this);
+CHECKS[TYPES.NULL] = be.null.bind(this);
+CHECKS[TYPES.NUMBER] = be.number.bind(this);
+CHECKS[TYPES.OBJECT] = be.object.bind(this);
+CHECKS[TYPES.PROMISE] = be.promise.bind(this);
+CHECKS[TYPES.REGEXP] = be.regexp.bind(this);
+CHECKS[TYPES.SET] = be.oSet.bind(this);
+CHECKS[TYPES.STRING] = be.string.bind(this);
+CHECKS[TYPES.SYMBOL] = be.symbol.bind(this);
+CHECKS[TYPES.UINT16ARRAY] = be.uint16Array.bind(this);
+CHECKS[TYPES.UINT32ARRAY] = be.uint32Array.bind(this);
+CHECKS[TYPES.UINT8ARRAY] = be.uint8Array.bind(this);
+CHECKS[TYPES.UINT8CLAMPEDARRAY] = be.uint8ClampedArray.bind(this);
+CHECKS[TYPES.UNDEFINED] = be.undefined.bind(this);
+CHECKS[TYPES.WEAKMAP] = be.weakMap.bind(this);
+CHECKS[TYPES.WEAKSET] = be.weakSet.bind(this);
+
+module.exports = CHECKS;

@@ -1,5 +1,5 @@
 const be = require('bejs');
-const Types = require('../src/types');
+const Types = require('../src/check-types');
 
 describe('types', function () {
     describe('number', function () {
