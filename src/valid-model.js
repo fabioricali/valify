@@ -17,6 +17,10 @@ class ValidModel {
                 if (this.model.hasOwnProperty(field)) {
 
                     if (typeof this.model[field] === 'object') {
+
+                        if(!this.model[field].hasOwnProperty('type'))
+                            throw new ValidModelError('Type property not found');
+
                         type = this.model[field].type;
                     } else {
                         type = this.model[field];
