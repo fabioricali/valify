@@ -1,0 +1,35 @@
+{
+  "name": "valid-model",
+  "version": "1.0.0",
+  "description": "Validate data model",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabioricali/valid-model.git"
+  },
+  "keywords": [
+    "validation",
+    "types",
+    "model",
+    "data",
+    "valid"
+  ],
+  "author": "Fabio Ricali",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabioricali/valid-model/issues"
+  },
+  "homepage": "https://github.com/fabioricali/valid-model#readme",
+  "dependencies": {
+    "bejs": "^1.14.0"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1"
+  }
+}
