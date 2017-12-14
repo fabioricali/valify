@@ -1,5 +1,5 @@
 const ValidModelError = require('./error');
-const checks = require('./check-types');
+const check = require('./check-types');
 
 class ValidModel {
 
@@ -10,7 +10,7 @@ class ValidModel {
         return (data) => {
             let type;
 
-            if(checks.object(data))
+            if(check.object(data))
                 throw new ValidModelError('Data is required and must be an object');
 
             for (let field in this.model) {
@@ -29,7 +29,7 @@ class ValidModel {
                     if (!ValidModel.typeExists(type))
                         throw new ValidModelError(`Unknown type: "${type}"`);
 
-                    if (data.hasOwnProperty(field) && !checks[type](data[field])) {
+                    if (data.hasOwnProperty(field) && !check[type](data[field])) {
                         throw new ValidModelError(`${field} expects ${type} but receives: ${data[field]}`);
                     }
                 }
@@ -38,7 +38,7 @@ class ValidModel {
     }
 
     static typeExists(type) {
-        return checks.hasOwnProperty(type);
+        return check.hasOwnProperty(type);
     }
 
 }
