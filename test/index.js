@@ -12,20 +12,24 @@ describe('validate', function () {
             userModel({
                 lastName: 'red'
             })
-        }catch (e) {
-            done();
+        } catch (e) {
+            if (e.message === 'Unknown type: "footype"')
+                done();
         }
     });
 
     it('should be return error, wrong type', function (done) {
 
         const userModel = Model({
-            firstName: 'string',
-            lastName: 'string',
             createdOn: {
                 type: 'date',
-                default: new Date()
-            }
+                default: new Date(),
+                convert: ()=>{
+                    console.log(this);
+                }
+            },
+            firstName: 'string',
+            lastName: 'string'
         });
 
         try {
@@ -33,8 +37,10 @@ describe('validate', function () {
                 firstName: 'Mike',
                 lastName: 525
             })
-        }catch (e) {
-            done();
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'lastName expects string but receives: 525')
+                done();
         }
     });
 
@@ -51,8 +57,9 @@ describe('validate', function () {
 
         try {
             userModel()
-        }catch (e) {
-            done();
+        } catch (e) {
+            if (e.message === 'Data is required and must be an object')
+                done();
         }
     });
 });
