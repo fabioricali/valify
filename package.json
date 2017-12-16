@@ -1,17 +1,21 @@
 {
-  "name": "valid-model",
-  "version": "1.0.0",
-  "description": "Validate data model",
+  "name": "valify",
+  "version": "0.0.0",
+  "description": "Validates data to easy and clean way.",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "version:major": "npm version major",
+    "version:minor": "npm version minor",
+    "version:patch": "npm version patch",
+    "postversion": "npm publish && git push && git push --tags",
     "test": "mocha test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fabioricali/valid-model.git"
+    "url": "git+https://github.com/fabioricali/valify.git"
   },
   "keywords": [
     "validation",
@@ -23,9 +27,9 @@
   "author": "Fabio Ricali",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fabioricali/valid-model/issues"
+    "url": "https://github.com/fabioricali/valify/issues"
   },
-  "homepage": "https://github.com/fabioricali/valid-model#readme",
+  "homepage": "https://github.com/fabioricali/valify#readme",
   "dependencies": {
     "bejs": "^1.14.0",
     "defaulty": "^2.0.0"

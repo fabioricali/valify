@@ -24,7 +24,7 @@ describe('validate', function () {
             createdOn: {
                 type: 'date',
                 default: new Date(),
-                onData: (data) => {
+                convert: (data) => {
                     console.log('arg', data);
                 }
             },
@@ -44,13 +44,13 @@ describe('validate', function () {
         }
     });
 
-    it('should be return ok, done from callback onData', function (done) {
+    it('should be return ok, done from callback convert', function (done) {
 
         const userModel = Model({
             createdOn: {
                 type: 'date',
                 default: new Date(),
-                onData: (value) => {
+                convert: (value) => {
                     done();
                     console.log('arg', value);
                 }
@@ -71,7 +71,7 @@ describe('validate', function () {
         const userModel = Model({
             createdOn: {
                 type: 'date',
-                onData: (value) => {
+                convert: (value) => {
                     console.log(value);
                     return 10;
                 }

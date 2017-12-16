@@ -84,8 +84,8 @@ class Valify {
                         data[field] = this.model[field].default;
                     }
 
-                    if (typeof this.model[field].onData === 'function') {
-                        data[field] = this.model[field].onData.call(this, data[field], Object.assign({}, data));
+                    if (typeof this.model[field].convert === 'function') {
+                        data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
                     }
 
                 }
@@ -130,7 +130,7 @@ class Valify {
             type: null,
             required: null,
             default: null,
-            onData: null,
+            convert: null,
             onError: null
         })
     }
