@@ -4,7 +4,7 @@ const Model = require('..');
 describe('validate', function () {
     it('should be return error, unknown type', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             lastName: 'footype'
         });
 
@@ -20,7 +20,7 @@ describe('validate', function () {
 
     it('should be return error, wrong type', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             createdOn: {
                 type: 'date',
                 default: new Date(),
@@ -46,7 +46,7 @@ describe('validate', function () {
 
     it('should be return ok, done from callback convert', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             createdOn: {
                 type: 'date',
                 default: new Date(),
@@ -68,7 +68,7 @@ describe('validate', function () {
 
     it('should be return converted value', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             createdOn: {
                 type: 'date',
                 convert: (value) => {
@@ -95,7 +95,7 @@ describe('validate', function () {
 
     it('should be return ok, calling done by onError callback', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: 'string',
             lastName: {
                 type: 'string',
@@ -117,7 +117,7 @@ describe('validate', function () {
 
     it('should be return error, data is undefined', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: 'string',
             lastName: 'string',
             createdOn: {
@@ -137,7 +137,7 @@ describe('validate', function () {
 
     it('should be return error, firstName is required', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: {
                 type: 'string',
                 required: true
@@ -162,7 +162,7 @@ describe('validate', function () {
 
     it('should be return ok', function () {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: 'string',
             lastName: 'string',
             createdOn: {
@@ -181,7 +181,7 @@ describe('validate', function () {
 
     it('should be return ok, using promise', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: 'string',
             lastName: 'string',
             createdOn: {
@@ -202,9 +202,9 @@ describe('validate', function () {
 
     });
 
-    it('should be return the equal object, using promise 2', function (done) {
+    it('should be return the equal object, using promise', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: 'string',
             lastName: 'string'
         }, {
@@ -224,9 +224,40 @@ describe('validate', function () {
 
     });
 
+    it('should be return error, add custom type', function (done) {
+
+        Model.addType('myCustom', value => {
+            console.log(value);
+            return value === 'boom';
+        });
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'myCustom'
+        }, {
+            usePromise: true
+        });
+
+        const data = {
+            firstName: 'Mike',
+            lastName: 'Ricali',
+            address: 'First street'
+        };
+
+        userModel(data).then((result) => {
+            console.log(result);
+            done('error')
+        }).catch(e => {
+            console.log(e);
+            if(e.last === 'lastName expects myCustom but receives: Ricali')
+            done();
+        });
+
+    });
+
     it('should be return error, firstName is required, using promise', function (done) {
 
-        const userModel = Model({
+        const userModel = new Model({
             firstName: {
                 type: 'string',
                 required: true

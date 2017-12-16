@@ -144,7 +144,22 @@ class Valify {
         return check.hasOwnProperty(type);
     }
 
+    /**
+     * Adds custom type
+     * @param name
+     * @param fn
+     */
+    static addType(name, fn) {
+        if(Valify.typeExists(name))
+            throw new Error(`Type ${name} already exists`);
+
+        if(typeof fn !== 'function')
+            throw new TypeError('fn must be a function');
+
+        check[name] = fn.bind(this);
+    }
+
 }
 
-module.exports = (model, opts) => new Valify(model, opts);
+module.exports = Valify;
 module.exports.TYPES = check;
