@@ -23,7 +23,7 @@ const userModel = new Valify({
         required: true
     },
     lastName: {
-        type: string,
+        type: 'string',
         required: true
     },
     role: {
@@ -59,7 +59,7 @@ const userModel = new Valify({
         required: true
     },
     lastName: {
-        type: string,
+        type: 'string',
         required: true
     }
 }, {
@@ -99,7 +99,7 @@ const userModel = new Valify({
         }
     },
     lastName: {
-        type: string,
+        type: 'string',
         convert: (value) => {
             return value.toUpperCase();
         }
