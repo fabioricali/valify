@@ -24,8 +24,8 @@ describe('validate', function () {
             createdOn: {
                 type: 'date',
                 default: new Date(),
-                convert: ()=>{
-                    console.log(this);
+                convert: (me)=>{
+                    console.log(me);
                 }
             },
             firstName: 'string',

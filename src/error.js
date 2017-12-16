@@ -1,7 +1,7 @@
-class ValidModelError extends TypeError {
+class ValifyError extends TypeError {
     constructor(message){
         super(message);
     }
 }
 
-module.exports = ValidModelError;
+module.exports = ValifyError;
