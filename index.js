@@ -1,1 +1,1 @@
-module.exports = require('./src/valid-model');
+module.exports = require('./src/valify');
