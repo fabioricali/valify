@@ -17,7 +17,7 @@ npm install --save valify
 const Valify = require('valify');
 
 // Define a model
-const userModel = Valify({
+const userModel = new Valify({
     firstName: {
         type: 'string',
         required: true
@@ -53,7 +53,7 @@ try {
 ```javascript
 
 // Define a model
-const userModel = Valify({
+const userModel = new Valify({
     firstName: {
         type: 'string',
         required: true
@@ -91,17 +91,15 @@ userModel(data).then(()=>{
 ```javascript
 
 // Define a model
-const userModel = Valify({
+const userModel = new Valify({
     firstName: {
         type: 'string',
-        required: true,
         convert: (value) => {
             return value.toUpperCase();
         }
     },
     lastName: {
         type: string,
-        required: true,
         convert: (value) => {
             return value.toUpperCase();
         }
@@ -116,8 +114,66 @@ const data = {
 
 userModel(data);
 
-console.log(data.firstName, data.lastName); //=> MIKE RICALI 
+console.log(data.firstName, data.lastName); //=> MIKE RICALI
 ```
+
+#### Add custom type
+```javascript
+
+Valify.addType('mycustom', value => {
+    return value === 10;
+});
+
+// Define a model
+const userModel = new Valify({
+    aNumber: 'mycustom'
+});
+
+// A data object
+const data = {
+    aNumber: 9
+};
+
+try {
+    userModel(data);
+} catch(e) {
+    console.log(e.message);
+} 
+```
+
+#### Available types
+- `alphanumeric`
+- `argument`
+- `array`
+- `boolean`
+- `buffer`
+- `date`
+- `error`
+- `float`
+- `float32array`
+- `float64array`
+- `function`
+- `generatorfunction`
+- `int`
+- `int16array`
+- `int32array`
+- `int8array`
+- `map`
+- `null`
+- `number`
+- `object`
+- `promise`
+- `regexp`
+- `set`
+- `string`
+- `symbol`
+- `uint16array`
+- `uint32array`
+- `uint8array`
+- `uint8clampedarray`
+- `undefined`
+- `weakmap`
+- `weakset`
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/Valify/blob/master/CHANGELOG.md">here</a>
