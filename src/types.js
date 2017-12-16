@@ -1,3 +1,7 @@
+/**
+ *
+ * @type {{ALPHANUMERIC: string, ARGUMENT: string, ARRAY: string, BOOLEAN: string, BUFFER: string, DATE: string, ERROR: string, FLOAT: string, FLOAT32ARRAY: string, FLOAT64ARRAY: string, FUNCTION: string, GENERATORFUNCTION: string, INT: string, INT16ARRAY: string, INT32ARRAY: string, INT8ARRAY: string, MAP: string, NULL: string, NUMBER: string, OBJECT: string, PROMISE: string, REGEXP: string, SET: string, STRING: string, SYMBOL: string, UINT16ARRAY: string, UINT32ARRAY: string, UINT8ARRAY: string, UINT8CLAMPEDARRAY: string, UNDEFINED: string, WEAKMAP: string, WEAKSET: string}}
+ */
 module.exports = {
     ALPHANUMERIC: 'alphanumeric',
     ARGUMENT: 'argument',

@@ -147,3 +147,4 @@ class Valify {
 }
 
 module.exports = (model, opts) => new Valify(model, opts);
+module.exports.TYPES = check;
