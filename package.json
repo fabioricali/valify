@@ -32,7 +32,8 @@
   "homepage": "https://github.com/fabioricali/valify#readme",
   "dependencies": {
     "bejs": "^1.14.0",
-    "defaulty": "^2.0.0"
+    "defaulty": "^2.0.0",
+    "string-template": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "^4.0.1"

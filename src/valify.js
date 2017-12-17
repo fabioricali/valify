@@ -1,6 +1,9 @@
 const ValifyError = require('./error');
 const check = require('./check-types');
 const extend = require('defaulty');
+const types = require('./types');
+const locale = require('./locale');
+const format = require('string-template');
 
 /**
  * @class Valify
@@ -40,6 +43,7 @@ class Valify {
      * @param field
      */
     addError(message, field) {
+        console.log(message);
         this.errors.last = message;
         if (field !== undefined) {
             this.errors.fields.push({
@@ -62,7 +66,7 @@ class Valify {
         let type;
 
         if (!check.object(data))
-            this.addError('Data is required and must be an object');
+            this.addError(locale.DATA_REQUIRED);
         else
             for (let field in this.model) {
                 if (this.model.hasOwnProperty(field)) {
@@ -71,15 +75,15 @@ class Valify {
                     type = this.model[field].type;
 
                     if (!Valify.typeExists(type)) {
-                        this.addError(`Unknown type: "${type}"`, field);
+                        this.addError(format(locale.UNKNOWN_TYPE, {type}), field);
                         continue;
                     }
 
                     if (data.hasOwnProperty(field)) {
                         if (!check[type](data[field]))
-                            this.addError(`${field} expects ${type} but receives: ${data[field]}`, field);
+                            this.addError(format(locale.TYPE_FAIL, {field, type, dataField: data[field]}), field);
                     } else if (this.model[field].default === null && this.model[field].required) {
-                        this.addError(`${field} is required`, field);
+                        this.addError(format(locale.FIELD_REQUIRED, {field}), field);
                     } else {
                         data[field] = this.model[field].default;
                     }
@@ -150,10 +154,10 @@ class Valify {
      * @param fn
      */
     static addType(name, fn) {
-        if(Valify.typeExists(name))
+        if (Valify.typeExists(name))
             throw new Error(`Type ${name} already exists`);
 
-        if(typeof fn !== 'function')
+        if (typeof fn !== 'function')
             throw new TypeError('fn must be a function');
 
         check[name] = fn.bind(this);
@@ -162,4 +166,5 @@ class Valify {
 }
 
 module.exports = Valify;
-module.exports.TYPES = check;
+module.exports.TYPES = types;
+module.exports.LOCALE = locale;

@@ -28,8 +28,8 @@ describe('validate', function () {
                     console.log('arg', data);
                 }
             },
-            firstName: 'string',
-            lastName: 'string'
+            firstName: Model.TYPES.STRING,
+            lastName: Model.TYPES.STRING
         });
 
         try {
