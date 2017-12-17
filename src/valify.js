@@ -74,14 +74,19 @@ class Valify {
                     this.normalize(field);
                     type = this.model[field].type;
 
-                    if (!Valify.typeExists(type)) {
+                    if (!Valify.typeExists(type) && typeof type !== 'function') {
                         this.addError(format(locale.UNKNOWN_TYPE, {type}), field);
                         continue;
                     }
 
                     if (data.hasOwnProperty(field)) {
-                        if (!check[type](data[field]))
+
+                        if (typeof type === 'string' && !check[type](data[field])) {
                             this.addError(format(locale.TYPE_FAIL, {field, type, dataField: data[field]}), field);
+                        } else if (typeof type === 'function' && !type.call(this, data[field])) {
+                            this.addError(format(locale.TYPE_FUNCTION_FAIL, {field, dataField: data[field]}), field);
+                        }
+
                     } else if (this.model[field].default === null && this.model[field].required) {
                         this.addError(format(locale.FIELD_REQUIRED, {field}), field);
                     } else {

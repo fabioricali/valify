@@ -18,6 +18,42 @@ describe('validate', function () {
         }
     });
 
+    it('should be return ok, passing a function such type', function (done) {
+
+        const userModel = new Model({
+            lastName: (value)=>{
+                return value === 'red';
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'red'
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
+    it('should be return error, passing a function such type', function (done) {
+
+        const userModel = new Model({
+            lastName: (value)=>{
+                return value === 'gray';
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'red'
+            });
+            done('error');
+        } catch (e) {
+            done();
+        }
+    });
+
     it('should be return error, wrong type', function (done) {
 
         const userModel = new Model({
