@@ -75,20 +75,32 @@ class Valify {
                     type = this.model[field].type;
 
                     if (!Valify.typeExists(type) && typeof type !== 'function') {
-                        this.addError(format(locale.UNKNOWN_TYPE, {type}), field);
+                        this.addError(
+                            format(locale.UNKNOWN_TYPE, {type}),
+                            field
+                        );
                         continue;
                     }
 
                     if (data.hasOwnProperty(field)) {
 
                         if (typeof type === 'string' && !check[type](data[field])) {
-                            this.addError(format(locale.TYPE_FAIL, {field, type, dataField: data[field]}), field);
+                            this.addError(
+                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {field, type, dataField: data[field]}),
+                                field
+                            );
                         } else if (typeof type === 'function' && !type.call(this, data[field])) {
-                            this.addError(format(locale.TYPE_FUNCTION_FAIL, {field, dataField: data[field]}), field);
+                            this.addError(
+                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {field, dataField: data[field]}),
+                                field
+                            );
                         }
 
                     } else if (this.model[field].default === null && this.model[field].required) {
-                        this.addError(format(locale.FIELD_REQUIRED, {field}), field);
+                        this.addError(
+                            format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
+                            field
+                        );
                     } else {
                         data[field] = this.model[field].default;
                     }
@@ -140,7 +152,11 @@ class Valify {
             required: null,
             default: null,
             convert: null,
-            onError: null
+            onError: null,
+            locale: {
+                FIELD_REQUIRED: null,
+                TYPE_FAIL: null
+            }
         })
     }
 
