@@ -65,7 +65,7 @@ class Valify {
     valid(data) {
         let type;
 
-        if (!check[types.OBJECT](data))
+        if (!be.object(data))
             this.addError(locale.DATA_REQUIRED);
         else
             for (let field in this.model) {
@@ -101,18 +101,18 @@ class Valify {
                                 }),
                                 field
                             );
-                        } else if (check[types.ARRAY](type)) {
+                        } else if (be.array(type)) {
                             for (let i in type) {
                                 if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
 
-                                    if (typeof type[i].fn === 'undefined') {
+                                    if (be.undefined(type[i].fn)) {
                                         type[i] = {
                                             fn: type[i],
                                             message: type[parseInt(i) + 1]
                                         };
                                     }
 
-                                    if(!check[types.STRING](type[i].message))
+                                    if(!be.string(type[i].message))
                                         type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
                                     if (!type[i].fn.call(this, data[field], be)) {
