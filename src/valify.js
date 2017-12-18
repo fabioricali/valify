@@ -112,7 +112,7 @@ class Valify {
                                         };
                                     }
 
-                                    if(!be.string(type[i].message))
+                                    if (!be.string(type[i].message))
                                         type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
                                     if (!type[i].fn.call(this, data[field], be)) {
@@ -206,7 +206,7 @@ class Valify {
      */
     static addType(name, fn) {
         if (be.emptyString(name))
-            throw new Error('Name cannot empty');
+            throw new Error('Name cannot be empty');
 
         if (Valify.typeExists(name))
             throw new Error(`Type ${name} already exists`);
@@ -223,8 +223,11 @@ class Valify {
      */
     static setLocale(obj) {
         for (let param in obj) {
-            if (obj.hasOwnProperty(param))
+            if (obj.hasOwnProperty(param)) {
+                if (be.emptyString(obj[param]))
+                    throw new Error('Description cannot be empty');
                 locale[param] = obj[param];
+            }
         }
     }
 
