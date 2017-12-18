@@ -4,7 +4,7 @@ const types = require('./types');
 const locale = Object.assign({}, require('./locale'));
 const extend = require('defaulty');
 const format = require('string-template');
-const validation = require('bejs');
+const be = require('bejs');
 
 /**
  * @class Valify
@@ -84,7 +84,7 @@ class Valify {
 
                     if (data.hasOwnProperty(field)) {
 
-                        if (check[types.STRING](type) && !check[type](data[field], validation)) {
+                        if (check[types.STRING](type) && !check[type](data[field], be)) {
                             this.addError(
                                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                                     field,
@@ -93,7 +93,7 @@ class Valify {
                                 }),
                                 field
                             );
-                        } else if (check[types.FUNCTION](type) && !type.call(this, data[field], validation)) {
+                        } else if (check[types.FUNCTION](type) && !type.call(this, data[field], be)) {
                             this.addError(
                                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                                     field,
@@ -115,7 +115,7 @@ class Valify {
                                     if(!check[types.STRING](type[i].message))
                                         type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
-                                    if (!type[i].fn.call(this, data[field], validation)) {
+                                    if (!type[i].fn.call(this, data[field], be)) {
                                         this.addError(
                                             format(type[i].message, {
                                                 field,
@@ -207,10 +207,13 @@ class Valify {
      * @param fn
      */
     static addType(name, fn) {
+        if (be.emptyString(name))
+            throw new Error('Name cannot empty');
+
         if (Valify.typeExists(name))
             throw new Error(`Type ${name} already exists`);
 
-        if (typeof fn !== 'function')
+        if (be.not.function(fn))
             throw new TypeError('fn must be a function');
 
         check[name] = fn.bind(this);
