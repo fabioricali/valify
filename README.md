@@ -5,8 +5,6 @@ Validates data to easy and clean way.
 <a href="https://travis-ci.org/fabioricali/valify" target="_blank"><img src="https://travis-ci.org/fabioricali/valify.svg?branch=master" title="Build Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
 
-## ***This project is still under development!***
-
 ### Installation
 ```
 npm install --save valify
@@ -117,7 +115,10 @@ userModel(data);
 console.log(data.firstName, data.lastName); //=> MIKE RICALI
 ```
 
-#### Add custom type
+#### Define custom type
+There are two ways to define custom types:
+
+##### 1) Globally, using static method `addType`
 ```javascript
 
 Valify.addType('mycustom', value => {
@@ -140,6 +141,73 @@ try {
     console.log(e.message);
 } 
 ```
+
+##### 2) Local, passing a function to `type` param
+```javascript
+
+// Define a model
+const userModel = new Valify({
+    aString: {
+        type: value => {
+            return typeof value === 'string'
+        }
+    },
+    // or 
+    aBoolean: value => {
+        return typeof value === 'boolean'
+    }
+});
+
+// A data object
+const data = {
+    aString: 'hello',
+    aBoolean: 5
+};
+
+try {
+    userModel(data);
+} catch(e) {
+    console.log(e.message);
+} 
+```
+
+#### Locale
+You can set locale string in tow ways:
+
+##### 1) Globally, using static method `setLocale`
+```javascript
+
+Valify.setLocale({
+    TYPE_FAIL: 'this type has failed'
+});
+
+```
+
+- Available strings
+    - **`UNKNOWN_TYPE`**, default: ***`Unknown type: "{type}"`***
+    - **`TYPE_FAIL`**, default: ***`{field} expects {type} but receives: {dataField}`***
+    - **`TYPE_FUNCTION_FAIL`**, default: ***`{field} receives: {dataField}`***
+    - **`FIELD_REQUIRED`**, default: ***`{field} is required`***
+    - **`DATA_REQUIRED`**, default: ***`Data is required and must be an object`***
+
+##### 2) Local, into field settings
+```javascript
+
+// Define a model
+const userModel = new Valify({
+    aString: {
+        type: 'string',
+        locale: {
+            TYPE_FAIL: 'this type has failed'
+        }
+    }
+});
+
+```
+
+- There are only two available properties:
+    - **`TYPE_FAIL`**
+    - **`FIELD_REQUIRED`**
 
 #### Available types
 - `alphanumeric`
