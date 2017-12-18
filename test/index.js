@@ -80,6 +80,37 @@ describe('validate', function () {
         }
     });
 
+    it('should be return error, customize error message', function (done) {
+
+        const userModel = new Model({
+            createdOn: {
+                type: 'date',
+                default: new Date(),
+                convert: (data) => {
+                    console.log('arg', data);
+                }
+            },
+            firstName: Model.TYPES.STRING,
+            lastName: {
+                type: Model.TYPES.STRING,
+                locale: {
+                    TYPE_FAIL: 'bomb error'
+                }
+            }
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: 525
+            })
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'bomb error')
+                done();
+        }
+    });
+
     it('should be return ok, done from callback convert', function (done) {
 
         const userModel = new Model({

@@ -43,7 +43,6 @@ class Valify {
      * @param field
      */
     addError(message, field) {
-        console.log(message);
         this.errors.last = message;
         if (field !== undefined) {
             this.errors.fields.push({
@@ -65,7 +64,7 @@ class Valify {
     valid(data) {
         let type;
 
-        if (!check.object(data))
+        if (!check[types.OBJECT](data))
             this.addError(locale.DATA_REQUIRED);
         else
             for (let field in this.model) {
