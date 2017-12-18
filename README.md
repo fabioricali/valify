@@ -171,6 +171,8 @@ try {
 } 
 ```
 
+- ***Remember:*** your function type must be always return a boolean
+
 #### Locale
 You can set locale string in tow ways:
 
