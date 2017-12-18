@@ -51,7 +51,7 @@ class Valify {
                 message: message
             });
 
-            if (typeof this.model[field].onError === 'function') {
+            if (be.function(this.model[field].onError)) {
                 this.model[field].onError.call(this, message);
             }
         }
@@ -145,12 +145,10 @@ class Valify {
             }
 
         if (this.opts.usePromise) {
-
             if (this.errors.last !== '')
                 return Promise.reject(this.errors);
             else
                 return Promise.resolve(data);
-
         } else {
             if (this.errors.last !== '')
                 throw new ValifyError(this.errors.last);
