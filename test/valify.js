@@ -326,8 +326,7 @@ describe('validate', function () {
 
     it('should be return error, add custom type', function (done) {
 
-        Model.addType('myType', value => {
-            console.log(value);
+        Model.addType('myType', (value, validation) => {
             return value === 'boom';
         });
 

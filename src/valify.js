@@ -4,6 +4,7 @@ const types = require('./types');
 const locale = Object.assign({}, require('./locale'));
 const extend = require('defaulty');
 const format = require('string-template');
+const validation = require('bejs');
 
 /**
  * @class Valify
@@ -70,7 +71,7 @@ class Valify {
             for (let field in this.model) {
                 if (this.model.hasOwnProperty(field)) {
 
-                    this.normalize(field);
+                    this.model[field] = this.normalize(field);
                     type = this.model[field].type;
 
                     if (!Valify.typeExists(type) && !check[types.FUNCTION](type) && !check[types.ARRAY](type)) {
@@ -83,26 +84,46 @@ class Valify {
 
                     if (data.hasOwnProperty(field)) {
 
-                        if (check[types.STRING](type) && !check[type](data[field])) {
+                        if (check[types.STRING](type) && !check[type](data[field], validation)) {
                             this.addError(
-                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {field, type, dataField: data[field]}),
+                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
+                                    field,
+                                    type,
+                                    dataField: data[field]
+                                }),
                                 field
                             );
-                        } else if (check[types.FUNCTION](type) && !type.call(this, data[field])) {
+                        } else if (check[types.FUNCTION](type) && !type.call(this, data[field], validation)) {
                             this.addError(
-                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {field, dataField: data[field]}),
+                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                                    field,
+                                    dataField: data[field]
+                                }),
                                 field
                             );
-                        }else if (check[types.ARRAY](type)) {
-                            for(let i in type) {
-                                if(type.hasOwnProperty(i) && !type[i].fn.call(this, data[field])) {
-                                    this.addError(
-                                        format(type[i].message || locale.TYPE_FUNCTION_FAIL, {
-                                            field,
-                                            dataField: data[field]
-                                        }),
-                                        field
-                                    );
+                        } else if (check[types.ARRAY](type)) {
+                            for (let i in type) {
+                                if (type.hasOwnProperty(i) && (check[types.OBJECT](type[i]) || check[types.FUNCTION](type[i]))) {
+
+                                    if (typeof type[i].fn === 'undefined') {
+                                        type[i] = {
+                                            fn: type[i],
+                                            message: type[parseInt(i) + 1]
+                                        };
+                                    }
+
+                                    if(!check[types.STRING](type[i].message))
+                                        type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
+
+                                    if (!type[i].fn.call(this, data[field], validation)) {
+                                        this.addError(
+                                            format(type[i].message, {
+                                                field,
+                                                dataField: data[field]
+                                            }),
+                                            field
+                                        );
+                                    }
                                 }
                             }
                         }
@@ -144,7 +165,6 @@ class Valify {
      * @returns {boolean}
      */
     isModel(field) {
-        console.log(typeof this.model[field] === 'object' && this.model[field].hasOwnProperty('type'))
         return typeof this.model[field] === 'object' && this.model[field].hasOwnProperty('type');
     }
 
@@ -200,10 +220,10 @@ class Valify {
      * Set locale
      * @param obj
      */
-    static setLocale(obj){
-        for(let param in obj) {
-            if(obj.hasOwnProperty(param))
-            locale[param] =  obj[param];
+    static setLocale(obj) {
+        for (let param in obj) {
+            if (obj.hasOwnProperty(param))
+                locale[param] = obj[param];
         }
     }
 
