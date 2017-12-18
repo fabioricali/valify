@@ -2,6 +2,11 @@ const be = require('bejs');
 const Model = require('..');
 
 describe('validate', function () {
+
+    before('reset locale', function () {
+        Model.setLocale(require('../src/locale'));
+    });
+
     it('should be return error, unknown type', function (done) {
 
         const userModel = new Model({
@@ -321,14 +326,14 @@ describe('validate', function () {
 
     it('should be return error, add custom type', function (done) {
 
-        Model.addType('myCustom', value => {
+        Model.addType('myType', value => {
             console.log(value);
             return value === 'boom';
         });
 
         const userModel = new Model({
             firstName: 'string',
-            lastName: 'myCustom'
+            lastName: 'myType'
         }, {
             usePromise: true
         });
@@ -344,7 +349,7 @@ describe('validate', function () {
             done('error')
         }).catch(e => {
             console.log(e);
-            if(e.last === 'lastName expects myCustom but receives: Ricali')
+            if(e.last === 'lastName expects myType but receives: Ricali')
             done();
         });
 

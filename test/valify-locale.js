@@ -14,13 +14,9 @@ describe('validate locale', function () {
 
     it('should be return error, unknown type', function (done) {
 
-        console.log(Model.LOCALE);
-
         const userModel = new Model({
             lastName: 'footype'
         });
-
-
 
         try {
             userModel({
