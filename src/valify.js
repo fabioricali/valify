@@ -151,7 +151,7 @@ class Valify {
                 return Promise.resolve(data);
         } else {
             if (this.errors.last !== '')
-                throw new ValifyError(this.errors.last);
+                throw new ValifyError(this.errors.last, this.errors.fields);
             else
                 return data;
         }

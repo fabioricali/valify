@@ -26,7 +26,7 @@ describe('validate', function () {
     it('should be return ok, passing a function such type', function (done) {
 
         const userModel = new Model({
-            lastName: (value)=>{
+            lastName: (value) => {
                 return value === 'red';
             }
         });
@@ -44,7 +44,7 @@ describe('validate', function () {
     it('should be return error, passing a function such type', function (done) {
 
         const userModel = new Model({
-            lastName: (value)=>{
+            lastName: (value) => {
                 return value === 'gray';
             }
         });
@@ -55,7 +55,9 @@ describe('validate', function () {
             });
             done('error');
         } catch (e) {
-            done();
+            console.log(e.message, e.fields);
+            if (e.message === 'lastName receives: red' && e.fields[0].message === 'lastName receives: red')
+                done();
         }
     });
 
@@ -160,7 +162,7 @@ describe('validate', function () {
 
         userModel(data);
 
-        if(data.createdOn === 10)
+        if (data.createdOn === 10)
             done();
 
     });
@@ -348,8 +350,8 @@ describe('validate', function () {
             done('error')
         }).catch(e => {
             console.log(e);
-            if(e.last === 'lastName expects myType but receives: Ricali')
-            done();
+            if (e.last === 'lastName expects myType but receives: Ricali')
+                done();
         });
 
     });
