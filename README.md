@@ -175,7 +175,7 @@ try {
 You can also define multi type in this ways:
 ```javascript
 
-const userModel = new Model({
+const userModel = new Valify({
     firstName: [
         {
             fn: value => false,
@@ -208,7 +208,7 @@ const userModel = new Model({
 
 - Inside all custom type function is passed a second argument that is <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>, a library used for several validations. Example:
 ```javascript
-new Model({
+new Valify({
     role: {
         type: [
             (value, validation) => validation.stringLength(value, 3), 'value must be a string long 3 chars',
