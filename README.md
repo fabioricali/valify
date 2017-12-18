@@ -43,7 +43,7 @@ const data = {
 try {
     userModel(data);
 } catch(e) {
-    console.log(e.message);
+    console.log(e.message, e.fields);
 }
 ```
 
@@ -138,7 +138,7 @@ const data = {
 try {
     userModel(data);
 } catch(e) {
-    console.log(e.message);
+    console.log(e.message, e.fields);
 } 
 ```
 
@@ -167,7 +167,7 @@ const data = {
 try {
     userModel(data);
 } catch(e) {
-    console.log(e.message);
+    console.log(e.message, e.fields);
 } 
 ```
 
