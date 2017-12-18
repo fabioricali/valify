@@ -73,7 +73,7 @@ class Valify {
                     this.normalize(field);
                     type = this.model[field].type;
 
-                    if (!Valify.typeExists(type) && typeof type !== 'function') {
+                    if (!Valify.typeExists(type) && !check[types.FUNCTION](type) && !check[types.ARRAY](type)) {
                         this.addError(
                             format(locale.UNKNOWN_TYPE, {type}),
                             field
@@ -83,16 +83,28 @@ class Valify {
 
                     if (data.hasOwnProperty(field)) {
 
-                        if (typeof type === 'string' && !check[type](data[field])) {
+                        if (check[types.STRING](type) && !check[type](data[field])) {
                             this.addError(
                                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {field, type, dataField: data[field]}),
                                 field
                             );
-                        } else if (typeof type === 'function' && !type.call(this, data[field])) {
+                        } else if (check[types.FUNCTION](type) && !type.call(this, data[field])) {
                             this.addError(
                                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {field, dataField: data[field]}),
                                 field
                             );
+                        }else if (check[types.ARRAY](type)) {
+                            for(let i in type) {
+                                if(type.hasOwnProperty(i) && !type[i].fn.call(this, data[field])) {
+                                    this.addError(
+                                        format(type[i].message || locale.TYPE_FUNCTION_FAIL, {
+                                            field,
+                                            dataField: data[field]
+                                        }),
+                                        field
+                                    );
+                                }
+                            }
                         }
 
                     } else if (this.model[field].default === null && this.model[field].required) {
@@ -104,7 +116,7 @@ class Valify {
                         data[field] = this.model[field].default;
                     }
 
-                    if (typeof this.model[field].convert === 'function') {
+                    if (check[types.FUNCTION](this.model[field].convert)) {
                         data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
                     }
 
@@ -132,6 +144,7 @@ class Valify {
      * @returns {boolean}
      */
     isModel(field) {
+        console.log(typeof this.model[field] === 'object' && this.model[field].hasOwnProperty('type'))
         return typeof this.model[field] === 'object' && this.model[field].hasOwnProperty('type');
     }
 
