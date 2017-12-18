@@ -227,6 +227,34 @@ describe('validate', function () {
         }
     });
 
+    it('should be return error, firstName is required, set locale', function (done) {
+
+        const userModel = new Model({
+            firstName: {
+                type: 'string',
+                required: true,
+                locale: {
+                    FIELD_REQUIRED: 'you must passing...'
+                }
+            },
+            lastName: 'string',
+            createdOn: {
+                type: 'date',
+                default: new Date()
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'Ricali'
+            })
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'you must passing...')
+                done();
+        }
+    });
+
     it('should be return ok', function () {
 
         const userModel = new Model({

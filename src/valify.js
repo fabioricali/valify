@@ -1,8 +1,8 @@
 const ValifyError = require('./error');
 const check = require('./check-types');
-const extend = require('defaulty');
 const types = require('./types');
 const locale = require('./locale');
+const extend = require('defaulty');
 const format = require('string-template');
 
 /**
@@ -181,6 +181,17 @@ class Valify {
             throw new TypeError('fn must be a function');
 
         check[name] = fn.bind(this);
+    }
+
+    /**
+     * Set locale
+     * @param obj
+     */
+    static setLocale(obj){
+        for(let param in obj) {
+            if(obj.hasOwnProperty(param))
+            locale[param] =  obj[param];
+        }
     }
 
 }
