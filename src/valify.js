@@ -74,7 +74,7 @@ class Valify {
                     this.model[field] = this.normalize(field);
                     type = this.model[field].type;
 
-                    if (!Valify.typeExists(type) && !check[types.FUNCTION](type) && !check[types.ARRAY](type)) {
+                    if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
                         this.addError(
                             format(locale.UNKNOWN_TYPE, {type}),
                             field
@@ -84,7 +84,7 @@ class Valify {
 
                     if (data.hasOwnProperty(field)) {
 
-                        if (check[types.STRING](type) && !check[type](data[field], be)) {
+                        if (be.string(type) && !check[type](data[field], be)) {
                             this.addError(
                                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                                     field,
@@ -93,7 +93,7 @@ class Valify {
                                 }),
                                 field
                             );
-                        } else if (check[types.FUNCTION](type) && !type.call(this, data[field], be)) {
+                        } else if (be.function(type) && !type.call(this, data[field], be)) {
                             this.addError(
                                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                                     field,
@@ -103,7 +103,7 @@ class Valify {
                             );
                         } else if (check[types.ARRAY](type)) {
                             for (let i in type) {
-                                if (type.hasOwnProperty(i) && (check[types.OBJECT](type[i]) || check[types.FUNCTION](type[i]))) {
+                                if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
 
                                     if (typeof type[i].fn === 'undefined') {
                                         type[i] = {
@@ -137,7 +137,7 @@ class Valify {
                         data[field] = this.model[field].default;
                     }
 
-                    if (check[types.FUNCTION](this.model[field].convert)) {
+                    if (be.function(this.model[field].convert)) {
                         data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
                     }
 
@@ -213,7 +213,7 @@ class Valify {
         if (Valify.typeExists(name))
             throw new Error(`Type ${name} already exists`);
 
-        if (be.not.function(fn))
+        if (!be.function(fn))
             throw new TypeError('fn must be a function');
 
         check[name] = fn.bind(this);
