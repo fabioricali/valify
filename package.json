@@ -1,6 +1,6 @@
 {
   "name": "valify",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Validates data to easy and clean way.",
   "main": "index.js",
   "directories": {
