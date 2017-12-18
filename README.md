@@ -116,7 +116,7 @@ console.log(data.firstName, data.lastName); //=> MIKE RICALI
 ```
 
 #### Define custom type
-There are two ways to define custom types:
+There are different ways to define custom types:
 
 ##### 1) Globally, using static method `addType`
 ```javascript
@@ -171,7 +171,53 @@ try {
 } 
 ```
 
-- ***Remember:*** your function type must be always return a boolean
+##### Multi-type function
+You can also define multi type in this ways:
+```javascript
+
+const userModel = new Model({
+    firstName: [
+        {
+            fn: value => false,
+            message: 'failed! wrong type for firstName'
+        }
+    ],
+    // or
+    lastName: {
+        type:[
+            {
+                fn: value => false,
+                message: 'failed! wrong type for lastName'
+            },
+            {
+                fn: value => true,
+                message: 'failed! wrong type for lastName'
+            }
+        ]
+    },
+    // or
+    role: {
+        type: [
+            value => typeof value === 'string', 'value must be a string',
+            value => value.length === 3, 'value must be length 3 chars'
+        ]
+    }
+});
+
+```
+
+- Inside all custom type function is passed a second argument that is <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>, a library used for several validations. Example:
+```javascript
+new Model({
+    role: {
+        type: [
+            (value, validation) => validation.stringLength(value, 3), 'value must be a string long 3 chars',
+        ]
+    }
+})
+```
+
+***Remember:*** your type function must be always return a boolean
 
 #### Locale
 You can set locale string in tow ways:
