@@ -182,7 +182,7 @@ class Valify {
 
         return extend(this.model[field], {
             type: null,
-            required: null,
+            required: false,
             default: null,
             convert: null,
             onError: null,
