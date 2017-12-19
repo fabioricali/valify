@@ -8,7 +8,8 @@ Validates data to easy and clean way.
 **Documentation**
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
-- [Promise](#using-promise)
+- [Field configuration](#field-configuration)
+- [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
 - [Multi-type function](#multi-type-function)
@@ -65,6 +66,7 @@ try {
 |`required`|`boolean`|`false`|Indicates if the field is required|
 |`default`|`any`|`null`|Default value|
 |`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
+|`locale`|`object`|`object`|An object that contains locale strings|
 |`convert`|`function`|`null`|A function to manipulate data|
 |`onError`|`function`|`null`|A function triggered when an check fails|
 
@@ -98,7 +100,7 @@ userModel(data).then(()=>{
     // An object like below
     /*
         {
-            last: 'lastName is required',
+            message: 'lastName is required',
             fields: [{field: 'lastName', message: 'lastName is required'}]
         }
      */
