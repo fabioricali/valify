@@ -1,6 +1,7 @@
 const ValifyError = require('./error');
 const check = require('./check-types');
 const types = require('./types');
+const validator = require('./validator');
 const locale = Object.assign({}, require('./locale'));
 const extend = require('defaulty');
 const format = require('string-template');
@@ -44,7 +45,8 @@ class Valify {
      * @param field
      */
     addError(message, field) {
-        this.errors.message = message;
+        if(this.errors.message === '')
+            this.errors.message = message;
         if (field !== undefined) {
             this.errors.fields.push({
                 field,
@@ -131,6 +133,20 @@ class Valify {
                             }
                         }
 
+                        if(be.object(this.model[field].validate)) {
+                            let validate = this.model[field].validate;
+                            for (let i in validate) {
+                                if (validate.hasOwnProperty(i) && validator.hasOwnProperty(i)){
+                                    if (be.true(validate[i]) && !validator[i].call(this, data[field])) {
+                                        this.addError(
+                                            format(this.model[field].locale.EMAIL_FAIL || locale.EMAIL_FAIL, {field}),
+                                            field
+                                        );
+                                    }
+                                }
+                            }
+                        }
+
                     } else if (this.model[field].default === null && this.model[field].required) {
                         this.addError(
                             format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
@@ -185,11 +201,13 @@ class Valify {
             required: false,
             default: null,
             convert: null,
+            validate: null,
             onError: null,
             allowNull: false,
             locale: {
                 FIELD_REQUIRED: null,
-                TYPE_FAIL: null
+                TYPE_FAIL: null,
+                EMAIL_FAIL: null
             }
         })
     }

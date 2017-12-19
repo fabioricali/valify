@@ -7,5 +7,6 @@ module.exports = {
     TYPE_FAIL: '{field} expects {type} but receives: {dataField}',
     TYPE_FUNCTION_FAIL: '{field} receives: {dataField}',
     FIELD_REQUIRED: '{field} is required',
-    DATA_REQUIRED: 'Data is required and must be an object'
+    DATA_REQUIRED: 'Data is required and must be an object',
+    EMAIL_FAIL: '{field} must be a valid email'
 };
