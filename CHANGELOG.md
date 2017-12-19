@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [2.0.0] - 2017-12-19
 - Changed error property name from `last` to `message` that it's returned by promise reject
+- Added `allowNull` property to field settings that overwrites all types checks if it's enabled and the value is `null`
 
 [1.2.0] - 2017-12-18
 - Now `ValifyError` returns a second argument with errors list

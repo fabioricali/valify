@@ -74,6 +74,9 @@ class Valify {
                     this.model[field] = this.normalize(field);
                     type = this.model[field].type;
 
+                    if (this.model[field].allowNull && data[field] === null)
+                        continue;
+
                     if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
                         this.addError(
                             format(locale.UNKNOWN_TYPE, {type}),
@@ -183,6 +186,7 @@ class Valify {
             default: null,
             convert: null,
             onError: null,
+            allowNull: false,
             locale: {
                 FIELD_REQUIRED: null,
                 TYPE_FAIL: null

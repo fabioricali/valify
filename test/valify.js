@@ -389,4 +389,26 @@ describe('validate', function () {
 
     });
 
+    it('should be return ok, using allowNull', function (done) {
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: {
+                type: 'string',
+                allowNull: true
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            firstName: 'Mike',
+            lastName: null
+        }).then((data) => {
+            console.log(data);
+            done();
+        });
+
+    });
+
 });
