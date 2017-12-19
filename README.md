@@ -233,7 +233,7 @@ Valify.setLocale({
 
 - Available strings
 |Name|Default|
-|-|
+|-|-|
 |`UNKNOWN_TYPE`|`Unknown type: "{type}"`|
 |`TYPE_FAIL`|`{field} expects {type} but receives: {dataField}`|
 |`TYPE_FUNCTION_FAIL`|`{field} receives: {dataField}`|
