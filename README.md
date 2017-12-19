@@ -5,6 +5,15 @@ Validates data to easy and clean way.
 <a href="https://travis-ci.org/fabioricali/valify" target="_blank"><img src="https://travis-ci.org/fabioricali/valify.svg?branch=master" title="Build Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
 
+**Documentation**
+- [Installation](#installation)
+- [Basic usage](#basic-usage)
+- [Promise](#using-promise)
+- [Manipulate data](#manipulate-data)
+- [Define custom types](#define-custom-type)
+- [Locale](#locale)
+- [Types](#available-types)
+
 ### Installation
 ```
 npm install --save valify
@@ -231,7 +240,7 @@ Valify.setLocale({
 
 ```
 
-- Available strings
+**Available strings**
 
 |Name|Default|
 |-|-|
