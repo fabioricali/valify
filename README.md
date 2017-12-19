@@ -232,11 +232,13 @@ Valify.setLocale({
 ```
 
 - Available strings
-    - **`UNKNOWN_TYPE`**, default: ***`Unknown type: "{type}"`***
-    - **`TYPE_FAIL`**, default: ***`{field} expects {type} but receives: {dataField}`***
-    - **`TYPE_FUNCTION_FAIL`**, default: ***`{field} receives: {dataField}`***
-    - **`FIELD_REQUIRED`**, default: ***`{field} is required`***
-    - **`DATA_REQUIRED`**, default: ***`Data is required and must be an object`***
+|Name|Default|
+-
+|`UNKNOWN_TYPE`|`Unknown type: "{type}"`|
+|`TYPE_FAIL`|`{field} expects {type} but receives: {dataField}`|
+|`TYPE_FUNCTION_FAIL`|`{field} receives: {dataField}`|
+|`FIELD_REQUIRED`|`{field} is required`|
+|`DATA_REQUIRED`|`Data is required and must be an object`|
 
 ##### 2) Local, into field settings
 ```javascript
