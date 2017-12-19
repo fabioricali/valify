@@ -350,7 +350,7 @@ describe('validate', function () {
             done('error')
         }).catch(e => {
             console.log(e);
-            if (e.last === 'lastName expects myType but receives: Ricali')
+            if (e.message === 'lastName expects myType but receives: Ricali')
                 done();
         });
 
@@ -379,9 +379,9 @@ describe('validate', function () {
         }).catch(e => {
             console.log(e);
             if (
-                e.last === 'firstName is required' &&
+                e.message === 'firstName is required' &&
                 e.fields[0].field === 'firstName' &&
-                e.fields[0].message === e.last
+                e.fields[0].message === e.message
             )
                 done();
 

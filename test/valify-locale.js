@@ -124,7 +124,7 @@ describe('validate locale', function () {
             done('error')
         }).catch(e => {
             console.log(e);
-            if(e.last === 'this type has failed')
+            if(e.message === 'this type has failed')
             done();
         });
 
@@ -153,9 +153,9 @@ describe('validate locale', function () {
         }).catch(e => {
             console.log(e);
             if (
-                e.last === 'is required' &&
+                e.message === 'is required' &&
                 e.fields[0].field === 'firstName' &&
-                e.fields[0].message === e.last
+                e.fields[0].message === e.message
             )
                 done();
 

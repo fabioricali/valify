@@ -31,7 +31,7 @@ class Valify {
          * @ignore
          */
         this.errors = {
-            last: '',
+            message: '',
             fields: []
         };
 
@@ -44,7 +44,7 @@ class Valify {
      * @param field
      */
     addError(message, field) {
-        this.errors.last = message;
+        this.errors.message = message;
         if (field !== undefined) {
             this.errors.fields.push({
                 field,
@@ -145,13 +145,13 @@ class Valify {
             }
 
         if (this.opts.usePromise) {
-            if (this.errors.last !== '')
+            if (this.errors.message !== '')
                 return Promise.reject(this.errors);
             else
                 return Promise.resolve(data);
         } else {
-            if (this.errors.last !== '')
-                throw new ValifyError(this.errors.last, this.errors.fields);
+            if (this.errors.message !== '')
+                throw new ValifyError(this.errors.message, this.errors.fields);
             else
                 return data;
         }
