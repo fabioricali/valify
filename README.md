@@ -71,6 +71,8 @@ try {
 |`onError`|`function`|`null`|A function triggered when an check fails|
 
 ### Using promise
+If you need to use with Promise must just add `usePromise` to model settings.
+
 ```javascript
 
 // Define a model
