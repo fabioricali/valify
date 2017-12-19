@@ -11,6 +11,7 @@ Validates data to easy and clean way.
 - [Promise](#using-promise)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
+- [Multi-type function](#multi-type-function)
 - [Locale](#locale)
 - [Types](#available-types)
 
@@ -56,7 +57,18 @@ try {
 }
 ```
 
-#### Using promise
+### Field configuration
+
+|Property|Type|Default|Description|
+|-|-|-|-|
+|`type`|`object`,`array`,`string`,`function`|`null`|Type of control|
+|`required`|`boolean`|`false`|Indicates if the field is required|
+|`default`|`any`|`null`|Default value|
+|`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
+|`convert`|`function`|`null`|A function to manipulate data|
+|`onError`|`function`|`null`|A function triggered when an check fails|
+
+### Using promise
 ```javascript
 
 // Define a model
@@ -94,7 +106,7 @@ userModel(data).then(()=>{
 
 ```
 
-#### Manipulate data
+### Manipulate data
 ```javascript
 
 // Define a model
@@ -124,7 +136,7 @@ userModel(data);
 console.log(data.firstName, data.lastName); //=> MIKE RICALI
 ```
 
-#### Define custom type
+### Define custom type
 There are different ways to define custom types:
 
 ##### 1) Globally, using static method `addType`
@@ -180,7 +192,7 @@ try {
 } 
 ```
 
-##### Multi-type function
+### Multi-type function
 You can also define multi type in this ways:
 ```javascript
 
@@ -228,7 +240,7 @@ new Valify({
 
 ***Remember:*** your type function must be always return a boolean
 
-#### Locale
+### Locale
 You can set locale string in tow ways:
 
 ##### 1) Globally, using static method `setLocale`
@@ -269,7 +281,7 @@ const userModel = new Valify({
     - **`TYPE_FAIL`**
     - **`FIELD_REQUIRED`**
 
-#### Available types
+### Available types
 - `alphanumeric`
 - `argument`
 - `array`
