@@ -48,7 +48,7 @@ class Valify {
         if (field !== undefined) {
             this.errors.fields.push({
                 field,
-                message: message
+                message
             });
 
             if (be.function(this.model[field].onError)) {
