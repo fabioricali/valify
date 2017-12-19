@@ -50,5 +50,31 @@ describe('validate', function () {
         }
     });
 
+    it('should be return error, custom validator', function (done) {
+
+        const userModel = new Model({
+            lastName: {
+                type: 'string',
+                validate: {
+                    myValidator(value) {
+                        if (value !== 'hello')
+                            throw new Error('string must be hello');
+                    }
+                }
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'test@test.com'
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'string must be hello')
+                done();
+        }
+    });
+
 
 });

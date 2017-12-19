@@ -136,12 +136,23 @@ class Valify {
                         if(be.object(this.model[field].validate)) {
                             let validate = this.model[field].validate;
                             for (let i in validate) {
-                                if (validate.hasOwnProperty(i) && validator.hasOwnProperty(i)){
+
+                                if (validate.hasOwnProperty(i)){
                                     if (be.true(validate[i]) && !validator[i].call(this, data[field])) {
                                         this.addError(
                                             format(this.model[field].locale.EMAIL_FAIL || locale.EMAIL_FAIL, {field}),
                                             field
                                         );
+                                        // custom validator
+                                    } else if (be.function(validate[i])) {
+                                        try {
+                                            validate[i].call(this, data[field], be);
+                                        } catch (e) {
+                                            this.addError(
+                                                format(e.message),
+                                                field
+                                            );
+                                        }
                                     }
                                 }
                             }
