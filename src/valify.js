@@ -6,6 +6,7 @@ const locale = Object.assign({}, require('./locale'));
 const extend = require('defaulty');
 const format = require('string-template');
 const be = require('bejs');
+const arrayme = require('arrayme');
 
 /**
  * @class Valify
@@ -135,14 +136,25 @@ class Valify {
 
                         if(be.object(this.model[field].validate)) {
                             let validate = this.model[field].validate;
-                            for (let i in validate) {
 
+                            for (let i in validate) {
+                                //console.log(data[field]);
                                 if (validate.hasOwnProperty(i)){
-                                    if (!be.function(validate[i]) && !validator[i].fn.call(this, data[field])) {
-                                        this.addError(
-                                            format(validate[i].msg || validator[i].msg, {field}),
-                                            field
-                                        );
+                                    if (!be.function(validate[i])) {
+
+                                        let args = [data[field]];
+
+                                        if(be.object(validate[i]) && validate[i].args)
+                                            args.push(validate[i].args);
+                                        else
+                                            args.push(validate[i]);
+
+                                        if(!validator[i].fn.apply(this, args))
+                                            this.addError(
+                                                format(validate[i].msg || validator[i].msg, args.slice(1)),
+                                                field
+                                            );
+
                                         // custom validator
                                     } else if (be.function(validate[i])){
                                         try {

@@ -90,10 +90,11 @@ describe('validate', function () {
             userModel({
                 eta: 9
             });
-            done();
+            done('error');
         } catch (e) {
             console.log(e.message);
-            done(e.message);
+            if(e.message === 'the number must be greater than or equal to 10')
+                done();
         }
     });
 
