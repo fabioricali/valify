@@ -24,6 +24,30 @@ describe('validate', function () {
             })
         } catch (e) {
             console.log(e.message);
+            if (e.message === 'email not valid')
+                done();
+        }
+    });
+
+    it('should be return failed email, custom message', function (done) {
+
+        const userModel = new Model({
+            email: {
+                type: 'string',
+                validate: {
+                    email: {
+                        msg: 'email must be a valid email'
+                    }
+                }
+            }
+        });
+
+        try {
+            userModel({
+                email: 'red0'
+            })
+        } catch (e) {
+            console.log(e.message);
             if (e.message === 'email must be a valid email')
                 done();
         }
@@ -46,6 +70,29 @@ describe('validate', function () {
             });
             done();
         } catch (e) {
+            console.log(e.message);
+            done(e.message);
+        }
+    });
+
+    it('should be return failed min', function (done) {
+
+        const userModel = new Model({
+            eta: {
+                type: 'int',
+                validate: {
+                    min: 10
+                }
+            }
+        });
+
+        try {
+            userModel({
+                eta: 9
+            });
+            done();
+        } catch (e) {
+            console.log(e.message);
             done(e.message);
         }
     });

@@ -138,13 +138,13 @@ class Valify {
                             for (let i in validate) {
 
                                 if (validate.hasOwnProperty(i)){
-                                    if (be.true(validate[i]) && !validator[i].call(this, data[field])) {
+                                    if (!be.function(validate[i]) && !validator[i].fn.call(this, data[field])) {
                                         this.addError(
-                                            format(this.model[field].locale.EMAIL_FAIL || locale.EMAIL_FAIL, {field}),
+                                            format(validate[i].msg || validator[i].msg, {field}),
                                             field
                                         );
                                         // custom validator
-                                    } else if (be.function(validate[i])) {
+                                    } else if (be.function(validate[i])){
                                         try {
                                             validate[i].call(this, data[field], be);
                                         } catch (e) {
