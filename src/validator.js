@@ -4,22 +4,47 @@ module.exports = {
     //String
     email: {
         fn: be.email.bind(this),
-        msg: 'email not valid'
-    },/*
-    url: be.url.bind(this),
-    ip: be.ip.bind(this),
-    camelCase: be.camelCase.bind(this),
-    capitalized: be.capitalized.bind(this),
-    kebabCase: be.kebabCase.bind(this),
-    lowerCase: be.lowerCase.bind(this),
-    snakeCase: be.snakeCase.bind(this),*/
+        msg: '{0} is a not valid email'
+    },
+    url: {
+        fn: be.url.bind(this),
+        msg: '{0} is a not valid url'
+    },
+    ip: {
+        fn: be.ip.bind(this),
+        msg: '{0} is a not valid IP'
+    },
+    camelCase: {
+        fn: be.camelCase.bind(this),
+        msg: 'the string must be in the camelCase format'
+    },
+    kebabCase: {
+        fn: be.kebabCase.bind(this),
+        msg: 'the string must be in the kebabCase format'
+    },
+    snakeCase: {
+        fn: be.snakeCase.bind(this),
+        msg: 'the string must be in the snakeCase format'
+    },
+    capitalized: {
+        fn: be.capitalized.bind(this),
+        msg: 'the string must be capitalized instead it is {0}'
+    },
+    lowercase: {
+        fn: be.lowerCase.bind(this),
+        msg: 'the string must be lowercase instead it is {0}'
+    },
+    uppercase: {
+        fn: be.upperCase.bind(this),
+        msg: 'the string must be uppercase instead it is {0}'
+    },
     //Number
     min: {
         fn: be.min.bind(this),
-        msg: 'the number must be greater than or equal to {0}'
+        msg: 'the number must be greater than or equal to {1} instead it is {0}'
     },
     max: {
         fn: be.max.bind(this),
-        msg: 'the number must be greater than or equal to {0}'
+        msg: 'the number must be lesser than or equal to {1} instead it is {0}'
     },
 };

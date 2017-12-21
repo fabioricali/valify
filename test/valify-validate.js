@@ -1,13 +1,13 @@
 const be = require('bejs');
 const Model = require('..');
 
-describe('validate', function () {
+describe('validator', function () {
 
     before('reset locale', function () {
         Model.setLocale(require('../src/locale'));
     });
 
-    it('should be return failed email', function (done) {
+    it('email: should be return failed', function (done) {
 
         const userModel = new Model({
             email: {
@@ -24,12 +24,12 @@ describe('validate', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'email not valid')
+            if (e.message === 'red0 is a not valid email')
                 done();
         }
     });
 
-    it('should be return failed email, custom message', function (done) {
+    it('email: should be return failed, custom message', function (done) {
 
         const userModel = new Model({
             email: {
@@ -53,7 +53,7 @@ describe('validate', function () {
         }
     });
 
-    it('should be return ok email', function (done) {
+    it('email: should be return ok', function (done) {
 
         const userModel = new Model({
             lastName: {
@@ -75,7 +75,7 @@ describe('validate', function () {
         }
     });
 
-    it('should be return failed min', function (done) {
+    it('min: should be return failed', function (done) {
 
         const userModel = new Model({
             eta: {
@@ -93,12 +93,100 @@ describe('validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'the number must be greater than or equal to 10')
+            if(e.message === 'the number must be greater than or equal to 10 instead it is 9')
                 done();
         }
     });
 
-    it('should be return error, custom validator', function (done) {
+    it('min: should be return ok', function (done) {
+
+        const userModel = new Model({
+            eta: {
+                type: 'int',
+                validate: {
+                    min: 10
+                }
+            }
+        });
+
+        try {
+            userModel({
+                eta: 11
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
+    it('max: should be return failed', function (done) {
+
+        const userModel = new Model({
+            eta: {
+                type: 'int',
+                validate: {
+                    max: 10
+                }
+            }
+        });
+
+        try {
+            userModel({
+                eta: 11
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'the number must be lesser than or equal to 10 instead it is 11')
+                done();
+        }
+    });
+
+    it('max: should be return ok', function (done) {
+
+        const userModel = new Model({
+            eta: {
+                type: 'int',
+                validate: {
+                    max: 10
+                }
+            }
+        });
+
+        try {
+            userModel({
+                eta: 9
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
+    it('url: should be return failed', function (done) {
+
+        const userModel = new Model({
+            url: {
+                type: 'string',
+                validate: {
+                    url: true
+                }
+            }
+        });
+
+        try {
+            userModel({
+                url: 'hello'
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'hello is a not valid url')
+                done();
+        }
+    });
+
+    it('custom validator: should be return error', function (done) {
 
         const userModel = new Model({
             lastName: {

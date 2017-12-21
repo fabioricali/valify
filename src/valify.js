@@ -156,7 +156,7 @@ class Valify {
 
                                 if (!validator[i].fn.apply(this, args))
                                     this.addError(
-                                        format(validate[i].msg || validator[i].msg, args.slice(1)),
+                                        format(validate[i].msg || validator[i].msg, args),
                                         field
                                     );
 
