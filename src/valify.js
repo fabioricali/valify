@@ -91,6 +91,7 @@ class Valify {
 
                 if (data.hasOwnProperty(field)) {
 
+                    // check type
                     if (be.string(type) && !check[type](data[field], be)) {
                         this.addError(
                             format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
@@ -135,6 +136,7 @@ class Valify {
                         }
                     }
 
+                    // validator
                     if (be.object(this.model[field].validate)) {
                         let validate = this.model[field].validate;
 
