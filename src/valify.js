@@ -187,7 +187,6 @@ class Valify {
                         }
                     }
                 }
-
             }
 
         if (this.opts.usePromise) {
@@ -201,6 +200,16 @@ class Valify {
             else
                 return data;
         }
+    }
+
+    static printArgs(args) {
+        for(let i in args) {
+            if(!args.hasOwnProperty(i)) continue;
+            if (be.date(args[i])){
+                args[i] = args[i].toISOString();
+            }
+        }
+        return args;
     }
 
     /**

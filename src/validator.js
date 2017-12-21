@@ -47,4 +47,9 @@ module.exports = {
         fn: be.max.bind(this),
         msg: 'the number must be lesser than or equal to {1} instead it is {0}'
     },
+    //Date
+    dateBetween: {
+        fn: be.dateBetween.bind(this),
+        msg: 'the date must be between {1} and {2} instead it is {0}'
+    }
 };
