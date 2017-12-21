@@ -46,7 +46,7 @@ class Valify {
      * @param field
      */
     addError(message, field) {
-        if(this.errors.message === '')
+        if (this.errors.message === '')
             this.errors.message = message;
         if (field !== undefined) {
             this.errors.fields.push({
@@ -72,117 +72,117 @@ class Valify {
             this.addError(locale.DATA_REQUIRED);
         else
             for (let field in this.model) {
-                if (this.model.hasOwnProperty(field)) {
+                if (!this.model.hasOwnProperty(field))
+                    continue;
 
-                    this.model[field] = this.normalize(field);
-                    type = this.model[field].type;
+                this.model[field] = this.normalize(field);
+                type = this.model[field].type;
 
-                    if (this.model[field].allowNull && data[field] === null)
-                        continue;
+                if (this.model[field].allowNull && data[field] === null)
+                    continue;
 
-                    if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
+                if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
+                    this.addError(
+                        format(locale.UNKNOWN_TYPE, {type}),
+                        field
+                    );
+                    continue;
+                }
+
+                if (data.hasOwnProperty(field)) {
+
+                    if (be.string(type) && !check[type](data[field], be)) {
                         this.addError(
-                            format(locale.UNKNOWN_TYPE, {type}),
+                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
+                                field,
+                                type,
+                                dataField: data[field]
+                            }),
                             field
                         );
-                        continue;
-                    }
+                    } else if (be.function(type) && !type.call(this, data[field], be)) {
+                        this.addError(
+                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                                field,
+                                dataField: data[field]
+                            }),
+                            field
+                        );
+                    } else if (be.array(type)) {
+                        for (let i in type) {
+                            if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
 
-                    if (data.hasOwnProperty(field)) {
+                                if (be.undefined(type[i].fn)) {
+                                    type[i] = {
+                                        fn: type[i],
+                                        message: type[parseInt(i) + 1]
+                                    };
+                                }
 
-                        if (be.string(type) && !check[type](data[field], be)) {
-                            this.addError(
-                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
-                                    field,
-                                    type,
-                                    dataField: data[field]
-                                }),
-                                field
-                            );
-                        } else if (be.function(type) && !type.call(this, data[field], be)) {
-                            this.addError(
-                                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
-                                    field,
-                                    dataField: data[field]
-                                }),
-                                field
-                            );
-                        } else if (be.array(type)) {
-                            for (let i in type) {
-                                if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
+                                if (!be.string(type[i].message))
+                                    type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
-                                    if (be.undefined(type[i].fn)) {
-                                        type[i] = {
-                                            fn: type[i],
-                                            message: type[parseInt(i) + 1]
-                                        };
-                                    }
-
-                                    if (!be.string(type[i].message))
-                                        type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
-
-                                    if (!type[i].fn.call(this, data[field], be)) {
-                                        this.addError(
-                                            format(type[i].message, {
-                                                field,
-                                                dataField: data[field]
-                                            }),
-                                            field
-                                        );
-                                    }
+                                if (!type[i].fn.call(this, data[field], be)) {
+                                    this.addError(
+                                        format(type[i].message, {
+                                            field,
+                                            dataField: data[field]
+                                        }),
+                                        field
+                                    );
                                 }
                             }
                         }
+                    }
 
-                        if(be.object(this.model[field].validate)) {
-                            let validate = this.model[field].validate;
+                    if (be.object(this.model[field].validate)) {
+                        let validate = this.model[field].validate;
 
-                            for (let i in validate) {
-                                //console.log(data[field]);
-                                if (validate.hasOwnProperty(i)){
-                                    if (!be.function(validate[i])) {
+                        for (let i in validate) {
+                            //console.log(data[field]);
+                            if (!validate.hasOwnProperty(i))
+                                continue;
 
-                                        let args = [data[field]];
+                            if (!be.function(validate[i])) {
 
-                                        if(be.object(validate[i]) && validate[i].args)
-                                            args.push(validate[i].args);
-                                        else
-                                            args.push(validate[i]);
+                                let args = [data[field]];
 
-                                        if(!validator[i].fn.apply(this, args))
-                                            this.addError(
-                                                format(validate[i].msg || validator[i].msg, args.slice(1)),
-                                                field
-                                            );
+                                if (be.object(validate[i]) && validate[i].args)
+                                    args.push(validate[i].args);
+                                else
+                                    args.push(validate[i]);
 
-                                        // custom validator
-                                    } else if (be.function(validate[i])){
-                                        try {
-                                            validate[i].call(this, data[field], be);
-                                        } catch (e) {
-                                            this.addError(
-                                                format(e.message),
-                                                field
-                                            );
-                                        }
-                                    }
+                                if (!validator[i].fn.apply(this, args))
+                                    this.addError(
+                                        format(validate[i].msg || validator[i].msg, args.slice(1)),
+                                        field
+                                    );
+
+                                // custom validator
+                            } else if (be.function(validate[i])) {
+                                try {
+                                    validate[i].call(this, data[field], be);
+                                } catch (e) {
+                                    this.addError(
+                                        format(e.message),
+                                        field
+                                    );
                                 }
                             }
                         }
-
-                    } else if (this.model[field].default === null && this.model[field].required) {
-                        this.addError(
-                            format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
-                            field
-                        );
-                    } else {
-                        data[field] = this.model[field].default;
                     }
 
-                    if (be.function(this.model[field].convert)) {
-                        data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
-                    }
+                } else if (this.model[field].default === null && this.model[field].required) {
+                    this.addError(
+                        format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
+                        field
+                    );
+                } else {
+                    data[field] = this.model[field].default;
+                }
 
+                if (be.function(this.model[field].convert)) {
+                    data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
                 }
             }
 
