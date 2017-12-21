@@ -66,10 +66,7 @@ describe('validate', function () {
         const userModel = new Model({
             createdOn: {
                 type: 'date',
-                default: new Date(),
-                convert: (data) => {
-                    console.log('arg', data);
-                }
+                default: new Date()
             },
             firstName: Model.TYPES.STRING,
             lastName: Model.TYPES.STRING
@@ -92,10 +89,7 @@ describe('validate', function () {
         const userModel = new Model({
             createdOn: {
                 type: 'date',
-                default: new Date(),
-                convert: (data) => {
-                    console.log('arg', data);
-                }
+                default: new Date()
             },
             firstName: Model.TYPES.STRING,
             lastName: {
@@ -140,7 +134,7 @@ describe('validate', function () {
 
     });
 
-    it('should be return converted value', function (done) {
+    it('convert: should be returns error if changing type', function (done) {
 
         const userModel = new Model({
             createdOn: {
@@ -160,9 +154,38 @@ describe('validate', function () {
             createdOn: new Date()
         };
 
+        try {
+            userModel(data);
+        } catch (e) {
+            if (e.message === 'createdOn expects date but receives: 10')
+                done();
+        }
+
+    });
+
+    it('convert: should be returns ok', function (done) {
+
+        const userModel = new Model({
+            eta: {
+                type: 'int',
+                convert: (value) => {
+                    console.log(value);
+                    return 10 + value;
+                }
+            },
+            firstName: 'string',
+            lastName: 'string'
+        });
+
+        let data = {
+            firstName: 'Mike',
+            lastName: 'Ricali',
+            eta: 25
+        };
+
         userModel(data);
 
-        if (data.createdOn === 10)
+        if (data.eta === 35)
             done();
 
     });

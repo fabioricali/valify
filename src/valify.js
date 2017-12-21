@@ -89,103 +89,105 @@ class Valify {
                     continue;
                 }
 
-                if (data.hasOwnProperty(field)) {
-
-                    // check type
-                    if (be.string(type) && !check[type](data[field], be)) {
+                if (!data.hasOwnProperty(field)) {
+                    if (this.model[field].default === null && this.model[field].required) {
                         this.addError(
-                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
-                                field,
-                                type,
-                                dataField: data[field]
-                            }),
+                            format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
                             field
                         );
-                    } else if (be.function(type) && !type.call(this, data[field], be)) {
-                        this.addError(
-                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
-                                field,
-                                dataField: data[field]
-                            }),
-                            field
-                        );
-                    } else if (be.array(type)) {
-                        for (let i in type) {
-                            if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
-
-                                if (be.undefined(type[i].fn)) {
-                                    type[i] = {
-                                        fn: type[i],
-                                        message: type[parseInt(i) + 1]
-                                    };
-                                }
-
-                                if (!be.string(type[i].message))
-                                    type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
-
-                                if (!type[i].fn.call(this, data[field], be)) {
-                                    this.addError(
-                                        format(type[i].message, {
-                                            field,
-                                            dataField: data[field]
-                                        }),
-                                        field
-                                    );
-                                }
-                            }
-                        }
+                        continue;
+                    } else {
+                        data[field] = this.model[field].default;
                     }
-
-                    // validator
-                    if (be.object(this.model[field].validate)) {
-                        let validate = this.model[field].validate;
-
-                        for (let i in validate) {
-                            //console.log(data[field]);
-                            if (!validate.hasOwnProperty(i))
-                                continue;
-
-                            if (!be.function(validate[i])) {
-
-                                let args = [data[field]];
-
-                                if (be.object(validate[i]) && validate[i].args)
-                                    args.push(validate[i].args);
-                                else
-                                    args.push(validate[i]);
-
-                                if (!validator[i].fn.apply(this, args))
-                                    this.addError(
-                                        format(validate[i].msg || validator[i].msg, args),
-                                        field
-                                    );
-
-                                // custom validator
-                            } else if (be.function(validate[i])) {
-                                try {
-                                    validate[i].call(this, data[field], be);
-                                } catch (e) {
-                                    this.addError(
-                                        format(e.message),
-                                        field
-                                    );
-                                }
-                            }
-                        }
-                    }
-
-                } else if (this.model[field].default === null && this.model[field].required) {
-                    this.addError(
-                        format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
-                        field
-                    );
-                } else {
-                    data[field] = this.model[field].default;
                 }
 
                 if (be.function(this.model[field].convert)) {
                     data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
                 }
+
+                // check type
+                if (be.string(type) && !check[type](data[field], be)) {
+                    this.addError(
+                        format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
+                            field,
+                            type,
+                            dataField: data[field]
+                        }),
+                        field
+                    );
+                } else if (be.function(type) && !type.call(this, data[field], be)) {
+                    this.addError(
+                        format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                            field,
+                            dataField: data[field]
+                        }),
+                        field
+                    );
+                } else if (be.array(type)) {
+                    for (let i in type) {
+                        if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
+
+                            if (be.undefined(type[i].fn)) {
+                                type[i] = {
+                                    fn: type[i],
+                                    message: type[parseInt(i) + 1]
+                                };
+                            }
+
+                            if (!be.string(type[i].message))
+                                type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
+
+                            if (!type[i].fn.call(this, data[field], be)) {
+                                this.addError(
+                                    format(type[i].message, {
+                                        field,
+                                        dataField: data[field]
+                                    }),
+                                    field
+                                );
+                            }
+                        }
+                    }
+                }
+
+                // validator
+                if (be.object(this.model[field].validate)) {
+                    let validate = this.model[field].validate;
+
+                    for (let i in validate) {
+                        //console.log(data[field]);
+                        if (!validate.hasOwnProperty(i))
+                            continue;
+
+                        if (!be.function(validate[i])) {
+
+                            let args = [data[field]];
+
+                            if (be.object(validate[i]) && validate[i].args)
+                                args.push(validate[i].args);
+                            else
+                                args.push(validate[i]);
+
+                            if (!validator[i].fn.apply(this, args))
+                                this.addError(
+                                    format(validate[i].msg || validator[i].msg, args),
+                                    field
+                                );
+
+                            // custom validator
+                        } else if (be.function(validate[i])) {
+                            try {
+                                validate[i].call(this, data[field], be);
+                            } catch (e) {
+                                this.addError(
+                                    format(e.message),
+                                    field
+                                );
+                            }
+                        }
+                    }
+                }
+
             }
 
         if (this.opts.usePromise) {
