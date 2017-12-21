@@ -15,11 +15,11 @@ module.exports = {
     snakeCase: be.snakeCase.bind(this),*/
     //Number
     min: {
-        fn:(v, n) => v >= n,
+        fn: be.min.bind(this),
         msg: 'the number must be greater than or equal to {0}'
     },
     max: {
-        fn: (v, n) => v <= n,
+        fn: be.max.bind(this),
         msg: 'the number must be greater than or equal to {0}'
     },
 };
