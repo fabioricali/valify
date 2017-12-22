@@ -9,6 +9,8 @@ Validates data to easy and clean way.
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
 - [Field configuration](#field-configuration)
+- [Validators](#validators)
+- [Nested models](#nested-models)
 - [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
@@ -67,8 +69,60 @@ try {
 |`default`|`any`|`null`|Default value|
 |`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
 |`locale`|`object`|`object`|An object that contains locale strings|
+|`validate`|`object`|`null`|An object that contains the validators|
 |`convert`|`function`|`null`|A function to manipulate data|
 |`onError`|`function`|`null`|A function triggered when an check fails|
+
+### Validators
+You can validate your model with the validators
+```javascript
+const userModel = new Valify({
+    firstName: {
+        type: 'string',
+        validate: {
+            uppercase: true
+        }
+    },
+    eta: {
+        type: 'int',
+        validate: {
+            min: 18
+        }
+    },
+    otherNumber: {
+        type: 'int',
+        validate: {
+            max: {
+                args: 56,
+                msg: 'this is a custom error message, the number must be 56'
+            }
+        }
+    },
+    // custom validator
+    color: {
+        type: 'string',
+        validate: {
+            checkColor(value) {
+                if (value !== 'red')
+                    throw new Error('the color must be red!');
+            }
+        }
+    }
+});
+```
+
+### Nested models
+```javascript
+
+const userModel = new Valify({
+    lastName: 'string',
+    firstName: 'string',
+    record: new Valify({
+        id: 'int',
+        lastAccess: 'date'
+    })
+});
+```
 
 ### Using promise
 If you need to use with Promise must just add `usePromise` to model settings.
@@ -242,7 +296,9 @@ new Valify({
 })
 ```
 
-***Remember:*** your type function must be always return a boolean
+***Remember:*** 
+- your type function must be always return a boolean
+- use anyway the [validators](#validators) for your multi checks because it's the right way
 
 ### Locale
 You can set locale string in tow ways:
