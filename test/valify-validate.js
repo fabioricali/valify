@@ -204,8 +204,29 @@ describe('validator', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'hello is a not valid url')
+            if(e.message === 'the date must be between 2017-12-10T00:00:00.000Z and 2017-12-20T00:00:00.000Z instead it is 2017-12-09T00:00:00.000Z')
                 done();
+        }
+    });
+
+    it('dateBetween: should be return ok', function (done) {
+
+        const userModel = new Model({
+            aDate: {
+                type: 'date',
+                validate: {
+                    dateBetween: [new Date('2017-12-10'), new Date('2017-12-20')]
+                }
+            }
+        });
+
+        try {
+            userModel({
+                aDate: new Date('2017-12-11')
+            });
+            done();
+        } catch (e) {
+            done(e.message);
         }
     });
 

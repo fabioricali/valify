@@ -161,16 +161,19 @@ class Valify {
 
                         if (!be.function(validate[i])) {
 
-                            let args = [data[field]];
+                            let args = (be.object(validate[i]) && validate[i].args)
+                                ? validate[i].args
+                                : validate[i];
 
-                            if (be.object(validate[i]) && validate[i].args)
-                                args.push(validate[i].args);
-                            else
-                                args.push(validate[i]);
+                            if (be.array(args)) {
+                                args.unshift(data[field]);
+                            } else{
+                                args = [data[field], args];
+                            }
 
                             if (!validator[i].fn.apply(this, args))
                                 this.addError(
-                                    format(validate[i].msg || validator[i].msg, args),
+                                    format(validate[i].msg || validator[i].msg, Valify.printArgs(args)),
                                     field
                                 );
 
