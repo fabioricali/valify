@@ -80,7 +80,7 @@ const userModel = new Valify({
     firstName: {
         type: 'string',
         validate: {
-            uppercase: true
+            upperCase: true
         }
     },
     eta: {

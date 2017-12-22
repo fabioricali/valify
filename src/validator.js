@@ -30,13 +30,13 @@ module.exports = {
         fn: be.capitalized.bind(this),
         msg: 'the string must be capitalized instead it is {0}'
     },
-    lowercase: {
+    lowerCase: {
         fn: be.lowerCase.bind(this),
-        msg: 'the string must be lowercase instead it is {0}'
+        msg: 'the string must be lowerCase instead it is {0}'
     },
-    uppercase: {
+    upperCase: {
         fn: be.upperCase.bind(this),
-        msg: 'the string must be uppercase instead it is {0}'
+        msg: 'the string must be upperCase instead it is {0}'
     },
     //Number
     min: {
