@@ -112,6 +112,7 @@ const userModel = new Valify({
 ```
 
 ### Nested models
+It's possible also add nested model 
 ```javascript
 
 const userModel = new Valify({
