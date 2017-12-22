@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [unreleased]
 - Added `validate` property
 - Added validators
+- Added support to nested model
 - Now `convert` cannot change type, value is closely related to type check and validators check
 
 [2.0.0] - 2017-12-19
