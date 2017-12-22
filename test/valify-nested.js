@@ -136,7 +136,7 @@ describe('valify-nested', function () {
                 name: 'string',
                 other: new Model({
                     color: 'string'
-                })
+                }, {usePromise: true}) //this will be ignored
             })
         });
 

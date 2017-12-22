@@ -257,6 +257,30 @@ describe('valify', function () {
         }
     });
 
+    it('should be return error, firstName is not required', function (done) {
+
+        const userModel = new Model({
+            firstName: {
+                type: 'string',
+                required: false
+            },
+            lastName: 'string',
+            createdOn: {
+                type: 'date',
+                default: new Date()
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'Ricali'
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
     it('should be return error, firstName is required, set locale', function (done) {
 
         const userModel = new Model({

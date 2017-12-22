@@ -16,7 +16,7 @@ class Valify {
      *
      * @param model
      * @param opts
-     * @returns {any}
+     * @returns {*|Promise}
      */
     constructor(model, opts = {}) {
 
@@ -66,7 +66,7 @@ class Valify {
      * Validation
      * @param data
      * @param nested
-     * @returns {*}
+     * @returns {*|Promise}
      */
     valid(data, nested = false) {
         let type;
@@ -82,45 +82,36 @@ class Valify {
                 this.model[field] = this.normalize(field);
                 type = this.model[field].type;
 
-                if (this.model[field].allowNull && data[field] === null)
+                // #1 check allow null
+                if (this.checkAllowNull(field, data))
                     continue;
 
-                if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
-                    this.addError(
-                        format(locale.UNKNOWN_TYPE, {type}),
-                        field
-                    );
+                // #2 check unknown type
+                if (this.checkUnknownType(type, field))
                     continue;
-                }
 
-                if (!data.hasOwnProperty(field)) {
-                    if (this.model[field].default === null && this.model[field].required) {
-                        this.addError(
-                            format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
-                            field
-                        );
-                        continue;
-                    } else {
-                        data[field] = this.model[field].default;
-                    }
-                }
+                // #3 check required
+                if (this.checkRequired(field, data))
+                    continue;
 
-                if (be.function(this.model[field].convert)) {
-                    data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
-                }
+                // #4 apply convert function
+                this.applyConvert(field, data);
 
-                // check type
+                // #5 check type
                 this.checkType(type, field, data);
 
-                // validator
+                // #6 validator
                 this.checkValidator(field, data);
             }
         }
+
         if (this.opts.usePromise && !nested) {
-            if (this.errors.message !== '')
-                return Promise.reject(this.errors);
-            else
-                return Promise.resolve(data);
+            return new Promise((resolve, reject) => {
+                if (this.errors.message !== '')
+                    reject(this.errors);
+                else
+                    resolve(data);
+            });
         } else {
             if (this.errors.message !== '')
                 throw new ValifyError(this.errors.message, this.errors.fields);
@@ -130,10 +121,82 @@ class Valify {
     }
 
     /**
+     * Check allow null
+     * @param field
+     * @param data
+     * @returns {boolean}
+     * @private
+     * @ignore
+     */
+    checkAllowNull(field, data) {
+        return this.model[field].allowNull && data[field] === null;
+    }
+
+    /**
+     * Check unknown type
+     * @param type
+     * @param field
+     * @returns {boolean}
+     * @private
+     * @ignore
+     */
+    checkUnknownType(type, field) {
+        if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
+            this.addError(
+                format(locale.UNKNOWN_TYPE, {type}),
+                field
+            );
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Apply convert function
+     * @param field
+     * @param data
+     * @private
+     * @ignore
+     */
+    applyConvert(field, data) {
+        if (be.function(this.model[field].convert))
+            data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
+    }
+
+    /**
+     * Check if is required
+     * @param field
+     * @param data
+     * @returns {boolean}
+     * @private
+     * @ignore
+     */
+    checkRequired(field, data) {
+        if (!data.hasOwnProperty(field)) {
+            if (this.model[field].default === null && this.model[field].required) {
+                this.addError(
+                    format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
+                    field
+                );
+                return true;
+            } else if (this.model[field].required === false) {
+                return true;
+            } else {
+                data[field] = this.model[field].default;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check over type
      * @param type
      * @param field
      * @param data
+     * @private
+     * @ignore
      */
     checkType(type, field, data) {
         if (be.string(type) && !check[type](data[field], be)) {
@@ -147,17 +210,17 @@ class Valify {
             );
         } else if (be.function(type)) {
 
-            if(Valify.isInstance(type)) {
-                try{
-                    type.call(this, data[field]);
+            if (Valify.isInstance(type)) {
+                try {
+                    type.call(this, data[field], true);
                 } catch (errors) {
-                    if(this.errors.message === '') this.errors.message = errors.message;
-                    for(let i in errors.fields) {
-                        if(errors.fields.hasOwnProperty(i))
+                    if (this.errors.message === '') this.errors.message = errors.message;
+                    for (let i in errors.fields) {
+                        if (errors.fields.hasOwnProperty(i))
                             this.errors.fields.push(errors.fields[i]);
                     }
                 }
-            } else if(!type.call(this, data[field], be)) {
+            } else if (!type.call(this, data[field], be)) {
                 this.addError(
                     format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                         field,
@@ -199,47 +262,49 @@ class Valify {
      * Check over validator
      * @param field
      * @param data
+     * @private
+     * @ignore
      */
     checkValidator(field, data) {
-        if (be.object(this.model[field].validate)) {
-            let validate = this.model[field].validate;
+        if (!be.object(this.model[field].validate)) return;
 
-            for (let i in validate) {
-                //console.log(data[field]);
-                if (!validate.hasOwnProperty(i))
-                    continue;
+        let validate = this.model[field].validate;
 
-                if (!be.function(validate[i])) {
+        for (let i in validate) {
+            if (!validate.hasOwnProperty(i))
+                continue;
 
-                    let args = (be.object(validate[i]) && validate[i].args)
-                        ? validate[i].args
-                        : validate[i];
+            if (!be.function(validate[i])) {
 
-                    if (be.array(args)) {
-                        args.unshift(data[field]);
-                    } else {
-                        args = [data[field], args];
-                    }
+                let args = (be.object(validate[i]) && validate[i].args)
+                    ? validate[i].args
+                    : validate[i];
 
-                    if (!validator[i].fn.apply(this, args))
-                        this.addError(
-                            format(validate[i].msg || validator[i].msg, Valify.printArgs(args)),
-                            field
-                        );
+                if (be.array(args)) {
+                    args.unshift(data[field]);
+                } else {
+                    args = [data[field], args];
+                }
 
-                    // custom validator
-                } else if (be.function(validate[i])) {
-                    try {
-                        validate[i].call(this, data[field], be);
-                    } catch (e) {
-                        this.addError(
-                            format(e.message),
-                            field
-                        );
-                    }
+                if (!validator[i].fn.apply(this, args))
+                    this.addError(
+                        format(validate[i].msg || validator[i].msg, Valify.printArgs(args)),
+                        field
+                    );
+
+                // custom validator
+            } else if (be.function(validate[i])) {
+                try {
+                    validate[i].call(this, data[field], be);
+                } catch (e) {
+                    this.addError(
+                        format(e.message),
+                        field
+                    );
                 }
             }
         }
+
     }
 
     /**
@@ -264,12 +329,12 @@ class Valify {
 
         return extend(this.model[field], {
             type: null,
-            required: false,
+            required: null,
             default: null,
             convert: null,
             validate: null,
             onError: null,
-            allowNull: false,
+            allowNull: null,
             locale: {
                 FIELD_REQUIRED: null,
                 TYPE_FAIL: null,
