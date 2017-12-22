@@ -95,6 +95,37 @@ describe('valify-nested', function () {
         }
     });
 
+    it('promise, should be return failed, error in child of child', function (done) {
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: new Model({
+                id: 'int',
+                name: 'string',
+                other: new Model({
+                    color: 'string'
+                })
+            })
+        }, {usePromise: true});
+
+        userModel({
+            firstName: 'Mike',
+            lastName: 'Reds',
+            record: {
+                id: 1,
+                name: 'boom',
+                other: {
+                    color: 25
+                }
+            }
+        }).then(() => done('error')).catch(e => {
+            console.log(e.message);
+            if (e.message === 'color expects string but receives: 25')
+                done();
+        });
+    });
+
     it('should be return failed, error in child of child, promise is not allowed in nested scenario', function (done) {
 
         const userModel = new Model({
@@ -105,7 +136,7 @@ describe('valify-nested', function () {
                 name: 'string',
                 other: new Model({
                     color: 'string'
-                }, {usePromise: true})
+                })
             })
         });
 
@@ -124,7 +155,48 @@ describe('valify-nested', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
+            console.log(JSON.stringify(e.fields));
             if (e.message === 'color expects string but receives: 25')
+                done();
+        }
+    });
+
+    it('should be return failed, error in child of child, check if is the first error', function (done) {
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: new Model({
+                id: 'int',
+                name: 'string',
+                other: new Model({
+                    color: 'string'
+                })
+            })
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: false,
+                record: {
+                    id: 'ahah',
+                    name: 'boom',
+                    other: {
+                        color: 25
+                    }
+                }
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message, e.fields);
+            console.log(JSON.stringify(e.fields));
+            if (
+                e.message === 'lastName expects string but receives: false' &&
+                e.fields[0].message === e.message &&
+                e.fields[1].message === 'id expects int but receives: ahah' &&
+                e.fields[2].message === 'color expects string but receives: 25'
+            )
                 done();
         }
     });

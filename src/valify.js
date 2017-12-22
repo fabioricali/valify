@@ -63,9 +63,10 @@ class Valify {
     /**
      * Validation
      * @param data
+     * @param nested
      * @returns {*}
      */
-    valid(data) {
+    valid(data, nested = false) {
         let type;
 
         if (!be.object(data))
@@ -116,14 +117,30 @@ class Valify {
                         }),
                         field
                     );
-                } else if (be.function(type) && !type.call(this, data[field], be)) {
-                    this.addError(
-                        format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
-                            field,
-                            dataField: data[field]
-                        }),
-                        field
-                    );
+                } else if (be.function(type)) {
+
+                    if(Valify.isNested(type)) {
+
+                        try{
+                            type.call(this, data[field]);
+                        } catch (errors) {
+                            if(this.errors.message === '') this.errors.message = errors.message;
+                            for(let i in errors.fields) {
+                                if(errors.fields.hasOwnProperty(i))
+                                    this.errors.fields.push(errors.fields[i]);
+                            }
+                        }
+
+                    } else if(!type.call(this, data[field], be)) {
+                        this.addError(
+                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                                field,
+                                dataField: data[field]
+                            }),
+                            field
+                        );
+                    }
+
                 } else if (be.array(type)) {
                     for (let i in type) {
                         if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
@@ -193,7 +210,7 @@ class Valify {
                 }
             }
         }
-        if (this.opts.usePromise) {
+        if (this.opts.usePromise && !nested) {
             if (this.errors.message !== '')
                 return Promise.reject(this.errors);
             else
@@ -204,6 +221,10 @@ class Valify {
             else
                 return data;
         }
+    }
+
+    static isNested(type) {
+        return type.name === 'bound valid' && be.function(type);
     }
 
     static printArgs(args) {
