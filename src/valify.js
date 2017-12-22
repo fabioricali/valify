@@ -70,8 +70,9 @@ class Valify {
 
         if (!be.object(data))
             this.addError(locale.DATA_REQUIRED);
-        else
+        else {
             for (let field in this.model) {
+
                 if (!this.model.hasOwnProperty(field))
                     continue;
 
@@ -167,7 +168,7 @@ class Valify {
 
                             if (be.array(args)) {
                                 args.unshift(data[field]);
-                            } else{
+                            } else {
                                 args = [data[field], args];
                             }
 
@@ -191,7 +192,7 @@ class Valify {
                     }
                 }
             }
-
+        }
         if (this.opts.usePromise) {
             if (this.errors.message !== '')
                 return Promise.reject(this.errors);
@@ -206,9 +207,9 @@ class Valify {
     }
 
     static printArgs(args) {
-        for(let i in args) {
-            if(!args.hasOwnProperty(i)) continue;
-            if (be.date(args[i])){
+        for (let i in args) {
+            if (!args.hasOwnProperty(i)) continue;
+            if (be.date(args[i])) {
                 args[i] = args[i].toISOString();
             }
         }
