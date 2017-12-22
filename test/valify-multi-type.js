@@ -1,7 +1,7 @@
 const be = require('bejs');
 const Model = require('..');
 
-describe('validate multi type', function () {
+describe('valify-multi-type', function () {
 
     before('reset locale', function () {
         Model.setLocale(require('../src/locale'));

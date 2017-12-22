@@ -1,6 +1,6 @@
 const Model = require('..');
 
-describe('validate locale', function () {
+describe('valify-locale', function () {
 
     beforeEach('should be change', function () {
         Model.setLocale({

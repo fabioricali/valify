@@ -1,7 +1,7 @@
 const be = require('bejs');
 const Model = require('..');
 
-describe('validator', function () {
+describe('valify-validate', function () {
 
     before('reset locale', function () {
         Model.setLocale(require('../src/locale'));
