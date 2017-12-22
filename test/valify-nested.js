@@ -61,6 +61,74 @@ describe('valify-nested', function () {
         }
     });
 
+    it('should be return failed, error in child of child', function (done) {
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: new Model({
+                id: 'int',
+                name: 'string',
+                other: new Model({
+                    color: 'string'
+                })
+            })
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: 'Reds',
+                record: {
+                    id: 1,
+                    name: 'boom',
+                    other: {
+                        color: 25
+                    }
+                }
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message, e.fields);
+            if (e.message === 'color expects string but receives: 25')
+                done();
+        }
+    });
+
+    it('should be return failed, error in child of child, promise is not allowed in nested scenario', function (done) {
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: new Model({
+                id: 'int',
+                name: 'string',
+                other: new Model({
+                    color: 'string'
+                }, {usePromise: true})
+            })
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: 'Reds',
+                record: {
+                    id: 1,
+                    name: 'boom',
+                    other: {
+                        color: 25
+                    }
+                }
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message, e.fields);
+            if (e.message === 'color expects string but receives: 25')
+                done();
+        }
+    });
+
     it('should be return failed, error in child, validator', function (done) {
 
         const userModel = new Model({
