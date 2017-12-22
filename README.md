@@ -120,7 +120,10 @@ const userModel = new Valify({
     firstName: 'string',
     record: new Valify({
         id: 'int',
-        lastAccess: 'date'
+        lastAccess: 'date',
+        otherNested: new Valify({
+            color: 'string'
+        })
     })
 });
 ```
