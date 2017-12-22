@@ -223,20 +223,6 @@ class Valify {
         }
     }
 
-    static isNested(type) {
-        return type.name === 'bound valid' && be.function(type);
-    }
-
-    static printArgs(args) {
-        for (let i in args) {
-            if (!args.hasOwnProperty(i)) continue;
-            if (be.date(args[i])) {
-                args[i] = args[i].toISOString();
-            }
-        }
-        return args;
-    }
-
     /**
      * Checks if is a Valify model
      * @param field
@@ -312,6 +298,30 @@ class Valify {
                 locale[param] = obj[param];
             }
         }
+    }
+
+    /**
+     * Check if is nested model
+     * @param type
+     * @returns {boolean}
+     */
+    static isNested(type) {
+        return type.name === 'bound valid' && be.function(type);
+    }
+
+    /**
+     * Returns printable arguments
+     * @param args
+     * @returns {*}
+     */
+    static printArgs(args) {
+        for (let i in args) {
+            if (!args.hasOwnProperty(i)) continue;
+            if (be.date(args[i])) {
+                args[i] = args[i].toISOString();
+            }
+        }
+        return args;
     }
 
 }
