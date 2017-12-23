@@ -122,6 +122,7 @@ const userModel = new Valify({
 Below there are some default validators
 
 |Name|Description|Default message|
+|-|-|-|
 |`email`|Check if string is a valid email|{0} is a not valid email|
 |`url`|Check if is a valid url|{0} is a not valid url|
 |`ip`|Check if is a valid IP format|{0} is a not valid IP|
