@@ -6,6 +6,7 @@ const locale = Object.assign({}, require('./locale'));
 const extend = require('defaulty');
 const format = require('string-template');
 const be = require('bejs');
+const deprecate = require('depreca');
 
 /**
  * @class Valify
@@ -195,11 +196,17 @@ class Valify {
      * @param type
      * @param field
      * @param data
+     * @param parent
      * @private
      * @ignore
      */
-    checkType(type, field, data) {
+    checkType(type, field, data, parent) {
         if (be.string(type) && !check[type](data[field], be)) {
+            if(be.object(parent)){
+                type = parent.type;
+                field = parent.field;
+                data = parent.data;
+            }
             this.addError(
                 format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                     field,
@@ -231,29 +238,53 @@ class Valify {
             }
 
         } else if (be.array(type)) {
-            for (let i in type) {
-                /*if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
 
-                    if (be.undefined(type[i].fn)) {
-                        type[i] = {
-                            fn: type[i],
-                            message: type[parseInt(i) + 1]
-                        };
+            if (type.length === 1) {
+
+                if (!be.array(data[field]))
+                    this.addError(
+                        format(this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
+                            field,
+                            dataField: data[field]
+                        }),
+                        field
+                    );
+                else {
+                    for(let i in data[field]) {
+                        if (data[field].hasOwnProperty(i)) {
+                            this.checkType(type[0], i, data[field], {type, field, data});
+                        }
                     }
+                }
 
-                    if (!be.string(type[i].message))
-                        type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
+            } else {
 
-                    if (!type[i].fn.call(this, data[field], be)) {
-                        this.addError(
-                            format(type[i].message, {
-                                field,
-                                dataField: data[field]
-                            }),
-                            field
-                        );
+                deprecate('multi-type function is deprecated, please use validators instead');
+
+                for (let i in type) {
+                    if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
+
+                        if (be.undefined(type[i].fn)) {
+                            type[i] = {
+                                fn: type[i],
+                                message: type[parseInt(i) + 1]
+                            };
+                        }
+
+                        if (!be.string(type[i].message))
+                            type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
+
+                        if (!type[i].fn.call(this, data[field], be)) {
+                            this.addError(
+                                format(type[i].message, {
+                                    field,
+                                    dataField: data[field]
+                                }),
+                                field
+                            );
+                        }
                     }
-                }*/
+                }
             }
         }
     }
@@ -338,7 +369,7 @@ class Valify {
             locale: {
                 FIELD_REQUIRED: null,
                 TYPE_FAIL: null,
-                EMAIL_FAIL: null
+                TYPE_ARRAY_FAIL: null
             }
         })
     }

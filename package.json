@@ -33,6 +33,7 @@
   "dependencies": {
     "bejs": "^1.16.0",
     "defaulty": "^2.0.0",
+    "depreca": "^1.3.0",
     "string-template": "^1.0.0"
   },
   "devDependencies": {

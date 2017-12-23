@@ -1,4 +1,3 @@
- const be = require('bejs');
 const Model = require('..');
 
 describe('valify-multi-type', function () {
@@ -24,7 +23,7 @@ describe('valify-multi-type', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'failed type 1')
+            if (e.message === 'lastName expects array of  but receives: red0')
                 done();
         }
     });
