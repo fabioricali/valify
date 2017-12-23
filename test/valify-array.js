@@ -40,6 +40,60 @@ describe('valify-array', function () {
         }
     });
 
+    it('should be return failed, type as function', function (done) {
+
+        const userModel = new Model({
+            lastName: [value => value === 'Gray']
+        });
+
+        try {
+            userModel({
+                lastName: ['Red']
+            })
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'lastName receives: Red')
+                done();
+        }
+    });
+
+    it('should be return failed, type as function and throw an error', function (done) {
+
+        const userModel = new Model({
+            lastName: [value => {
+                if(value !== 'Gray')
+                    throw new Error('value must be Gray');
+            }]
+        });
+
+        try {
+            userModel({
+                lastName: ['Red']
+            })
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'value must be Gray')
+                done();
+        }
+    });
+
+    it('should be return ok, type as function', function (done) {
+
+        const userModel = new Model({
+            lastName: [value => ['Red', 'Gray'].includes(value)]
+        });
+
+        try {
+            userModel({
+                lastName: ['Red', 'Gray']
+            });
+            done();
+        } catch (e) {
+            console.log(e);
+            done(e.message);
+        }
+    });
+
     it('should be return failed, wrong item', function (done) {
 
         const userModel = new Model({

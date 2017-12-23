@@ -201,8 +201,11 @@ class Valify {
      * @ignore
      */
     checkType(type, field, data, parent) {
+        /*console.log(
+          type, field, data, parent
+        );*/
         if (be.string(type) && !check[type](data[field], be)) {
-            if(be.object(parent)){
+            if (be.object(parent)) {
                 type = parent.type;
                 field = parent.field;
                 data = parent.data;
@@ -216,7 +219,6 @@ class Valify {
                 field
             );
         } else if (be.function(type)) {
-
             if (Valify.isInstance(type)) {
                 try {
                     type.call(this, data[field], true);
@@ -227,14 +229,28 @@ class Valify {
                             this.errors.fields.push(errors.fields[i]);
                     }
                 }
-            } else if (!type.call(this, data[field], be)) {
-                this.addError(
-                    format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
-                        field,
-                        dataField: data[field]
-                    }),
-                    field
-                );
+            } else {
+                try {
+                    if (!type.call(this, data[field], be)) {
+                        if (be.object(parent)) {
+                            field = parent.field;
+                            data = parent.data;
+                        }
+                        this.addError(
+                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                                field,
+                                dataField: data[field]
+                            }),
+                            field
+                        );
+                    }
+                } catch (errors) {
+                    if (this.errors.message === '') this.errors.message = errors.message;
+                    for (let j in errors.fields) {
+                        if (errors.fields.hasOwnProperty(j))
+                            this.errors.fields.push(errors.fields[j]);
+                    }
+                }
             }
 
         } else if (be.array(type)) {
@@ -250,7 +266,7 @@ class Valify {
                         field
                     );
                 else {
-                    for(let i in data[field]) {
+                    for (let i in data[field]) {
                         if (data[field].hasOwnProperty(i)) {
                             this.checkType(type[0], i, data[field], {type, field, data});
                         }
