@@ -14,6 +14,14 @@ module.exports = {
         fn: be.ip.bind(this),
         msg: '{0} is a not valid IP'
     },
+    uuid: {
+        fn: be.uuid.bind(this),
+        msg: '{0} is a not valid UUID'
+    },
+    creditCard: {
+        fn: be.creditCard.bind(this),
+        msg: '{0} is a not valid credit card'
+    },
     camelCase: {
         fn: be.camelCase.bind(this),
         msg: 'the string must be in the camelCase format'
