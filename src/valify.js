@@ -231,15 +231,7 @@ class Valify {
                     );
                 }
             }catch (errors) {
-
-                this.addError(
-                    format(errors.message, {
-                        field,
-                        type,
-                        dataField: data[field]
-                    }),
-                    field
-                );
+                this.addError(errors.message, field);
             }
         } else if (be.function(type)) {
             if (Valify.isInstance(type)) {
@@ -264,7 +256,10 @@ class Valify {
                         );
                     }
                 } catch (errors) {
-                    this.catchError(errors);
+                    if (be.object(parent)) {
+                        field = parent.field;
+                    }
+                    this.addError(errors.message, field);
                 }
             }
 
@@ -465,6 +460,10 @@ class Valify {
             if (!args.hasOwnProperty(i)) continue;
             if (be.date(args[i])) {
                 args[i] = args[i].toISOString();
+            } else if(be.null(args[i])){
+                args[i] = 'null';
+            } else if(be.undefined(args[i])){
+                args[i] = 'undefined';
             }
         }
         return args;

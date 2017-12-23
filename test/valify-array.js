@@ -9,6 +9,7 @@ describe('valify-array', function () {
     it('should be return failed', function (done) {
 
         const userModel = new Model({
+            aNumber: 'int',
             lastName: ['string']
         });
 
@@ -17,8 +18,13 @@ describe('valify-array', function () {
                 lastName: 'Red'
             })
         } catch (e) {
+            console.log(e.fields);
             console.log(e.message);
-            if (e.message === 'lastName expects array of  but receives: Red')
+            if (
+                e.message === 'aNumber expects int but receives: ' &&
+                e.fields.length === 2 &&
+                e.fields[1].message === 'lastName expects array of  but receives: Red'
+            )
                 done();
         }
     });
@@ -61,7 +67,7 @@ describe('valify-array', function () {
 
         const userModel = new Model({
             lastName: [value => {
-                if(value !== 'Gray')
+                if (value !== 'Gray')
                     throw new Error('value must be Gray');
             }]
         });
@@ -72,7 +78,8 @@ describe('valify-array', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'value must be Gray')
+            console.log(e.fields);
+            if (e.message === 'value must be Gray' && e.fields[0].message === 'value must be Gray' && e.fields[0].field === 'lastName')
                 done();
         }
     });
@@ -107,7 +114,7 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'lastName expects string but receives: Red,Gray,2')
+            if (e.message === 'lastName expects string but receives: Red,Gray,2')
                 done();
         }
     });
@@ -145,7 +152,8 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'gmail.com is a not valid email')
+            console.log(e.fields);
+            if (e.message === 'gmail.com is a not valid email' && e.fields[0].field === 'email' && e.fields[0].message === e.message)
                 done();
         }
     });

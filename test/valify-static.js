@@ -14,4 +14,12 @@ describe('valify-static', function () {
             be.err.true(result);
         });
     });
+    describe('printArgs', function () {
+        it('should return true', function () {
+            let result = Model.printArgs({});
+            console.log(result);
+            console.log(String(new Date()));
+            //be.err.false(result);
+        });
+    });
 });
