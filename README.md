@@ -14,7 +14,6 @@ Validates data to easy and clean way.
 - [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
-- [Multi-type function](#multi-type-function)
 - [Locale](#locale)
 - [Types](#available-types)
 
@@ -41,6 +40,9 @@ const userModel = new Valify({
         type: 'string',
         default: 'editor'
     },
+    colors: {
+        type: ['string']
+    },
     createdAt: {
         type: 'date',
         default: new Date()
@@ -49,7 +51,10 @@ const userModel = new Valify({
 
 // A data object
 const data = {
-    firstName: 'Mike'
+    firstName: 'Mike',
+    lastName: 'Ricali',
+    role: 'owner',
+    colors: ['red', 'yellow', 'orange']
 };
 
 // Validate userModel
@@ -68,7 +73,7 @@ try {
 |`required`|`boolean`|`false`|Indicates if the field is required|
 |`default`|`any`|`null`|Default value|
 |`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
-|`locale`|`object`|`object`|An object that contains locale strings|
+|`locale`|`object`|`object`|An object that contains locale strings that overwrites those globals|
 |`validate`|`object`|`null`|An object that contains the validators|
 |`convert`|`function`|`null`|A function to manipulate data|
 |`onError`|`function`|`null`|A function triggered when an check fails|
@@ -112,20 +117,56 @@ const userModel = new Valify({
 ```
 
 ### Nested models
-It's possible also add nested model 
+It's possible also add nested model, for example you could have an array field like below:
 ```javascript
 
 const userModel = new Valify({
-    lastName: 'string',
     firstName: 'string',
-    record: new Valify({
+    lastName: 'string',
+    records: [new Valify({
         id: 'int',
-        lastAccess: 'date',
+        accessOn: 'date',
         otherNested: new Valify({
             color: 'string'
         })
-    })
+    })]
 });
+
+// A data object
+const data = {
+    firstName: 'Mike',
+    lastName: 'Ricali',
+    records: [
+        {
+            id: 1,
+            accessOn: '2017-12-23T00:01:00',
+            otherNested: {
+                color: 'red'
+            }
+        },
+        {
+            id: 2,
+            accessOn: '2017-12-23T00:02:00',
+            otherNested: {
+                color: 'yellow'
+            }
+        },
+        {
+            id: 3,
+            accessOn: '2017-12-23T00:03:00',
+            otherNested: {
+                color: 'green'
+            }
+        }
+    ]
+};
+
+// Validate userModel
+try {
+    userModel(data);
+} catch(e) {
+    console.log(e.message, e.fields);
+}
 ```
 
 ### Using promise
@@ -253,56 +294,6 @@ try {
     console.log(e.message, e.fields);
 } 
 ```
-
-### Multi-type function
-You can also define multi type in this ways:
-```javascript
-
-const userModel = new Valify({
-    firstName: [
-        {
-            fn: value => false,
-            message: 'failed! wrong type for firstName'
-        }
-    ],
-    // or
-    lastName: {
-        type:[
-            {
-                fn: value => false,
-                message: 'failed! wrong type for lastName'
-            },
-            {
-                fn: value => true,
-                message: 'failed! wrong type for lastName'
-            }
-        ]
-    },
-    // or
-    role: {
-        type: [
-            value => typeof value === 'string', 'value must be a string',
-            value => value.length === 3, 'value must be length 3 chars'
-        ]
-    }
-});
-
-```
-
-- Inside all custom type function is passed a second argument that is <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>, a library used for several validations. Example:
-```javascript
-new Valify({
-    role: {
-        type: [
-            (value, validation) => validation.stringLength(value, 3), 'value must be a string long 3 chars',
-        ]
-    }
-})
-```
-
-***Remember:*** 
-- your type function must be always return a boolean
-- use anyway the [validators](#validators) for your multi checks because it's the right way
 
 ### Locale
 You can set locale string in tow ways:
