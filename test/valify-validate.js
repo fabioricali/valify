@@ -98,6 +98,31 @@ describe('valify-validate', function () {
         }
     });
 
+    it('min: should be return failed, passing args', function (done) {
+
+        const userModel = new Model({
+            eta: {
+                type: 'int',
+                validate: {
+                    min: {
+                        args: 10
+                    }
+                }
+            }
+        });
+
+        try {
+            userModel({
+                eta: 9
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'the number must be greater than or equal to 10 instead it is 9')
+                done();
+        }
+    });
+
     it('min: should be return ok', function (done) {
 
         const userModel = new Model({

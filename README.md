@@ -138,11 +138,62 @@ Below there are some default validators
 |`max`|Check if value number or string length is lesser than or equal to a number|the number must be lesser than or equal to {1} instead it is {0}|
 |`dateBetween`|Check if a date is between two dates|the date must be between {1} and {2} instead it is {0}|
 
+```javascript
+new Valify({
+    myField: {
+        type: '...',
+        validate: {
+            email: true,
+            url: true,
+            ip: true,
+            uuid: true,
+            creditCard: true,
+            camelCase: true,
+            kebabCase: true,
+            snakeCase: true,
+            capitalized: true,
+            lowerCase: true,
+            upperCase: true,
+            min: 5,
+            max: 10,
+            dateBetween: [
+                new Date('2017-12-01'), // start date
+                new Date('2017-12-23')  // end date
+            ]
+        }
+    }
+})
+```
+
+**Customize error message**
+
+```javascript
+{
+    validate: {
+        email: {
+            msg: 'your custom error message'
+        },
+        min: {
+            args: 5,
+            msg: 'an error'
+        },
+        dateBetween: {
+            args: [
+                new Date('2017-12-01'), // start date
+                new Date('2017-12-23')  // end date
+            ],
+            msg: 'an other error'
+        }
+    }
+}
+```
+
 - Inside all custom validator function and custom type function are passed others 2 arguments: 
     - `data`, a copy of origin data object
     - `be`, a library used for several validations. More info on <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>
     
 Example
+
 ```javascript
 new Valify({
     color0: 'string',
