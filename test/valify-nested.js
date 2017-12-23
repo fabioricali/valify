@@ -56,7 +56,7 @@ describe('valify-nested', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
-            if (e.message === 'id expects int but receives: ops')
+            if (e.message === 'id expects int but receives: "ops"')
                 done();
         }
     });
@@ -194,7 +194,7 @@ describe('valify-nested', function () {
             if (
                 e.message === 'lastName expects string but receives: false' &&
                 e.fields[0].message === e.message &&
-                e.fields[1].message === 'id expects int but receives: ahah' &&
+                e.fields[1].message === 'id expects int but receives: "ahah"' &&
                 e.fields[2].message === 'color expects string but receives: 25'
             )
                 done();

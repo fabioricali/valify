@@ -18,7 +18,7 @@ describe('valify-static', function () {
         it('should return true', function () {
             let result = Model.printArgs({});
             console.log(result);
-            console.log(String(new Date()));
+            console.log(JSON.stringify({}));
             //be.err.false(result);
         });
     });

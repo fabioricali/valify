@@ -24,7 +24,7 @@ describe('valify-validate', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'red0 is a not valid email')
+            if (e.message === '"red0" is a not valid email')
                 done();
         }
     });
@@ -181,7 +181,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'hello is a not valid url')
+            if(e.message === '"hello" is a not valid url')
                 done();
         }
     });
@@ -204,7 +204,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'the date must be between 2017-12-10T00:00:00.000Z and 2017-12-20T00:00:00.000Z instead it is 2017-12-09T00:00:00.000Z')
+            if(e.message === 'the date must be between "2017-12-10T00:00:00.000Z" and "2017-12-20T00:00:00.000Z" instead it is "2017-12-09T00:00:00.000Z"')
                 done();
         }
     });

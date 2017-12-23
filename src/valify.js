@@ -226,7 +226,7 @@ class Valify {
                         format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                             field,
                             type,
-                            dataField: data[field]
+                            dataField: JSON.stringify(data[field])
                         }),
                         field
                     );
@@ -251,7 +251,7 @@ class Valify {
                         this.addError(
                             format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                                 field,
-                                dataField: data[field]
+                                dataField: JSON.stringify(data[field])
                             }),
                             field
                         );
@@ -268,15 +268,16 @@ class Valify {
 
             if (type.length === 1) {
 
-                if (!be.array(data[field]))
+                if (!be.array(data[field])) {
                     this.addError(
                         format(this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
                             field,
-                            dataField: data[field]
+                            type,
+                            dataField: JSON.stringify(data[field])
                         }),
                         field
                     );
-                else {
+                } else {
                     for (let i in data[field]) {
                         if (data[field].hasOwnProperty(i)) {
                             this.checkType(type[0], i, data[field], {type, field, data});
@@ -305,7 +306,7 @@ class Valify {
                             this.addError(
                                 format(type[i].message, {
                                     field,
-                                    dataField: data[field]
+                                    dataField: JSON.stringify(data[field])
                                 }),
                                 field
                             );
@@ -459,13 +460,7 @@ class Valify {
     static printArgs(args) {
         for (let i in args) {
             if (!args.hasOwnProperty(i)) continue;
-            if (be.date(args[i])) {
-                args[i] = args[i].toISOString();
-            } else if(be.null(args[i])){
-                args[i] = 'null';
-            } else if(be.undefined(args[i])){
-                args[i] = 'undefined';
-            }
+            args[i] = JSON.stringify(args[i]);
         }
         return args;
     }

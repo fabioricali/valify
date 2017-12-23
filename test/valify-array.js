@@ -21,9 +21,9 @@ describe('valify-array', function () {
             console.log(e.fields);
             console.log(e.message);
             if (
-                e.message === 'aNumber expects int but receives: ' &&
+                e.message === 'aNumber expects int but receives: null' &&
                 e.fields.length === 2 &&
-                e.fields[1].message === 'lastName expects array of  but receives: Red'
+                e.fields[1].message === 'lastName expects array of string but receives: "Red"'
             )
                 done();
         }
@@ -58,7 +58,7 @@ describe('valify-array', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'lastName receives: Red')
+            if (e.message === 'lastName receives: ["Red"]')
                 done();
         }
     });
@@ -114,7 +114,7 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'lastName expects string but receives: Red,Gray,2')
+            if (e.message === 'lastName expects string but receives: ["Red","Gray",2]')
                 done();
         }
     });
@@ -153,7 +153,7 @@ describe('valify-array', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (e.message === 'gmail.com is a not valid email' && e.fields[0].field === 'email' && e.fields[0].message === e.message)
+            if (e.message === '"gmail.com" is a not valid email' && e.fields[0].field === 'email' && e.fields[0].message === e.message)
                 done();
         }
     });

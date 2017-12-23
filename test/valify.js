@@ -56,7 +56,7 @@ describe('valify', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
-            if (e.message === 'lastName receives: red' && e.fields[0].message === 'lastName receives: red')
+            if (e.message === 'lastName receives: "red"' && e.fields[0].message === 'lastName receives: "red"')
                 done();
         }
     });
