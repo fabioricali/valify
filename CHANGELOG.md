@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added validators
 - Added support to nested model
 - Now `convert` cannot change type, value is closely related to type check and validators check
+- Deprecated multi-type settings
 
 [2.0.0] - 2017-12-19
 - Changed error property name from `last` to `message` that it's returned by promise reject

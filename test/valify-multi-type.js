@@ -1,4 +1,4 @@
-const be = require('bejs');
+ const be = require('bejs');
 const Model = require('..');
 
 describe('valify-multi-type', function () {

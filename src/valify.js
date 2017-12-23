@@ -232,7 +232,7 @@ class Valify {
 
         } else if (be.array(type)) {
             for (let i in type) {
-                if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
+                /*if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
 
                     if (be.undefined(type[i].fn)) {
                         type[i] = {
@@ -253,7 +253,7 @@ class Valify {
                             field
                         );
                     }
-                }
+                }*/
             }
         }
     }
