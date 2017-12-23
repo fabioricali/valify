@@ -213,23 +213,34 @@ class Valify {
      * @ignore
      */
     checkType(type, field, data, parent) {
-        /*console.log(
-          type, field, data, parent
-        );*/
-        if (be.string(type) && !check[type](data[field], be)) {
-            if (be.object(parent)) {
-                type = parent.type;
-                field = parent.field;
-                data = parent.data;
+        if (be.string(type)) {
+            try {
+                if (!check[type](data[field], be)) {
+                    if (be.object(parent)) {
+                        type = parent.type;
+                        field = parent.field;
+                        data = parent.data;
+                    }
+                    this.addError(
+                        format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
+                            field,
+                            type,
+                            dataField: data[field]
+                        }),
+                        field
+                    );
+                }
+            }catch (errors) {
+
+                this.addError(
+                    format(errors.message, {
+                        field,
+                        type,
+                        dataField: data[field]
+                    }),
+                    field
+                );
             }
-            this.addError(
-                format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
-                    field,
-                    type,
-                    dataField: data[field]
-                }),
-                field
-            );
         } else if (be.function(type)) {
             if (Valify.isInstance(type)) {
                 try {

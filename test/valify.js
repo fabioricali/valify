@@ -373,36 +373,6 @@ describe('valify', function () {
 
     });
 
-    it('should be return error, add custom type', function (done) {
-
-        Model.addType('myType', (value, validation) => {
-            return value === 'boom';
-        });
-
-        const userModel = new Model({
-            firstName: 'string',
-            lastName: 'myType'
-        }, {
-            usePromise: true
-        });
-
-        const data = {
-            firstName: 'Mike',
-            lastName: 'Ricali',
-            address: 'First street'
-        };
-
-        userModel(data).then((result) => {
-            console.log(result);
-            done('error')
-        }).catch(e => {
-            console.log(e);
-            if (e.message === 'lastName expects myType but receives: Ricali')
-                done();
-        });
-
-    });
-
     it('should be return error, firstName is required, using promise', function (done) {
 
         const userModel = new Model({
