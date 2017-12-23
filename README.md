@@ -10,6 +10,7 @@ Validates data to easy and clean way.
 - [Basic usage](#basic-usage)
 - [Field configuration](#field-configuration)
 - [Validators](#validators)
+    - [Available validators](#available-validators)
 - [Nested models](#nested-models)
 - [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
@@ -115,6 +116,26 @@ const userModel = new Valify({
     }
 });
 ```
+
+#### Available validators
+
+Below there are some default validators
+
+|Name|Description|Default message|
+|`email`|Check if string is a valid email|{0} is a not valid email|
+|`url`|Check if is a valid url|{0} is a not valid url|
+|`ip`|Check if is a valid IP format|{0} is a not valid IP|
+|`uuid`|Check if is a valid UUID format|{0} is a not valid UUID|
+|`creditCard`|Check if is a valid credit card format|{0} is a not valid credit card|
+|`camelCase`|Check if is a valid camelCase format|the string must be in the camelCase format|
+|`kebabCase`|Check if is a valid kebabCase format|the string must be in the kebabCase format|
+|`snakeCase`|Check if is a valid snakeCase format|the string must be in the snakeCase format|
+|`capitalized`|Check if value is capitalized|the string must be capitalized instead it is {0}|
+|`lowerCase`|Check if value is lowercase|the string must be lowerCase instead it is {0}|
+|`upperCase`|Check if value is uppercase|the string must be upperCase instead it is {0}|
+|`min`|Check if value number or string length is greater than or equal to a number|the number must be greater than or equal to {1} instead it is {0}|
+|`max`|Check if value number or string length is lesser than or equal to a number|the number must be lesser than or equal to {1} instead it is {0}|
+|`dateBetween`|Check if a date is between two dates|the date must be between {1} and {2} instead it is {0}|
 
 - Inside all custom validator function and custom type function are passed others 2 arguments: 
     - `data`, a copy of origin data object
