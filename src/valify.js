@@ -243,7 +243,7 @@ class Valify {
                 }
             } else {
                 try {
-                    if (!type.call(this, data[field], be)) {
+                    if (!type.call(this, data[field], Object.assign({}, data), be)) {
                         if (be.object(parent)) {
                             field = parent.field;
                             data = parent.data;
@@ -354,7 +354,7 @@ class Valify {
                 // custom validator
             } else if (be.function(validate[i])) {
                 try {
-                    validate[i].call(this, data[field], be);
+                    validate[i].call(this, data[field], Object.assign({}, data), be);
                 } catch (e) {
                     this.addError(
                         format(e.message),

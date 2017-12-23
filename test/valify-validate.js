@@ -236,7 +236,8 @@ describe('valify-validate', function () {
             lastName: {
                 type: 'string',
                 validate: {
-                    myValidator(value) {
+                    myValidator(value, data) {
+                        console.log(data);
                         if (value !== 'hello')
                             throw new Error('string must be hello');
                     }
