@@ -64,6 +64,18 @@ class Valify {
     }
 
     /**
+     * Catch error
+     * @param errors
+     */
+    catchError(errors) {
+        if (this.errors.message === '') this.errors.message = errors.message;
+        for (let i in errors.fields) {
+            if (errors.fields.hasOwnProperty(i))
+                this.errors.fields.push(errors.fields[i]);
+        }
+    }
+
+    /**
      * Validation
      * @param data
      * @param nested
@@ -223,11 +235,7 @@ class Valify {
                 try {
                     type.call(this, data[field], true);
                 } catch (errors) {
-                    if (this.errors.message === '') this.errors.message = errors.message;
-                    for (let i in errors.fields) {
-                        if (errors.fields.hasOwnProperty(i))
-                            this.errors.fields.push(errors.fields[i]);
-                    }
+                    this.catchError(errors);
                 }
             } else {
                 try {
@@ -245,11 +253,7 @@ class Valify {
                         );
                     }
                 } catch (errors) {
-                    if (this.errors.message === '') this.errors.message = errors.message;
-                    for (let j in errors.fields) {
-                        if (errors.fields.hasOwnProperty(j))
-                            this.errors.fields.push(errors.fields[j]);
-                    }
+                    this.catchError(errors);
                 }
             }
 
