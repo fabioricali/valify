@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - **Added** validators
 - **Added** support to nested model
 - **Changed** now `convert` cannot change type, value is closely related to type check and validators check
-- **Changed** now custom type supports also Error calling
+- **Changed** now custom type supports also Error call
 - **Deprecated** multi-type settings
 
 [2.0.0] - 2017-12-19
