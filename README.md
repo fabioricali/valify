@@ -116,6 +116,31 @@ const userModel = new Valify({
 });
 ```
 
+- Inside all custom validator function and custom type function are passed others 2 arguments: 
+    - `data`, a copy of origin data object
+    - `be`, a library used for several validations. More info on <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>
+    
+Example
+```javascript
+new Valify({
+    color0: 'string',
+    color1: {
+        type: (value, data, be) => {
+            return be.string(value)
+        },
+        validate: {
+            checkColor(value, data, be) {
+                if (value !== 'red')
+                    throw new Error('the color must be red!');
+                
+                if (value === data.color0)
+                    throw new Error('the color must be different of color0!');
+            }
+        }
+    }
+})
+```    
+
 ### Nested models
 It's possible also add nested model, for example you could have an array field like below:
 ```javascript
@@ -245,7 +270,8 @@ There are different ways to define custom types:
 ##### 1) Globally, using static method `addType`
 ```javascript
 
-Valify.addType('mycustom', value => {
+Valify.addType('mycustom', (value, data) => {
+    console.log(data);
     return value === 10;
 });
 
