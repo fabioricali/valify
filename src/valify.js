@@ -213,6 +213,7 @@ class Valify {
      * @ignore
      */
     checkType(type, field, data, parent) {
+        //TODO add type conversion to string
         if (be.string(type)) {
             try {
                 if (!check[type](data[field], be)) {
