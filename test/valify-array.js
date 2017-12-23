@@ -111,4 +111,78 @@ describe('valify-array', function () {
                 done();
         }
     });
+
+    it('should be return failed, type as model', function (done) {
+
+        const userModel = new Model({
+            record: [new Model({
+                firstName: 'string',
+                lastName: 'string',
+                email: {
+                    type: 'string',
+                    validate: {
+                        email: true
+                    }
+                }
+            })]
+        });
+
+        try {
+            userModel({
+                record: [
+                    {
+                        firstName: 'Mike',
+                        lastName: 'Ricali',
+                        email: 'mike.ricali@gmail.com'
+                    },
+                    {
+                        firstName: 'John',
+                        lastName: 'McCain',
+                        email: 'gmail.com'
+                    }
+                ]
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'gmail.com is a not valid email')
+                done();
+        }
+    });
+
+    it('should be return ok, type as model', function (done) {
+
+        const userModel = new Model({
+            record: [new Model({
+                firstName: 'string',
+                lastName: 'string',
+                email: {
+                    type: 'string',
+                    validate: {
+                        email: true
+                    }
+                }
+            })]
+        });
+
+        try {
+            userModel({
+                record: [
+                    {
+                        firstName: 'Mike',
+                        lastName: 'Ricali',
+                        email: 'mike.ricali@gmail.com'
+                    },
+                    {
+                        firstName: 'John',
+                        lastName: 'McCain',
+                        email: 'john.m@gmail.com'
+                    }
+                ]
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
 });
