@@ -76,6 +76,7 @@ try {
 
 ### Validators
 You can validate your model with the validators
+
 ```javascript
 const userModel = new Valify({
     firstName: {
@@ -113,7 +114,6 @@ const userModel = new Valify({
 ```
 
 #### Available validators
-
 Below there are some default validators
 
 |Name|Description|Default message|
@@ -161,6 +161,7 @@ new Valify({
 ```
 
 #### Customize error message
+The validators error message are customizable through `msg` property like below.
 
 ```javascript
 {
@@ -211,6 +212,7 @@ new Valify({
 
 ### Nested models
 It's possible also add nested model, for example you could have an array field like below:
+
 ```javascript
 
 const userModel = new Valify({
@@ -303,8 +305,9 @@ userModel(data).then(()=>{
 ```
 
 ### Manipulate data
-```javascript
+You may need to manipulate data before the validation.
 
+```javascript
 // Define a model
 const userModel = new Valify({
     firstName: {
