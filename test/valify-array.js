@@ -21,7 +21,7 @@ describe('valify-array', function () {
             console.log(e.fields);
             console.log(e.message);
             if (
-                e.message === 'aNumber expects int but receives: null' &&
+                e.message === 'aNumber is required' &&
                 e.fields.length === 2 &&
                 e.fields[1].message === 'lastName expects array of string but receives: "Red"'
             )

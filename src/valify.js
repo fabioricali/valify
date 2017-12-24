@@ -95,6 +95,9 @@ class Valify {
                 this.model[field] = this.normalize(field);
                 type = this.model[field].type;
 
+                // #0 detect short required string
+                type = this.detectShortRequired(type, field);
+
                 // #1 check allow null
                 if (this.checkAllowNull(field, data))
                     continue;
@@ -131,6 +134,22 @@ class Valify {
             else
                 return data;
         }
+    }
+
+    detectShortRequired(type, field) {
+        let sType;
+
+        if (be.string(type)){
+            sType = type;
+        } else if (be.array(type) && type.length === 1 && be.string(type[0])) {
+            sType = type[0];
+        }
+
+        if (sType !== undefined && sType.endsWith('?')) {
+            this.model[field].required = false;
+            return sType.slice(0, -1);
+        } else
+            return type;
     }
 
     /**
@@ -393,7 +412,7 @@ class Valify {
 
         return extend(this.model[field], {
             type: null,
-            required: null,
+            required: true,
             default: null,
             convert: null,
             validate: null,
