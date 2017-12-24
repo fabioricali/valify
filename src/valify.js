@@ -356,7 +356,7 @@ class Valify {
                 try {
                     if(!validate[i].call(this, data[field], Object.assign({}, data), be)) {
                         this.addError(
-                            format(locale.VALIDATOR_FAIL, {field, validator: i}),
+                            format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {field, validator: i}),
                             field
                         );
                     }
@@ -402,7 +402,8 @@ class Valify {
             locale: {
                 FIELD_REQUIRED: null,
                 TYPE_FAIL: null,
-                TYPE_ARRAY_FAIL: null
+                TYPE_ARRAY_FAIL: null,
+                VALIDATOR_FAIL: null
             }
         })
     }
