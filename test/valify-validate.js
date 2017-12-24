@@ -282,5 +282,31 @@ describe('valify-validate', function () {
         }
     });
 
+    it('custom validator: should be return false', function (done) {
+
+        const userModel = new Model({
+            lastName: {
+                type: 'string',
+                validate: {
+                    myValidator(value, data) {
+                        console.log(value);
+                        return value === 'hello';
+                    }
+                }
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'test@test.com'
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'lastName fail, myValidator returns false')
+                done();
+        }
+    });
+
 
 });

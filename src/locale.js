@@ -5,6 +5,7 @@
 module.exports = {
     UNKNOWN_TYPE: 'Unknown type: "{type}"',
     TYPE_FAIL: '{field} expects {type} but receives: {dataField}',
+    VALIDATOR_FAIL: '{field} fail, {validator} returns false',
     TYPE_ARRAY_FAIL: '{field} expects array of {type} but receives: {dataField}',
     TYPE_FUNCTION_FAIL: '{field} receives: {dataField}',
     FIELD_REQUIRED: '{field} is required',

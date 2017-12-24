@@ -354,7 +354,12 @@ class Valify {
                 // custom validator
             } else if (be.function(validate[i])) {
                 try {
-                    validate[i].call(this, data[field], Object.assign({}, data), be);
+                    if(!validate[i].call(this, data[field], Object.assign({}, data), be)) {
+                        this.addError(
+                            format(locale.VALIDATOR_FAIL, {field, validator: i}),
+                            field
+                        );
+                    }
                 } catch (e) {
                     this.addError(
                         format(e.message),

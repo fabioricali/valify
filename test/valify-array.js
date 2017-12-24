@@ -249,6 +249,43 @@ describe('valify-array', function () {
         }
     });
 
+    it('should be return false, custom validator to check empty array', function (done) {
+
+        const userModel = new Model({
+            record: {
+                type: [
+                    new Model({
+                        firstName: 'string',
+                        lastName: 'string',
+                        email: {
+                            type: 'string',
+                            validate: {
+                                email: true
+                            }
+                        }
+                    })
+                ],
+                validate: {
+                    checkEmpty(value, data, be){
+                        if(be.empty(value))
+                            throw new Error('cannot be empty');
+                    }
+                }
+            }
+        });
+
+        try {
+            userModel({
+                record: []
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'cannot be empty')
+                done();
+        }
+    });
+
     it('should be return failed, different type', function (done) {
 
         const userModel = new Model({
