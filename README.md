@@ -11,6 +11,7 @@ Validates data to easy and clean way.
 - [Field configuration](#field-configuration)
 - [Validators](#validators)
     - [Available validators](#available-validators)
+    - [Error message](#customize-error-message)
 - [Nested models](#nested-models)
 - [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
@@ -29,21 +30,15 @@ const Valify = require('valify');
 
 // Define a model
 const userModel = new Valify({
-    firstName: {
-        type: 'string',
-        required: true
-    },
-    lastName: {
-        type: 'string',
-        required: true
-    },
+    firstName: 'string',
+    lastName: 'string',
+    age: 'int?', // this is not required
     role: {
         type: 'string',
-        default: 'editor'
+        default: 'editor',
+        required: false
     },
-    colors: {
-        type: ['string']
-    },
+    colors: ['string'],
     createdAt: {
         type: 'date',
         default: new Date()
@@ -71,7 +66,7 @@ try {
 |Property|Type|Default|Description|
 |-|-|-|-|
 |`type`|`object`,`array`,`string`,`function`|`null`|Type of control|
-|`required`|`boolean`|`false`|Indicates if the field is required|
+|`required`|`boolean`|`true`|Indicates if the field is required|
 |`default`|`any`|`null`|Default value|
 |`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
 |`locale`|`object`|`object`|An object that contains locale strings that overwrites those globals|
@@ -165,7 +160,7 @@ new Valify({
 })
 ```
 
-**Customize error message**
+#### Customize error message
 
 ```javascript
 {
