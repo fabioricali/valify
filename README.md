@@ -1,9 +1,15 @@
-# Valify
-
+<div align="center">
+<br/><br/>
+<img width="300" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
+<br/><br/>
+<br/><br/>
 Validates data to easy and clean way.
-
+<br/><br/>
 <a href="https://travis-ci.org/fabioricali/valify" target="_blank"><img src="https://travis-ci.org/fabioricali/valify.svg?branch=master" title="Build Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
+<br/><br/>
+<br/><br/>
+</div>
 
 **Documentation**
 - [Installation](#installation)
