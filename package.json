@@ -1,51 +1,51 @@
 {
-  "name": "valify",
-  "version": "3.0.0",
-  "description": "Validates data to easy and clean way.",
-  "main": "index.js",
-  "browser": "dist/valify.min.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "version:major": "webpack --env.major && npm run-script && version-to-tag.sh && npm publish",
-    "version:minor": "webpack --env.minor && npm run-script && version-to-tag.sh && npm publish",
-    "version:patch": "webpack --env.patch && npm run-script && version-to-tag.sh && npm publish",
-    "build": "webpack --progress",
-    "postversion": "npm publish && git push && git push --tags",
-    "test": "mocha test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fabioricali/valify.git"
-  },
-  "keywords": [
-    "validation",
-    "types",
-    "model",
-    "data",
-    "valid"
-  ],
-  "author": "Fabio Ricali",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fabioricali/valify/issues"
-  },
-  "homepage": "https://github.com/fabioricali/valify#readme",
-  "dependencies": {
-    "bejs": "^1.16.0",
-    "defaulty": "^2.0.0",
-    "depreca": "^1.3.0",
-    "string-template": "^1.0.0"
-  },
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "mocha": "^4.0.1",
-    "unminified-webpack-plugin": "^1.4.2",
-    "webpack": "^3.10.0",
-    "webpack-auto-inject-version": "^1.0.0"
-  }
+    "name": "valify",
+    "version": "3.1.0",
+    "description": "Validates data to easy and clean way.",
+    "main": "index.js",
+    "browser": "dist/valify.min.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "version:major": "webpack --env.major && npm run-script && version-to-tag.sh && npm publish",
+        "version:minor": "webpack --env.minor && npm run-script && version-to-tag.sh && npm publish",
+        "version:patch": "webpack --env.patch && npm run-script && version-to-tag.sh && npm publish",
+        "build": "webpack --progress",
+        "postversion": "npm publish && git push && git push --tags",
+        "test": "mocha test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fabioricali/valify.git"
+    },
+    "keywords": [
+        "validation",
+        "types",
+        "model",
+        "data",
+        "valid"
+    ],
+    "author": "Fabio Ricali",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/fabioricali/valify/issues"
+    },
+    "homepage": "https://github.com/fabioricali/valify#readme",
+    "dependencies": {
+        "bejs": "^1.16.0",
+        "defaulty": "^2.0.0",
+        "depreca": "^1.3.0",
+        "string-template": "^1.0.0"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-es2015": "^6.24.1",
+        "mocha": "^4.0.1",
+        "unminified-webpack-plugin": "^1.4.2",
+        "webpack": "^3.10.0",
+        "webpack-auto-inject-version": "^1.0.0"
+    }
 }
