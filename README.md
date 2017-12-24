@@ -14,7 +14,7 @@ Validates data to easy and clean way.
 - [Installation](#installation)
     - [Browser](#browser)
 - [Basic usage](#basic-usage)
-- [Field configuration](#field-configuration)
+- [Field options](#field-options)
 - [Validators](#validators)
     - [Available validators](#available-validators)
     - [Error message](#customize-error-message)
@@ -72,7 +72,7 @@ try {
 }
 ```
 
-### Field configuration
+### Field options
 
 |Property|Type|Default|Description|
 |-|-|-|-|
