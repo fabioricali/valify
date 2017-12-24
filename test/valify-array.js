@@ -193,4 +193,86 @@ describe('valify-array', function () {
             done(e.message);
         }
     });
+
+    it('should be return ok, empty model', function (done) {
+
+        const userModel = new Model({
+            record: [new Model({
+                firstName: 'string',
+                lastName: 'string',
+                email: {
+                    type: 'string',
+                    validate: {
+                        email: true
+                    }
+                }
+            })]
+        });
+
+        try {
+            userModel({
+                record: []
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
+    it('should be return false, empty model and required true', function (done) {
+
+        const userModel = new Model({
+            record: {
+                type: [
+                    new Model({
+                        firstName: 'string',
+                        lastName: 'string',
+                        email: {
+                            type: 'string',
+                            validate: {
+                                email: true
+                            }
+                        }
+                    })
+                ],
+                required: true
+            }
+        });
+
+        try {
+            userModel({});
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'record is required')
+                done();
+        }
+    });
+
+    it('should be return failed, different type', function (done) {
+
+        const userModel = new Model({
+            record: [new Model({
+                firstName: 'string',
+                lastName: 'string',
+                email: {
+                    type: 'string',
+                    validate: {
+                        email: true
+                    }
+                }
+            })]
+        });
+
+        try {
+            userModel({
+                record: null
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'record expects array of function () { [native code] } but receives: null')
+                done();
+        }
+    });
 });
