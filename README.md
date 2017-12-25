@@ -16,6 +16,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
     - [Browser](#browser)
 - [Basic usage](#basic-usage)
 - [Field options](#field-options)
+- [Error object](#error-object)
 - [Validators](#validators)
     - [Available validators](#available-validators)
     - [Customize error message](#customize-error-message)
