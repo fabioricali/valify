@@ -1,6 +1,6 @@
 <div align="center">
 <br/><br/>
-<img width="300" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
+<img width="250" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
 <br/>
 Validates data to easy and clean way.
 <br/><br/><br/>
