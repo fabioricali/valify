@@ -136,6 +136,12 @@ class Valify {
         }
     }
 
+    /**
+     * Detect if string type has symbol "?" set required property to false
+     * @param type
+     * @param field
+     * @returns {*}
+     */
     detectShortRequired(type, field) {
         let sType;
 
