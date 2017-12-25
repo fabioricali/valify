@@ -10,6 +10,8 @@ Validates data to easy and clean way.
 <br/><br/>
 </div>
 
+Valify was created to easily validate data structures. With a simple syntax it is ideal in many contexts for example in REST API
+
 **Documentation**
 - [Installation](#installation)
     - [Browser](#browser)
