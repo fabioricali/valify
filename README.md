@@ -2,12 +2,11 @@
 <br/><br/>
 <img width="250" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
 <br/>
-Validates data to easy and clean way.
+Validates data to easy way.
 <br/><br/><br/>
 <a href="https://travis-ci.org/fabioricali/valify" target="_blank"><img src="https://travis-ci.org/fabioricali/valify.svg?branch=master" title="Build Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
-<br/><br/>
-<br/><br/>
+<br/><br/><br/>
 </div>
 
 Valify was created to easily validate data structures. With a simple syntax it is ideal in many contexts for example in REST API
@@ -19,7 +18,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Field options](#field-options)
 - [Validators](#validators)
     - [Available validators](#available-validators)
-    - [Error message](#customize-error-message)
+    - [Customize error message](#customize-error-message)
 - [Nested models](#nested-models)
 - [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
@@ -86,6 +85,18 @@ try {
 |`validate`|`object`|`null`|An object that contains the validators|
 |`convert`|`function`|`null`|A function to manipulate data|
 |`onError`|`function`|`null`|A function triggered when an check fails|
+
+### Error object
+Valify in case of errors returns an object with 2 properties:
+- `message` is the first error occurred
+- `fields` is an array of all errors occurred
+
+```
+{
+    message: 'lastName is required',
+    fields: [{field: 'lastName', message: 'lastName is required'}]
+}
+```
 
 ### Validators
 You can validate your model with the validators
@@ -427,6 +438,7 @@ Valify.setLocale({
 |`TYPE_FUNCTION_FAIL`|`{field} receives: {dataField}`|
 |`FIELD_REQUIRED`|`{field} is required`|
 |`DATA_REQUIRED`|`Data is required and must be an object`|
+|`VALIDATOR_FAIL`|`{field} fail, {validator} returns false`|
 
 ##### 2) Local, into field settings
 ```javascript
@@ -447,8 +459,12 @@ const userModel = new Valify({
     - **`TYPE_FAIL`**
     - **`TYPE_ARRAY_FAIL`**
     - **`FIELD_REQUIRED`**
+    - **`VALIDATOR_FAIL`**
 
 ### Available types
+
+All types that you can use:
+
 - `alphanumeric`
 - `argument`
 - `array`
