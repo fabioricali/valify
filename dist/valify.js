@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 3.1.0  
+// [AIV]  Valify Build version: 3.2.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6630,11 +6630,11 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 
 /**
  *
- * @type {{ALPHANUMERIC: string, ARGUMENTS: string, ARRAY: string, BOOLEAN: string, BUFFER: string, DATE: string, ERROR: string, FLOAT: string, FLOAT32ARRAY: string, FLOAT64ARRAY: string, FUNCTION: string, GENERATORFUNCTION: string, INT: string, INT16ARRAY: string, INT32ARRAY: string, INT8ARRAY: string, MAP: string, NULL: string, NUMBER: string, OBJECT: string, PROMISE: string, REGEXP: string, SET: string, STRING: string, SYMBOL: string, UINT16ARRAY: string, UINT32ARRAY: string, UINT8ARRAY: string, UINT8CLAMPEDARRAY: string, UNDEFINED: string, WEAKMAP: string, WEAKSET: string}}
+ * @type {{ALPHANUMERIC: string, ARGUMENT: string, ARRAY: string, BOOLEAN: string, BUFFER: string, DATE: string, ERROR: string, FLOAT: string, FLOAT32ARRAY: string, FLOAT64ARRAY: string, FUNCTION: string, GENERATORFUNCTION: string, INT: string, INT16ARRAY: string, INT32ARRAY: string, INT8ARRAY: string, MAP: string, NULL: string, NUMBER: string, OBJECT: string, PROMISE: string, REGEXP: string, SET: string, STRING: string, SYMBOL: string, UINT16ARRAY: string, UINT32ARRAY: string, UINT8ARRAY: string, UINT8CLAMPEDARRAY: string, UNDEFINED: string, WEAKMAP: string, WEAKSET: string}}
  */
 module.exports = {
     ALPHANUMERIC: 'alphanumeric',
-    ARGUMENTS: 'argument',
+    ARGUMENTS: 'arguments',
     ARRAY: 'array',
     BOOLEAN: 'boolean',
     BUFFER: 'buffer',
@@ -6830,6 +6830,14 @@ var Valify = function () {
                 if (this.errors.message !== '') throw new ValifyError(this.errors.message, this.errors.fields);else return data;
             }
         }
+
+        /**
+         * Detect if string type has symbol "?" set required property to false
+         * @param type
+         * @param field
+         * @returns {*}
+         */
+
     }, {
         key: 'detectShortRequired',
         value: function detectShortRequired(type, field) {
@@ -6935,10 +6943,9 @@ var Valify = function () {
     }, {
         key: 'checkType',
         value: function checkType(type, field, data, parent) {
-
             if (be.string(type)) {
                 try {
-                    if (!check[type](data[field], be)) {
+                    if (!Valify.stringAsError(check[type](data[field], be))) {
                         if (be.object(parent)) {
                             type = parent.type;
                             field = parent.field;
@@ -6962,7 +6969,8 @@ var Valify = function () {
                     }
                 } else {
                     try {
-                        if (!type.call(this, data[field], Object.assign({}, data), be)) {
+
+                        if (!Valify.stringAsError(type.call(this, data[field], Object.assign({}, data), be))) {
                             if (be.object(parent)) {
                                 field = parent.field;
                                 data = parent.data;
@@ -7012,7 +7020,7 @@ var Valify = function () {
 
                             if (!be.string(type[_i].message)) type[_i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
-                            if (!type[_i].fn.call(this, data[field], be)) {
+                            if (!Valify.stringAsError(type[_i].fn.call(this, data[field], be))) {
                                 this.addError(format(type[_i].message, {
                                     field: field,
                                     dataField: JSON.stringify(data[field])
@@ -7057,8 +7065,11 @@ var Valify = function () {
                     // custom validator
                 } else if (be.function(validate[i])) {
                     try {
-                        if (!validate[i].call(this, data[field], Object.assign({}, data), be)) {
-                            this.addError(format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, { field: field, validator: i }), field);
+                        if (!Valify.stringAsError(validate[i].call(this, data[field], Object.assign({}, data), be))) {
+                            this.addError(format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {
+                                field: field,
+                                validator: i
+                            }), field);
                         }
                     } catch (e) {
                         this.addError(format(e.message), field);
@@ -7109,6 +7120,13 @@ var Valify = function () {
                 }
             });
         }
+    }], [{
+        key: 'stringAsError',
+        value: function stringAsError(value) {
+            if (be.string(value)) {
+                throw new Error(value);
+            } else return value;
+        }
 
         /**
          * Check if is nested model
@@ -7116,7 +7134,7 @@ var Valify = function () {
          * @returns {boolean}
          */
 
-    }], [{
+    }, {
         key: 'isInstance',
         value: function isInstance(type) {
             return type.owner instanceof Valify;
