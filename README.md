@@ -17,6 +17,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Basic usage](#basic-usage)
 - [Field options](#field-options)
 - [Error object](#error-object)
+- [Default values](#default-values)
 - [Validators](#validators)
     - [Available validators](#available-validators)
     - [Customize error message](#customize-error-message)
@@ -48,8 +49,7 @@ const userModel = new Valify({
     age: 'int?', // this is not required
     role: {
         type: 'string',
-        default: 'editor',
-        required: false
+        default: 'editor'
     },
     colors: ['string'],
     createdAt: {
@@ -96,6 +96,33 @@ Valify in case of errors returns an object with 2 properties:
 {
     message: 'lastName is required',
     fields: [{field: 'lastName', message: 'lastName is required'}]
+}
+```
+
+### Default values
+You can set a default value for each field, this setting overwrites `required` property to `false`.
+
+```javascript
+const Valify = require('valify');
+
+// Define a model
+const userModel = new Valify({
+    name: 'string',
+    role: {
+        type: 'string',
+        default: 'editor'
+    }
+});
+
+// A data object
+const data = {
+    name: 'Mike Ricali'
+};
+
+try {
+    userModel(data); //=> {name: 'Mike Ricali', role: 'editor'}
+} catch(e) {
+    console.log(e.message, e.fields);
 }
 ```
 
