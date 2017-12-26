@@ -394,14 +394,10 @@ try {
 // Define a model
 const userModel = new Valify({
     aString: {
-        type: value => {
-            return typeof value === 'string'
-        }
+        type: value => typeof value === 'string'
     },
     // or 
-    aBoolean: value => {
-        return typeof value === 'boolean'
-    }
+    aBoolean: value => typeof value === 'boolean'
 });
 
 // A data object
@@ -418,7 +414,7 @@ try {
 ```
 
 ### Locale
-You can set locale string in tow ways:
+You can set locale string in two ways:
 
 ##### 1) Globally, using static method `setLocale`
 ```javascript
@@ -429,7 +425,7 @@ Valify.setLocale({
 
 ```
 
-**Available strings**
+**Default strings**
 
 |Name|Default|
 |-|-|
@@ -466,7 +462,7 @@ const userModel = new Valify({
 
 All types that you can use:
 
-- Native
+- JavaScript standard
     - `arguments`
     - `array`
     - `boolean`
@@ -497,11 +493,10 @@ All types that you can use:
     - `weakmap`
     - `weakset`
     
-- `alphanumeric`
-- `float`
-- `int`
-
-
+- Extra    
+    - `alphanumeric`
+    - `float`
+    - `int`
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/Valify/blob/master/CHANGELOG.md">here</a>
