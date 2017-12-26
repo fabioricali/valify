@@ -1,6 +1,6 @@
 <div align="center">
 <br/><br/>
-<img width="250" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
+<img width="220" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
 <br/>
 Validates data to easy way in JavaScript.
 <br/><br/><br/>
@@ -131,7 +131,7 @@ const userModel = new Valify({
         validate: {
             checkColor(value) {
                 if (value !== 'red')
-                    throw new Error('the color must be red!');
+                    return 'the color must be red!';
             }
         }
     }
@@ -366,19 +366,28 @@ There are different ways to define custom types:
 ##### 1) Globally, using static method `addType`
 ```javascript
 
-Valify.addType('mycustom', (value, data) => {
+Valify.addType('mycustom1', (value, data) => {
     console.log(data);
     return value === 10;
 });
 
+// it's also possible returns a string as error like below
+Valify.addType('mycustom2', (value, data) => {
+    console.log(data);
+    if (value !== 10)
+        return 'ops... must be 10'
+});
+
 // Define a model
 const userModel = new Valify({
-    aNumber: 'mycustom'
+    aNumber: 'mycustom1',
+    otherNumber: 'mycustom2'
 });
 
 // A data object
 const data = {
-    aNumber: 9
+    aNumber: 9,
+    otherNumber: 11,
 };
 
 try {
