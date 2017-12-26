@@ -2,7 +2,7 @@
 <br/><br/>
 <img width="250" src="https://raw.githubusercontent.com/fabioricali/valify/master/extra/logo-valify.png" title="Valify"/>
 <br/>
-Validates data to easy way.
+Validates data to easy way in JavaScript.
 <br/><br/><br/>
 <a href="https://travis-ci.org/fabioricali/valify" target="_blank"><img src="https://travis-ci.org/fabioricali/valify.svg?branch=master" title="Build Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
@@ -466,38 +466,42 @@ const userModel = new Valify({
 
 All types that you can use:
 
+- Native
+    - `arguments`
+    - `array`
+    - `boolean`
+    - `buffer`
+    - `date`
+    - `error`
+    - `float32array`
+    - `float64array`
+    - `function`
+    - `generatorfunction`
+    - `int16array`
+    - `int32array`
+    - `int8array`
+    - `map`
+    - `null`
+    - `number`
+    - `object`
+    - `promise`
+    - `regexp`
+    - `set`
+    - `string`
+    - `symbol`
+    - `uint16array`
+    - `uint32array`
+    - `uint8array`
+    - `uint8clampedarray`
+    - `undefined`
+    - `weakmap`
+    - `weakset`
+    
 - `alphanumeric`
-- `argument`
-- `array`
-- `boolean`
-- `buffer`
-- `date`
-- `error`
 - `float`
-- `float32array`
-- `float64array`
-- `function`
-- `generatorfunction`
 - `int`
-- `int16array`
-- `int32array`
-- `int8array`
-- `map`
-- `null`
-- `number`
-- `object`
-- `promise`
-- `regexp`
-- `set`
-- `string`
-- `symbol`
-- `uint16array`
-- `uint32array`
-- `uint8array`
-- `uint8clampedarray`
-- `undefined`
-- `weakmap`
-- `weakset`
+
+
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/Valify/blob/master/CHANGELOG.md">here</a>

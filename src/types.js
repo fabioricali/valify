@@ -4,7 +4,7 @@
  */
 module.exports = {
     ALPHANUMERIC: 'alphanumeric',
-    ARGUMENT: 'argument',
+    ARGUMENTS: 'arguments',
     ARRAY: 'array',
     BOOLEAN: 'boolean',
     BUFFER: 'buffer',

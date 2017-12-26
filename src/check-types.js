@@ -4,7 +4,7 @@ const TYPES = require('./types');
 const check = [];
 
 check[TYPES.ALPHANUMERIC] = be.alphanumeric.bind(this);
-check[TYPES.ARGUMENT] = be.argument.bind(this);
+check[TYPES.ARGUMENTS] = be.argument.bind(this);
 check[TYPES.ARRAY] = be.array.bind(this);
 check[TYPES.BOOLEAN] = be.boolean.bind(this);
 check[TYPES.BUFFER] = be.buffer.bind(this);
