@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+[3.2.0] - 2017-12-26
+- **Changed** now custom validator function can be returns a string such error  
+
 [3.1.0] - 2017-12-24
 - **Added** optional type symbol, now it's possible declare an optional type without set `required` property to `false`, but just so "string?"
 - **Changed** now custom validator function can be returns a boolean in addition to Error

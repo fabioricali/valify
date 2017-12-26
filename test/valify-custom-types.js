@@ -68,4 +68,35 @@ describe('valify-custom-types', function () {
         });
 
     });
+
+    it('add type should be return error such string', function (done) {
+
+        Model.addType('myType3', (value, validation) => {
+            if (value !== 'boom')
+                return 'it must be boom';
+        });
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'myType3'
+        }, {
+            usePromise: true
+        });
+
+        const data = {
+            firstName: 'Mike',
+            lastName: 'Ricali',
+            address: 'First street'
+        };
+
+        userModel(data).then((result) => {
+            console.log(result);
+            done('error')
+        }).catch(e => {
+            console.log(e);
+            if (e.message === 'it must be boom' && e.fields[0].message === 'it must be boom')
+                done();
+        });
+
+    });
 });

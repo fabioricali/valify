@@ -145,7 +145,7 @@ class Valify {
     detectShortRequired(type, field) {
         let sType;
 
-        if (be.string(type)){
+        if (be.string(type)) {
             sType = type;
         } else if (be.array(type) && type.length === 1 && be.string(type[0])) {
             sType = type[0];
@@ -238,10 +238,9 @@ class Valify {
      * @ignore
      */
     checkType(type, field, data, parent) {
-
         if (be.string(type)) {
             try {
-                if (!check[type](data[field], be)) {
+                if (!Valify.stringAsError(check[type](data[field], be))) {
                     if (be.object(parent)) {
                         type = parent.type;
                         field = parent.field;
@@ -268,7 +267,8 @@ class Valify {
                 }
             } else {
                 try {
-                    if (!type.call(this, data[field], Object.assign({}, data), be)) {
+
+                    if (!Valify.stringAsError(type.call(this, data[field], Object.assign({}, data), be))) {
                         if (be.object(parent)) {
                             field = parent.field;
                             data = parent.data;
@@ -327,7 +327,7 @@ class Valify {
                         if (!be.string(type[i].message))
                             type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
-                        if (!type[i].fn.call(this, data[field], be)) {
+                        if (!Valify.stringAsError(type[i].fn.call(this, data[field], be))) {
                             this.addError(
                                 format(type[i].message, {
                                     field,
@@ -379,9 +379,12 @@ class Valify {
                 // custom validator
             } else if (be.function(validate[i])) {
                 try {
-                    if(!validate[i].call(this, data[field], Object.assign({}, data), be)) {
+                    if (!Valify.stringAsError(validate[i].call(this, data[field], Object.assign({}, data), be))) {
                         this.addError(
-                            format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {field, validator: i}),
+                            format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {
+                                field,
+                                validator: i
+                            }),
                             field
                         );
                     }
@@ -431,6 +434,13 @@ class Valify {
                 VALIDATOR_FAIL: null
             }
         })
+    }
+
+    static stringAsError(value) {
+        if (be.string(value)) {
+            throw new Error(value);
+        } else
+            return value;
     }
 
     /**

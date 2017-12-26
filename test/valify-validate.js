@@ -308,5 +308,30 @@ describe('valify-validate', function () {
         }
     });
 
+    it('custom validator: should be return a string such error', function (done) {
+
+        const userModel = new Model({
+            lastName: {
+                type: 'string',
+                validate: {
+                    myValidator(value, data) {
+                        return 'this an error';
+                    }
+                }
+            }
+        });
+
+        try {
+            userModel({
+                lastName: 'test@test.com'
+            });
+            done('error');
+        } catch (e) {
+            console.log(e.message);
+            if(e.message === 'this an error')
+                done();
+        }
+    });
+
 
 });
