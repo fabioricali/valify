@@ -592,4 +592,27 @@ describe('valify', function () {
 
     });
 
+    it('should be return error, type int allowEmpty set false', function (done) {
+
+        const userModel = new Model({
+            aNumber: {
+                type: 'int',
+                allowEmpty: false
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            aNumber: ''
+        }).then((data) => {
+            console.log(data);
+            done('error');
+        }).catch(e => {
+            console.log(e.message);
+            if (e.message === 'aNumber expects int but receives: ""')
+                done();
+        });
+
+    });
 });
