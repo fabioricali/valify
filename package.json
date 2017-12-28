@@ -1,7 +1,7 @@
 {
     "name": "valify",
     "version": "3.3.0",
-    "description": "Validates data to easy and clean way.",
+    "description": "Validates data to easy way in JavaScript.",
     "main": "index.js",
     "browser": "dist/valify.min.js",
     "directories": {
@@ -22,8 +22,23 @@
     "keywords": [
         "validation",
         "types",
+        "type",
         "model",
+        "json",
+        "interface",
+        "assert",
+        "assertion",
+        "list",
+        "express",
+        "koa",
+        "struct",
+        "collection",
+        "error",
+        "array",
         "data",
+        "validator",
+        "schema",
+        "checker",
         "valid"
     ],
     "author": "Fabio Ricali",
