@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 3.2.0  
+// [AIV]  Valify Build version: 3.3.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6634,6 +6634,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
  */
 module.exports = {
     ALPHANUMERIC: 'alphanumeric',
+    ANY: 'any',
     ARGUMENTS: 'arguments',
     ARRAY: 'array',
     BOOLEAN: 'boolean',
@@ -6817,7 +6818,10 @@ var Valify = function () {
                     // #5 check type
                     this.checkType(type, field, data);
 
-                    // #6 validator
+                    // #6 check empty
+                    this.checkAllowEmpty(field, data);
+
+                    // #7 validator
                     this.checkValidator(field, data);
                 }
             }
@@ -6853,6 +6857,22 @@ var Valify = function () {
                 this.model[field].required = false;
                 return sType.slice(0, -1);
             } else return type;
+        }
+
+        /**
+         * Check allow empty
+         * @param field
+         * @param data
+         * @private
+         * @ignore
+         */
+
+    }, {
+        key: 'checkAllowEmpty',
+        value: function checkAllowEmpty(field, data) {
+            if (!this.model[field].allowEmpty && be.empty(data[field])) {
+                this.addError(format(this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, { field: field }), field);
+            }
         }
 
         /**
@@ -7112,11 +7132,13 @@ var Valify = function () {
                 validate: null,
                 onError: null,
                 allowNull: null,
+                allowEmpty: true,
                 locale: {
                     FIELD_REQUIRED: null,
                     TYPE_FAIL: null,
                     TYPE_ARRAY_FAIL: null,
-                    VALIDATOR_FAIL: null
+                    VALIDATOR_FAIL: null,
+                    FIELD_CANNOT_EMPTY: null
                 }
             });
         }
@@ -7262,6 +7284,9 @@ var TYPES = __webpack_require__(1);
 var check = [];
 
 check[TYPES.ALPHANUMERIC] = be.alphanumeric.bind(undefined);
+check[TYPES.ANY] = function () {
+  return true;
+};
 check[TYPES.ARGUMENTS] = be.argument.bind(undefined);
 check[TYPES.ARRAY] = be.array.bind(undefined);
 check[TYPES.BOOLEAN] = be.boolean.bind(undefined);
@@ -7415,6 +7440,7 @@ module.exports = {
     TYPE_ARRAY_FAIL: '{field} expects array of {type} but receives: {dataField}',
     TYPE_FUNCTION_FAIL: '{field} receives: {dataField}',
     FIELD_REQUIRED: '{field} is required',
+    FIELD_CANNOT_EMPTY: '{field} cannot be empty',
     DATA_REQUIRED: 'Data is required and must be an object'
 };
 
