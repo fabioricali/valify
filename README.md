@@ -531,6 +531,7 @@ All types that you can use:
     
 - Extra    
     - `alphanumeric`
+    - `any`
     - `float`
     - `int`
 
