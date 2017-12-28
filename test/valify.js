@@ -447,4 +447,149 @@ describe('valify', function () {
 
     });
 
+    it('should be return error, type string allowEmpty set false', function (done) {
+
+        const userModel = new Model({
+            firstName: {
+                type: 'string',
+                allowEmpty: false
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            firstName: ''
+        }).then((data) => {
+            console.log(data);
+            done('error');
+        }).catch(e => {
+            console.log(e.message);
+            if (e.message === 'firstName cannot be empty')
+                done();
+        });
+
+    });
+
+    it('should be return error, type string allowEmpty set false and custom message', function (done) {
+
+        const userModel = new Model({
+            firstName: {
+                type: 'string',
+                allowEmpty: false,
+                locale: {
+                    FIELD_CANNOT_EMPTY: 'ops.. it\'s empty'
+                }
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            firstName: ''
+        }).then((data) => {
+            console.log(data);
+            done('error');
+        }).catch(e => {
+            console.log(e.message);
+            if (e.message === 'ops.. it\'s empty')
+                done();
+        });
+
+    });
+
+    it('should be return error, type array allowEmpty set false', function (done) {
+
+        const userModel = new Model({
+            anArray: {
+                type: 'array',
+                allowEmpty: false
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            anArray: []
+        }).then((data) => {
+            console.log(data);
+            done('error');
+        }).catch(e => {
+            console.log(e.message);
+            if (e.message === 'anArray cannot be empty')
+                done();
+        });
+
+    });
+
+    it('should be return ok, type array allowEmpty set false', function (done) {
+
+        const userModel = new Model({
+            anArray: {
+                type: 'array',
+                allowEmpty: false
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            anArray: [2]
+        }).then((data) => {
+            console.log(data);
+            done();
+        }).catch(e => {
+            console.log(e.message);
+            done(e.message);
+        });
+
+    });
+
+    it('should be return error, type object allowEmpty set false', function (done) {
+
+        const userModel = new Model({
+            anObject: {
+                type: 'object',
+                allowEmpty: false
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            anObject: {}
+        }).then((data) => {
+            console.log(data);
+            done('error');
+        }).catch(e => {
+            console.log(e.message);
+            if (e.message === 'anObject cannot be empty')
+                done();
+        });
+
+    });
+
+    it('should be return ok, type object allowEmpty set false', function (done) {
+
+        const userModel = new Model({
+            anObject: {
+                type: 'object',
+                allowEmpty: false
+            }
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            anObject: {a:0}
+        }).then((data) => {
+            console.log(data);
+            done();
+        }).catch(e => {
+            console.log(e.message);
+            done(e.message);
+        });
+
+    });
+
 });

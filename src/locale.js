@@ -9,5 +9,6 @@ module.exports = {
     TYPE_ARRAY_FAIL: '{field} expects array of {type} but receives: {dataField}',
     TYPE_FUNCTION_FAIL: '{field} receives: {dataField}',
     FIELD_REQUIRED: '{field} is required',
+    FIELD_CANNOT_EMPTY: '{field} cannot be empty',
     DATA_REQUIRED: 'Data is required and must be an object'
 };

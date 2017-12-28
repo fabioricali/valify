@@ -116,7 +116,10 @@ class Valify {
                 // #5 check type
                 this.checkType(type, field, data);
 
-                // #6 validator
+                // #6 check empty
+                this.checkAllowEmpty(field, data);
+
+                // #7 validator
                 this.checkValidator(field, data);
             }
         }
@@ -156,6 +159,22 @@ class Valify {
             return sType.slice(0, -1);
         } else
             return type;
+    }
+
+    /**
+     * Check allow empty
+     * @param field
+     * @param data
+     * @private
+     * @ignore
+     */
+    checkAllowEmpty(field, data) {
+        if (!this.model[field].allowEmpty && be.empty(data[field])){
+            this.addError(
+                format(this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, {field}),
+                field
+            );
+        }
     }
 
     /**
@@ -427,11 +446,13 @@ class Valify {
             validate: null,
             onError: null,
             allowNull: null,
+            allowEmpty: true,
             locale: {
                 FIELD_REQUIRED: null,
                 TYPE_FAIL: null,
                 TYPE_ARRAY_FAIL: null,
-                VALIDATOR_FAIL: null
+                VALIDATOR_FAIL: null,
+                FIELD_CANNOT_EMPTY: null
             }
         })
     }
