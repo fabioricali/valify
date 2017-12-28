@@ -82,6 +82,7 @@ try {
 |`required`|`boolean`|`true`|Indicates if the field is required|
 |`default`|`any`|`null`|Default value|
 |`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
+|`allowEmpty`|`boolean`|`true`|Allow empty value, works for `string`, `array` and `object`|
 |`locale`|`object`|`object`|An object that contains locale strings that overwrites those globals|
 |`validate`|`object`|`null`|An object that contains the validators|
 |`convert`|`function`|`null`|A function to manipulate data|
@@ -472,6 +473,7 @@ Valify.setLocale({
 |`FIELD_REQUIRED`|`{field} is required`|
 |`DATA_REQUIRED`|`Data is required and must be an object`|
 |`VALIDATOR_FAIL`|`{field} fail, {validator} returns false`|
+|`FIELD_CANNOT_EMPTY`|`{field} cannot be empty`|
 
 ##### 2) Local, into field settings
 ```javascript
@@ -493,6 +495,7 @@ const userModel = new Valify({
     - **`TYPE_ARRAY_FAIL`**
     - **`FIELD_REQUIRED`**
     - **`VALIDATOR_FAIL`**
+    - **`FIELD_CANNOT_EMPTY`**
 
 ### Available types
 
