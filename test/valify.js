@@ -428,4 +428,23 @@ describe('valify', function () {
 
     });
 
+    it('should be return ok, using "any" as type', function (done) {
+
+        const userModel = new Model({
+            firstName: 'any',
+            lastName: 'any'
+        }, {
+            usePromise: true
+        });
+
+        userModel({
+            firstName: 'Mike',
+            lastName: null
+        }).then((data) => {
+            console.log(data);
+            done();
+        });
+
+    });
+
 });
