@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-[3.3.0] - 2017-12-28
+[3.3.1] - 2017-12-28
 - **Added** new type `any`
 - **Added** new property `allowEmpty`, now it's possible check if a string or an array or an object are empties
 
