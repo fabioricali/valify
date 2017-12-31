@@ -80,6 +80,7 @@ class Valify {
      * @param errors
      */
     catchError(errors) {
+        console.log(this.errors);
         if (this.errors.message === '') this.errors.message = errors.message;
         for (let i in errors.fields) {
             if (errors.fields.hasOwnProperty(i))

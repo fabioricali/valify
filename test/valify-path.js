@@ -244,4 +244,60 @@ describe('valify-path', function () {
                 done();
         }
     });
+
+    it('should be return failed, validator and complex nested', function (done) {
+
+        const userModel = new Model({
+            record: [new Model({
+                p0: new Model({
+                        p1: new Model({
+                            p2: [
+                                new Model({
+                                        p3: {
+                                            type: 'string',
+                                            validate: {
+                                                email: true
+                                            }
+                                        }
+                                    }
+                                )]
+                        })
+                    }
+                )
+            })]
+        });
+
+        try {
+            userModel({
+                record: [
+                    {
+                        p0: {
+                            p1: {
+                                p2: [
+                                    {p3: 'tt@tt.com'}
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        p0: {
+                            p1: {
+                                p2: [
+                                    {p3: 'hello'},
+                                    {p3: 'ciao'},
+                                    {p3: 'world'}
+                                ]
+                            }
+                        }
+                    }
+                ]
+            });
+            done('error');
+        } catch (e) {
+            //console.log(e.message);
+            //console.log(e.fields);
+            if (be.equal(e.fields[0].path, ['record', '1', 'p0', 'p1', 'p2', '1', 'p3']))
+                done();
+        }
+    });
 });

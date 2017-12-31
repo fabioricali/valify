@@ -29,6 +29,36 @@ describe('valify-validate', function () {
         }
     });
 
+    it('email: should be returns many fail', function (done) {
+
+        const userModel = new Model({
+            email: {
+                type: 'string',
+                validate: {
+                    email: true
+                }
+            },
+            email2: {
+                type: 'string',
+                validate: {
+                    email: true
+                }
+            }
+        });
+
+        try {
+            userModel({
+                email: 'red0',
+                email2: 'invalid'
+            })
+        } catch (e) {
+            console.log(e.message);
+            console.log(e.fields);
+            if (e.message === '"red0" is a not valid email' && e.fields.length === 2)
+                done();
+        }
+    });
+
     it('email: should be return failed, custom message', function (done) {
 
         const userModel = new Model({
