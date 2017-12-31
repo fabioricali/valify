@@ -57,7 +57,7 @@ class Valify {
         if (obj.field !== undefined)
             obj.path.push(obj.field);
 
-        if(obj.index !== undefined)
+        if (obj.index !== undefined)
             obj.path.push(obj.index);
 
         obj.path = obj.path.join('.');

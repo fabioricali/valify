@@ -28,7 +28,7 @@ describe('valify-nested', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
-            if (e.message === 'lastName expects string but receives: 4')
+            if (e.message === '"lastName" expects "string" but receives: 4')
                 done();
         }
     });
@@ -56,7 +56,7 @@ describe('valify-nested', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
-            if (e.message === 'id expects int but receives: "ops"')
+            if (e.message === '"record.id" expects "int" but receives: "ops"')
                 done();
         }
     });
@@ -90,7 +90,7 @@ describe('valify-nested', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
-            if (e.message === 'color expects string but receives: 25')
+            if (e.message === '"record.other.color" expects "string" but receives: 25')
                 done();
         }
     });
@@ -121,7 +121,7 @@ describe('valify-nested', function () {
             }
         }).then(() => done('error')).catch(e => {
             console.log(e.message);
-            if (e.message === 'color expects string but receives: 25')
+            if (e.message === '"record.other.color" expects "string" but receives: 25')
                 done();
         });
     });
@@ -156,7 +156,7 @@ describe('valify-nested', function () {
         } catch (e) {
             console.log(e.message, e.fields);
             console.log(JSON.stringify(e.fields));
-            if (e.message === 'color expects string but receives: 25')
+            if (e.message === '"record.other.color" expects "string" but receives: 25')
                 done();
         }
     });
@@ -192,10 +192,10 @@ describe('valify-nested', function () {
             console.log(e.message, e.fields);
             console.log(JSON.stringify(e.fields));
             if (
-                e.message === 'lastName expects string but receives: false' &&
+                e.message === '"lastName" expects "string" but receives: false' &&
                 e.fields[0].message === e.message &&
-                e.fields[1].message === 'id expects int but receives: "ahah"' &&
-                e.fields[2].message === 'color expects string but receives: 25'
+                e.fields[1].message === '"record.id" expects "int" but receives: "ahah"' &&
+                e.fields[2].message === '"record.other.color" expects "string" but receives: 25'
             )
                 done();
         }

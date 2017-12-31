@@ -4,11 +4,11 @@
  */
 module.exports = {
     UNKNOWN_TYPE: 'Unknown type: "{type}"',
-    TYPE_FAIL: '{field} expects {type} but receives: {dataField}',
-    VALIDATOR_FAIL: '{field} fail, {validator} returns false',
-    TYPE_ARRAY_FAIL: '{field} expects array of {type} but receives: {dataField}',
-    TYPE_FUNCTION_FAIL: '{field} receives: {dataField}',
-    FIELD_REQUIRED: '{field} is required',
-    FIELD_CANNOT_EMPTY: '{field} cannot be empty',
+    TYPE_FAIL: '"{path}" expects "{type}" but receives: {dataField}',
+    VALIDATOR_FAIL: '"{path}" fail, "{validator}" returns false',
+    TYPE_ARRAY_FAIL: '"{path}" expects array of "{type}" but receives: {dataField}',
+    TYPE_FUNCTION_FAIL: '"{path}" receives: {dataField}',
+    FIELD_REQUIRED: '"{path}" is required',
+    FIELD_CANNOT_EMPTY: '"{path}" cannot be empty',
     DATA_REQUIRED: 'Data is required and must be an object'
 };

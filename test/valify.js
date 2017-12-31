@@ -56,7 +56,7 @@ describe('valify', function () {
             done('error');
         } catch (e) {
             console.log(e.message, e.fields);
-            if (e.message === 'lastName receives: "red"' && e.fields[0].message === 'lastName receives: "red"')
+            if (e.message === '"lastName" receives: "red"' && e.fields[0].message === '"lastName" receives: "red"')
                 done();
         }
     });
@@ -79,7 +79,7 @@ describe('valify', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'lastName expects string but receives: 525')
+            if (e.message === '"lastName" expects "string" but receives: 525')
                 done();
         }
     });
@@ -157,7 +157,7 @@ describe('valify', function () {
         try {
             userModel(data);
         } catch (e) {
-            if (e.message === 'createdOn expects date but receives: 10')
+            if (e.message === '"createdOn" expects "date" but receives: 10')
                 done();
         }
 
@@ -252,7 +252,7 @@ describe('valify', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'firstName is required')
+            if (e.message === '"firstName" is required')
                 done();
         }
     });
@@ -396,7 +396,7 @@ describe('valify', function () {
         }).catch(e => {
             console.log(e);
             if (
-                e.message === 'firstName is required' &&
+                e.message === '"firstName" is required' &&
                 e.fields[0].field === 'firstName' &&
                 e.fields[0].message === e.message
             )
@@ -465,7 +465,7 @@ describe('valify', function () {
             done('error');
         }).catch(e => {
             console.log(e.message);
-            if (e.message === 'firstName cannot be empty')
+            if (e.message === '"firstName" cannot be empty')
                 done();
         });
 
@@ -516,7 +516,7 @@ describe('valify', function () {
             done('error');
         }).catch(e => {
             console.log(e.message);
-            if (e.message === 'anArray cannot be empty')
+            if (e.message === '"anArray" cannot be empty')
                 done();
         });
 
@@ -563,7 +563,7 @@ describe('valify', function () {
             done('error');
         }).catch(e => {
             console.log(e.message);
-            if (e.message === 'anObject cannot be empty')
+            if (e.message === '"anObject" cannot be empty')
                 done();
         });
 
@@ -610,7 +610,7 @@ describe('valify', function () {
             done('error');
         }).catch(e => {
             console.log(e.message);
-            if (e.message === 'aNumber expects int but receives: ""')
+            if (e.message === '"aNumber" expects "int" but receives: ""')
                 done();
         });
 

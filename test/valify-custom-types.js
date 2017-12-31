@@ -32,7 +32,7 @@ describe('valify-custom-types', function () {
         }).catch(e => {
             console.log(e.message);
             console.log(e.fields);
-            if (e.message === 'lastName expects myType but receives: "Ricali"' && e.fields[0].field === 'lastName' && e.fields[0].message === e.message)
+            if (e.message === '"lastName" expects "myType" but receives: "Ricali"' && e.fields[0].field === 'lastName' && e.fields[0].message === e.message)
                 done();
         });
 

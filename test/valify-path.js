@@ -200,15 +200,15 @@ describe('valify-path', function () {
         const userModel = new Model({
             record: [new Model({
                 p0: new Model({
-                        p1: new Model({
-                            p2: [
-                                new Model({
-                                        p3: 'string'
-                                    }
-                                )]
-                        })
-                    }
-                )
+                    p1: new Model({
+                        p2: [
+                            new Model({
+                                    p3: 'string'
+                                }
+                            )
+                        ]
+                    })
+                })
             })]
         });
 
@@ -250,20 +250,19 @@ describe('valify-path', function () {
         const userModel = new Model({
             record: [new Model({
                 p0: new Model({
-                        p1: new Model({
-                            p2: [
-                                new Model({
-                                        p3: {
-                                            type: 'string',
-                                            validate: {
-                                                email: true
-                                            }
-                                        }
+                    p1: new Model({
+                        p2: [
+                            new Model({
+                                p3: {
+                                    type: 'string',
+                                    validate: {
+                                        email: true
                                     }
-                                )]
-                        })
-                    }
-                )
+                                }
+                            })
+                        ]
+                    })
+                })
             })]
         });
 

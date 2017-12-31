@@ -371,7 +371,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if (e.message === 'lastName fail, myValidator returns false')
+            if (e.message === '"lastName" fail, "myValidator" returns false')
                 done();
         }
     });
