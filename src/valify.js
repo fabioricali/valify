@@ -49,14 +49,19 @@ class Valify {
      * Add error to list
      * @param message
      * @param field
+     * @param index
      */
-    addError(message, field) {
+    addError(message, field, index) {
         if (this.errors.message === '')
             this.errors.message = message;
         if (field !== undefined) {
 
             let path = Object.assign([], this.path);
+
             path.push(field);
+
+            if(index !== undefined)
+                path.push(index);
 
             this.errors.fields.push({
                 field,
@@ -270,6 +275,12 @@ class Valify {
      * @ignore
      */
     checkType(type, field, data, parent) {
+
+        let index;
+        if (be.object(parent)) {
+            index = parent.index;
+        }
+
         if (be.string(type)) {
             try {
                 if (!Valify.stringAsError(check[type](data[field], be))) {
@@ -284,11 +295,12 @@ class Valify {
                             type,
                             dataField: JSON.stringify(data[field])
                         }),
-                        field
+                        field,
+                        index
                     );
                 }
             } catch (errors) {
-                this.addError(errors.message, field);
+                this.addError(errors.message, field, index);
             }
         } else if (be.function(type)) {
             if (Valify.isInstance(type)) {
@@ -314,14 +326,15 @@ class Valify {
                                 field,
                                 dataField: JSON.stringify(data[field])
                             }),
-                            field
+                            field,
+                            index
                         );
                     }
                 } catch (errors) {
                     if (be.object(parent)) {
                         field = parent.field;
                     }
-                    this.addError(errors.message, field);
+                    this.addError(errors.message, field, index);
                 }
             }
 
@@ -336,12 +349,13 @@ class Valify {
                             type,
                             dataField: JSON.stringify(data[field])
                         }),
-                        field
+                        field,
+                        index
                     );
                 } else {
                     for (let i in data[field]) {
                         if (data[field].hasOwnProperty(i)) {
-                            this.checkType(type[0], i, data[field], {type, field, data});
+                            this.checkType(type[0], i, data[field], {type, field, data, index: i});
                         }
                     }
                 }
@@ -369,7 +383,8 @@ class Valify {
                                     field,
                                     dataField: JSON.stringify(data[field])
                                 }),
-                                field
+                                field,
+                                index
                             );
                         }
                     }
