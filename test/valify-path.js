@@ -20,7 +20,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['lastName', '0']))
+            if (be.equal(e.fields[0].path, 'lastName.0'))
                 done();
         }
     });
@@ -39,7 +39,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['lastName', '2']))
+            if (be.equal(e.fields[0].path, 'lastName.2'))
                 done();
         }
     });
@@ -78,7 +78,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['record', '1', 'email']))
+            if (be.equal(e.fields[0].path, 'record.1.email'))
                 done();
         }
     });
@@ -121,7 +121,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['record', '1', 'email']))
+            if (be.equal(e.fields[0].path, 'record.1.email'))
                 done();
         }
     });
@@ -152,7 +152,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['record']))
+            if (be.equal(e.fields[0].path, 'record'))
                 done();
         }
     });
@@ -190,7 +190,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['record']))
+            if (be.equal(e.fields[0].path, 'record'))
                 done();
         }
     });
@@ -240,7 +240,7 @@ describe('valify-path', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['record', '1', 'p0', 'p1', 'p2', '1', 'p3']))
+            if (be.equal(e.fields[0].path, 'record.1.p0.p1.p2.1.p3'))
                 done();
         }
     });
@@ -297,7 +297,7 @@ describe('valify-path', function () {
             console.log(e.message);
             console.log(e.fields);
             //console.log(e.fields[0].path);
-            if (be.equal(e.fields[0].path, ['record', '1', 'p0', 'p1', 'p2', '0', 'p3']))
+            if (be.equal(e.fields[0].path, 'record.1.p0.p1.p2.0.p3'))
                 done();
         }
     });

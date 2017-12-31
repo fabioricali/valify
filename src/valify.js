@@ -63,6 +63,8 @@ class Valify {
             if(index !== undefined)
                 path.push(index);
 
+            path = path.join('.');
+
             this.errors.fields.push({
                 field,
                 message,
