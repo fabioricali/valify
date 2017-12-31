@@ -244,6 +244,7 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
+            console.log(e.fields);
             if(e.message === 'record is required')
                 done();
         }
@@ -281,6 +282,7 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
+            console.log(e.fields);
             if(e.message === 'cannot be empty')
                 done();
         }
@@ -308,6 +310,7 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
+            console.log(e.fields);
             if (e.message === 'record expects array of function () { [native code] } but receives: null')
                 done();
         }

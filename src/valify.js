@@ -37,6 +37,8 @@ class Valify {
             fields: []
         };
 
+        this.path = [];
+
         this._valid_ = this.valid.bind(this);
         this._valid_.owner = this;
 
@@ -52,9 +54,14 @@ class Valify {
         if (this.errors.message === '')
             this.errors.message = message;
         if (field !== undefined) {
+
+            let path = Object.assign([], this.path);
+            path.push(field);
+
             this.errors.fields.push({
                 field,
-                message
+                message,
+                path
             });
 
             if (be.function(this.model[field].onError)) {
@@ -81,9 +88,15 @@ class Valify {
      * @param nested
      * @returns {*|Promise}
      */
-    valid(data, nested = false) {
+    valid(data, nested) {
         let type;
 
+        if (nested) {
+            //console.log(nested);
+            this.path = Object.assign([], nested);
+            //console.log('nestedddd',nested);
+            //console.log(this.path);
+        }
         if (!be.object(data))
             this.addError(locale.DATA_REQUIRED);
         else {
@@ -280,7 +293,11 @@ class Valify {
         } else if (be.function(type)) {
             if (Valify.isInstance(type)) {
                 try {
-                    type.call(this, data[field], true);
+                    let path = Object.assign([], this.path);
+                    if(parent)
+                        path.push(parent.field);
+                    path.push(field);
+                    type.call(this, data[field], path);
                 } catch (errors) {
                     this.catchError(errors);
                 }
