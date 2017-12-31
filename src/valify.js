@@ -80,10 +80,9 @@ class Valify {
      * @param errors
      */
     catchError(errors) {
-        console.log(this.errors);
         if (this.errors.message === '') this.errors.message = errors.message;
         for (let i in errors.fields) {
-            if (errors.fields.hasOwnProperty(i))
+            if (errors.fields.hasOwnProperty(i) && !this.errors.fields.includes(errors.fields[i]))
                 this.errors.fields.push(errors.fields[i]);
         }
     }
@@ -97,6 +96,7 @@ class Valify {
     valid(data, nested) {
         let type;
 
+        //console.log('valid', nested);
         if (nested) {
             //console.log(nested);
             this.path = Object.assign([], nested);
@@ -151,9 +151,10 @@ class Valify {
                     resolve(data);
             });
         } else {
-            if (this.errors.message !== '')
+            if (this.errors.message !== '') {
+                //if(this.errors.fields.length <=3)
                 throw new ValifyError(this.errors.message, this.errors.fields);
-            else
+            }else
                 return data;
         }
     }

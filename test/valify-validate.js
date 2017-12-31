@@ -59,6 +59,44 @@ describe('valify-validate', function () {
         }
     });
 
+    it('email: should be returns many fail nested model', function (done) {
+
+        const userModel = new Model({
+            record: [new Model({
+                email: {
+                    type: 'string',
+                    validate: {
+                        email: true
+                    }
+                }
+            })]
+        });
+
+        try {
+            userModel(
+                {
+                    record: [
+                        {
+                            email: 'red0',
+                        },
+                        {
+                            email: 'invalid',
+                        },
+                        {
+                            email: 'boom',
+                        }
+                    ]
+                }
+            )
+        } catch (e) {
+            //console.log(e.message);
+            console.log(e.fields);
+            console.log(e.fields.length);
+            if (e.message === '"red0" is a not valid email' && e.fields.length === 3)
+                done();
+        }
+    });
+
     it('email: should be return failed, custom message', function (done) {
 
         const userModel = new Model({
@@ -123,7 +161,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'the number must be greater than or equal to 10 instead it is 9')
+            if (e.message === 'the number must be greater than or equal to 10 instead it is 9')
                 done();
         }
     });
@@ -148,7 +186,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'the number must be greater than or equal to 10 instead it is 9')
+            if (e.message === 'the number must be greater than or equal to 10 instead it is 9')
                 done();
         }
     });
@@ -192,7 +230,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'the number must be lesser than or equal to 10 instead it is 11')
+            if (e.message === 'the number must be lesser than or equal to 10 instead it is 11')
                 done();
         }
     });
@@ -236,7 +274,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === '"hello" is a not valid url')
+            if (e.message === '"hello" is a not valid url')
                 done();
         }
     });
@@ -259,7 +297,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'the date must be between "2017-12-10T00:00:00.000Z" and "2017-12-20T00:00:00.000Z" instead it is "2017-12-09T00:00:00.000Z"')
+            if (e.message === 'the date must be between "2017-12-10T00:00:00.000Z" and "2017-12-20T00:00:00.000Z" instead it is "2017-12-09T00:00:00.000Z"')
                 done();
         }
     });
@@ -307,7 +345,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'string must be hello')
+            if (e.message === 'string must be hello')
                 done();
         }
     });
@@ -333,7 +371,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'lastName fail, myValidator returns false')
+            if (e.message === 'lastName fail, myValidator returns false')
                 done();
         }
     });
@@ -358,7 +396,7 @@ describe('valify-validate', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if(e.message === 'this an error')
+            if (e.message === 'this an error')
                 done();
         }
     });

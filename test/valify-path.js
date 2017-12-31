@@ -294,9 +294,10 @@ describe('valify-path', function () {
             });
             done('error');
         } catch (e) {
-            //console.log(e.message);
-            //console.log(e.fields);
-            if (be.equal(e.fields[0].path, ['record', '1', 'p0', 'p1', 'p2', '1', 'p3']))
+            console.log(e.message);
+            console.log(e.fields);
+            //console.log(e.fields[0].path);
+            if (be.equal(e.fields[0].path, ['record', '1', 'p0', 'p1', 'p2', '0', 'p3']))
                 done();
         }
     });
