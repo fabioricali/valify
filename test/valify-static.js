@@ -16,7 +16,7 @@ describe('valify-static', function () {
     });
     describe('printArgs', function () {
         it('should return true', function () {
-            let result = Model.printArgs({});
+            let result = Model.printArgs({0: '', 1: ''});
             console.log(result);
             console.log(JSON.stringify({}));
             //be.err.false(result);

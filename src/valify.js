@@ -48,32 +48,33 @@ class Valify {
     /**
      * Add error to list
      * @param message
-     * @param field
-     * @param index
+     * @param obj
      */
-    addError(message, field, index) {
+    addError(message, obj = {}) {
+
+        obj.path = Object.assign([], this.path);
+
+        if (obj.field !== undefined)
+            obj.path.push(obj.field);
+
+        if(obj.index !== undefined)
+            obj.path.push(obj.index);
+
+        obj.path = obj.path.join('.');
+
+        message = format(message, obj);
+
         if (this.errors.message === '')
             this.errors.message = message;
-        if (field !== undefined) {
 
-            let path = Object.assign([], this.path);
+        this.errors.fields.push({
+            field: obj.field,
+            message,
+            path: obj.path
+        });
 
-            path.push(field);
-
-            if(index !== undefined)
-                path.push(index);
-
-            path = path.join('.');
-
-            this.errors.fields.push({
-                field,
-                message,
-                path
-            });
-
-            if (be.function(this.model[field].onError)) {
-                this.model[field].onError.call(this, message);
-            }
+        if (obj.field !== undefined && be.function(this.model[obj.field].onError)) {
+            this.model[obj.field].onError.call(this, message);
         }
     }
 
@@ -193,8 +194,7 @@ class Valify {
     checkAllowEmpty(field, data) {
         if (!this.model[field].allowEmpty && be.empty(data[field])){
             this.addError(
-                format(this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, {field}),
-                field
+                this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, {field}
             );
         }
     }
@@ -222,8 +222,7 @@ class Valify {
     checkUnknownType(type, field) {
         if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
             this.addError(
-                format(locale.UNKNOWN_TYPE, {type}),
-                field
+                locale.UNKNOWN_TYPE, {type, field}
             );
             return true;
         }
@@ -255,8 +254,7 @@ class Valify {
         if (!data.hasOwnProperty(field)) {
             if (this.model[field].default === null && this.model[field].required) {
                 this.addError(
-                    format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}),
-                    field
+                    this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, {field}
                 );
                 return true;
             } else if (this.model[field].required === false) {
@@ -294,17 +292,16 @@ class Valify {
                         data = parent.data;
                     }
                     this.addError(
-                        format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
+                        this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                             field,
                             type,
-                            dataField: JSON.stringify(data[field])
-                        }),
-                        field,
-                        index
+                            dataField: JSON.stringify(data[field]),
+                            index
+                        }
                     );
                 }
             } catch (errors) {
-                this.addError(errors.message, field, index);
+                this.addError(errors.message, {field, index});
             }
         } else if (be.function(type)) {
             if (Valify.isInstance(type)) {
@@ -326,19 +323,18 @@ class Valify {
                             data = parent.data;
                         }
                         this.addError(
-                            format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                            this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                                 field,
-                                dataField: JSON.stringify(data[field])
-                            }),
-                            field,
-                            index
+                                dataField: JSON.stringify(data[field]),
+                                index
+                            }
                         );
                     }
                 } catch (errors) {
                     if (be.object(parent)) {
                         field = parent.field;
                     }
-                    this.addError(errors.message, field, index);
+                    this.addError(errors.message, {field, index});
                 }
             }
 
@@ -348,13 +344,12 @@ class Valify {
 
                 if (!be.array(data[field])) {
                     this.addError(
-                        format(this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
+                        this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
                             field,
                             type,
-                            dataField: JSON.stringify(data[field])
-                        }),
-                        field,
-                        index
+                            dataField: JSON.stringify(data[field]),
+                            index
+                        }
                     );
                 } else {
                     for (let i in data[field]) {
@@ -383,12 +378,11 @@ class Valify {
 
                         if (!Valify.stringAsError(type[i].fn.call(this, data[field], be))) {
                             this.addError(
-                                format(type[i].message, {
+                                type[i].message, {
                                     field,
-                                    dataField: JSON.stringify(data[field])
-                                }),
-                                field,
-                                index
+                                    dataField: JSON.stringify(data[field]),
+                                    index
+                                }
                             );
                         }
                     }
@@ -425,28 +419,27 @@ class Valify {
                     args = [data[field], args];
                 }
 
-                if (!validator[i].fn.apply(this, args))
+                if (!validator[i].fn.apply(this, args)) {
+                    let param = Valify.printArgs(args);
+                    param['field'] = field;
                     this.addError(
-                        format(validate[i].msg || validator[i].msg, Valify.printArgs(args)),
-                        field
+                        validate[i].msg || validator[i].msg, param
                     );
-
+                }
                 // custom validator
             } else if (be.function(validate[i])) {
                 try {
                     if (!Valify.stringAsError(validate[i].call(this, data[field], Object.assign({}, data), be))) {
                         this.addError(
-                            format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {
+                            this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {
                                 field,
                                 validator: i
-                            }),
-                            field
+                            }
                         );
                     }
                 } catch (e) {
                     this.addError(
-                        format(e.message),
-                        field
+                        e.message, {field}
                     );
                 }
             }
