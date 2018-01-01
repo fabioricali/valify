@@ -117,31 +117,31 @@ class Valify {
                 this.model[field] = this.normalize(field);
                 type = this.model[field].type;
 
-                // #0 detect short required string
+                // #1 detect short required string
                 type = this.detectShortRequired(type, field);
 
-                // #1 check allow null
+                // #2 check allow null
                 if (this.checkAllowNull(field, data))
                     continue;
 
-                // #2 check unknown type
+                // #3 check unknown type
                 if (this.checkUnknownType(type, field))
                     continue;
 
-                // #3 check required
+                // #4 check required
                 if (this.checkRequired(field, data))
                     continue;
 
-                // #4 apply convert function
+                // #5 apply convert function
                 this.applyConvert(field, data);
 
-                // #5 check type
+                // #6 check type
                 this.checkType(type, field, data);
 
-                // #6 check empty
+                // #7 check empty
                 this.checkAllowEmpty(field, data);
 
-                // #7 validator
+                // #8 validator
                 this.checkValidator(field, data);
             }
         }
