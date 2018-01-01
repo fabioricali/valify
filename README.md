@@ -100,7 +100,8 @@ Valify in case of errors returns an object with 2 properties:
         {
             path: 'aParam.other.lastName', 
             message: '"aParam.other.lastName" is required', 
-            field: 'lastName'
+            field: 'lastName',
+            type: 'string'
         }
     ]
 }
