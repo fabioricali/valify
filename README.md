@@ -95,8 +95,14 @@ Valify in case of errors returns an object with 2 properties:
 
 ```
 {
-    message: 'lastName is required',
-    fields: [{field: 'lastName', message: 'lastName is required'}]
+    message: '"aParam.other.lastName" is required',
+    fields: [
+        {
+            path: 'aParam.other.lastName', 
+            message: '"aParam.other.lastName" is required', 
+            field: 'lastName'
+        }
+    ]
 }
 ```
 
@@ -350,7 +356,7 @@ userModel(data).then(()=>{
     /*
         {
             message: 'lastName is required',
-            fields: [{field: 'lastName', message: 'lastName is required'}]
+            fields: [{field: 'lastName', message: 'lastName is required', path: 'lastName'}]
         }
      */
 });
@@ -467,13 +473,13 @@ Valify.setLocale({
 |Name|Default|
 |-|-|
 |`UNKNOWN_TYPE`|`Unknown type: "{type}"`|
-|`TYPE_FAIL`|`{field} expects {type} but receives: {dataField}`|
-|`TYPE_ARRAY_FAIL`|`{field} expects array of {type} but receives: {dataField}`|
-|`TYPE_FUNCTION_FAIL`|`{field} receives: {dataField}`|
-|`FIELD_REQUIRED`|`{field} is required`|
+|`TYPE_FAIL`|`"{path}" expects "{type}" but receives: {dataField}`|
+|`TYPE_ARRAY_FAIL`|`"{path}" expects array of "{type}" but receives: {dataField}`|
+|`TYPE_FUNCTION_FAIL`|`"{path}" receives: {dataField}`|
+|`FIELD_REQUIRED`|`"{path}" is required`|
 |`DATA_REQUIRED`|`Data is required and must be an object`|
-|`VALIDATOR_FAIL`|`{field} fail, {validator} returns false`|
-|`FIELD_CANNOT_EMPTY`|`{field} cannot be empty`|
+|`VALIDATOR_FAIL`|`"{path}" fail, "{validator}" returns false`|
+|`FIELD_CANNOT_EMPTY`|`"{path}" cannot be empty`|
 
 ##### 2) Local, into field settings
 ```javascript
