@@ -70,9 +70,10 @@ class Valify {
         if (obj.field === undefined) return;
 
         this.errors.fields.push({
-            field: obj.field,
+            path: obj.path,
             message,
-            path: obj.path
+            field: obj.field,
+            type: this.model[obj.field].type
         });
 
         if (be.function(this.model[obj.field].onError)) {
