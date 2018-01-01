@@ -85,7 +85,7 @@ try {
 |`allowEmpty`|`boolean`|`true`|Allow empty value, works for `string`, `array` and `object`|
 |`locale`|`object`|`object`|An object that contains locale strings that overwrites those globals|
 |`validate`|`object`|`null`|An object that contains the validators|
-|`convert`|`function`|`null`|A function to manipulate data|
+|`convert`|`function`|`null`|A function to manipulate/conversion data|
 |`onError`|`function`|`null`|A function triggered when an check fails|
 
 ### Error object
@@ -371,27 +371,28 @@ You may need to manipulate data before the validation.
 const userModel = new Valify({
     firstName: {
         type: 'string',
-        convert: (value) => {
-            return value.toUpperCase();
-        }
+        convert: value => value.toUpperCase()
     },
     lastName: {
         type: 'string',
-        convert: (value) => {
-            return value.toUpperCase();
-        }
+        convert: value => value.toUpperCase()
+    },
+    age: {
+        type: 'number',
+        convert: value => parseInt(value)
     }
 });
 
 // A data object
 const data = {
     firstName: 'Mike',
-    lastName: 'Ricali'
+    lastName: 'Ricali',
+    age: '25'
 };
 
 userModel(data);
 
-console.log(data.firstName, data.lastName); //=> MIKE RICALI
+console.log(data.firstName, data.lastName, data.age, typeof data.age); //=> MIKE RICALI 25 number
 ```
 
 ### Define custom type
