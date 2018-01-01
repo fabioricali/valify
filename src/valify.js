@@ -102,13 +102,10 @@ class Valify {
     valid(data, nested) {
         let type;
 
-        //console.log('valid', nested);
         if (nested) {
-            //console.log(nested);
             this.path = Object.assign([], nested);
-            //console.log('nestedddd',nested);
-            //console.log(this.path);
         }
+
         if (!be.object(data))
             this.addError(locale.DATA_REQUIRED);
         else {
