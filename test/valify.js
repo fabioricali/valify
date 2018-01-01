@@ -18,6 +18,7 @@ describe('valify', function () {
                 lastName: 'red'
             })
         } catch (e) {
+            console.log(e.fields);
             if (e.message === 'Unknown type: "footype"')
                 done();
         }
@@ -227,6 +228,7 @@ describe('valify', function () {
             console.log(userModel())
         } catch (e) {
             console.log(e.message);
+            console.log(e.fields);
             if (e.message === 'Data is required and must be an object')
                 done();
         }

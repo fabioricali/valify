@@ -67,13 +67,15 @@ class Valify {
         if (this.errors.message === '')
             this.errors.message = message;
 
+        if (obj.field === undefined) return;
+
         this.errors.fields.push({
             field: obj.field,
             message,
             path: obj.path
         });
 
-        if (obj.field !== undefined && be.function(this.model[obj.field].onError)) {
+        if (be.function(this.model[obj.field].onError)) {
             this.model[obj.field].onError.call(this, message);
         }
     }
