@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - **Fixed** repeated errors in nested model scenario
 - **Breaking changes**
     - **Changed** in locale strings {field} with {path}
+    - **Changed** `convert` position, now is before all checks
 
 [3.3.1] - 2017-12-28
 - **Added** new type `any`
