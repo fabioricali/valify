@@ -1,3 +1,4 @@
+/**
 const be = require('bejs');
 const Model = require('..');
 
@@ -403,3 +404,4 @@ describe('valify-validate', function () {
 
 
 });
+ */

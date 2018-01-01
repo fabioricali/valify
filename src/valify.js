@@ -142,7 +142,7 @@ class Valify {
                 this.checkAllowEmpty(field, data);
 
                 // #8 validator
-                this.checkValidator(field, data);
+                //this.checkValidator(field, data);
             }
         }
 
