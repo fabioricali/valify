@@ -120,20 +120,20 @@ class Valify {
                 // #1 detect short required string
                 type = this.detectShortRequired(type, field);
 
-                // #2 check allow null
+                // #2 apply convert function
+                this.applyConvert(field, data);
+
+                // #3 check allow null
                 if (this.checkAllowNull(field, data))
                     continue;
 
-                // #3 check unknown type
+                // #4 check unknown type
                 if (this.checkUnknownType(type, field))
                     continue;
 
-                // #4 check required
+                // #5 check required
                 if (this.checkRequired(field, data))
                     continue;
-
-                // #5 apply convert function
-                this.applyConvert(field, data);
 
                 // #6 check type
                 this.checkType(type, field, data);
