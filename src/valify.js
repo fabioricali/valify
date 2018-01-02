@@ -22,7 +22,7 @@ class Valify {
 
         this.opts = extend.copy(opts, {
             usePromise: false,
-            strict: false
+            detectUnknown: false
         });
 
         this.model = Object.assign({}, model);
@@ -140,7 +140,17 @@ class Valify {
 
                 // #7 check empty
                 this.checkAllowEmpty(field, data);
+            }
 
+            if (this.opts.detectUnknown) {
+                let unknown = [];
+                for (let i in data) {
+                    if (data.hasOwnProperty(i) && !this.model[i])
+                        unknown.push(i);
+                }
+                if (unknown.length) {
+                    this.addError(locale.UNKNOWN_DETECTED, {unknown: unknown.join(', ')});
+                }
             }
         }
 

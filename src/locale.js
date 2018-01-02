@@ -9,5 +9,6 @@ module.exports = {
     TYPE_FUNCTION_FAIL: '"{path}" receives: {dataField}',
     FIELD_REQUIRED: '"{path}" is required',
     FIELD_CANNOT_EMPTY: '"{path}" cannot be empty',
-    DATA_REQUIRED: 'Data is required and must be an object'
+    DATA_REQUIRED: 'Data is required and must be an object',
+    UNKNOWN_DETECTED: 'Unknown fields were detected: {unknown}'
 };
