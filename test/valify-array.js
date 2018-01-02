@@ -23,7 +23,7 @@ describe('valify-array', function () {
             if (
                 e.message === '"aNumber" is required' &&
                 e.fields.length === 2 &&
-                e.fields[1].message === '"lastName" expects array of "string" but receives: "Red"'
+                e.fields[1].message === '"lastName" expects array of "string" type but receives: "Red"'
             )
                 done();
         }
@@ -114,7 +114,7 @@ describe('valify-array', function () {
             done('error');
         } catch (e) {
             console.log(e.message);
-            if (e.message === '"lastName.2" expects "string" but receives: ["Red","Gray",2]')
+            if (e.message === '"lastName.2" expects "string" type but receives: ["Red","Gray",2]')
                 done();
         }
     });
@@ -311,7 +311,7 @@ describe('valify-array', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (e.message === '"record" expects array of "function () { [native code] }" but receives: null')
+            if (e.message === '"record" expects array of "function () { [native code] }" type but receives: null')
                 done();
         }
     });

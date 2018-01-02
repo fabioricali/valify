@@ -80,7 +80,7 @@ describe('valify', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === '"lastName" expects "string" but receives: 525')
+            if (e.message === '"lastName" expects "string" type but receives: 525')
                 done();
         }
     });
@@ -158,7 +158,7 @@ describe('valify', function () {
         try {
             userModel(data);
         } catch (e) {
-            if (e.message === '"createdOn" expects "date" but receives: 10')
+            if (e.message === '"createdOn" expects "date" type but receives: 10')
                 done();
         }
 
@@ -612,7 +612,7 @@ describe('valify', function () {
             done('error');
         }).catch(e => {
             console.log(e.message);
-            if (e.message === '"aNumber" expects "int" but receives: ""')
+            if (e.message === '"aNumber" expects "int" type but receives: ""')
                 done();
         });
 

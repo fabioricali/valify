@@ -23,7 +23,7 @@ describe('valify-multi-type', function () {
             })
         } catch (e) {
             console.log(e.message);
-            if (e.message === '"lastName" expects array of "[object Object]" but receives: "red0"')
+            if (e.message === '"lastName" expects array of "[object Object]" type but receives: "red0"')
                 done();
         }
     });
