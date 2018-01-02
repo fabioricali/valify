@@ -18,13 +18,11 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Field options](#field-options)
 - [Error object](#error-object)
 - [Default values](#default-values)
-- [Validators](#validators)
-    - [Available validators](#available-validators)
-    - [Customize error message](#customize-error-message)
 - [Nested models](#nested-models)
 - [Promises](#using-promise)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
+    - [Arguments](#arguments-in-custom-type)
 - [Locale](#locale)
 - [Types](#available-types)
 
@@ -84,7 +82,6 @@ try {
 |`allowNull`|`boolean`|`false`|Allow null value, overwrites all checks|
 |`allowEmpty`|`boolean`|`true`|Allow empty value, works for `string`, `array` and `object`|
 |`locale`|`object`|`object`|An object that contains locale strings that overwrites those globals|
-|`validate`|`object`|`null`|An object that contains the validators|
 |`convert`|`function`|`null`|A function to manipulate/conversion data|
 |`onError`|`function`|`null`|A function triggered when an check fails|
 
@@ -133,142 +130,6 @@ try {
     console.log(e.message, e.fields);
 }
 ```
-
-### Validators
-You can validate your model with the validators
-
-```javascript
-const userModel = new Valify({
-    firstName: {
-        type: 'string',
-        validate: {
-            upperCase: true
-        }
-    },
-    eta: {
-        type: 'int',
-        validate: {
-            min: 18
-        }
-    },
-    otherNumber: {
-        type: 'int',
-        validate: {
-            max: {
-                args: 56,
-                msg: 'this is a custom error message, the number must be 56'
-            }
-        }
-    },
-    // custom validator
-    color: {
-        type: 'string',
-        validate: {
-            checkColor(value) {
-                if (value !== 'red')
-                    return 'the color must be red!';
-            }
-        }
-    }
-});
-```
-
-#### Available validators
-Below there are some default validators
-
-|Name|Description|Default message|
-|-|-|-|
-|`email`|Check if string is a valid email|{0} is a not valid email|
-|`url`|Check if is a valid url|{0} is a not valid url|
-|`ip`|Check if is a valid IP format|{0} is a not valid IP|
-|`uuid`|Check if is a valid UUID format|{0} is a not valid UUID|
-|`creditCard`|Check if is a valid credit card format|{0} is a not valid credit card|
-|`camelCase`|Check if is a valid camelCase format|the string must be in the camelCase format|
-|`kebabCase`|Check if is a valid kebabCase format|the string must be in the kebabCase format|
-|`snakeCase`|Check if is a valid snakeCase format|the string must be in the snakeCase format|
-|`capitalized`|Check if value is capitalized|the string must be capitalized instead it is {0}|
-|`lowerCase`|Check if value is lowercase|the string must be lowerCase instead it is {0}|
-|`upperCase`|Check if value is uppercase|the string must be upperCase instead it is {0}|
-|`min`|Check if value number or string length is greater than or equal to a number|the number must be greater than or equal to {1} instead it is {0}|
-|`max`|Check if value number or string length is lesser than or equal to a number|the number must be lesser than or equal to {1} instead it is {0}|
-|`dateBetween`|Check if a date is between two dates|the date must be between {1} and {2} instead it is {0}|
-
-```javascript
-new Valify({
-    myField: {
-        type: '...',
-        validate: {
-            email: true,
-            url: true,
-            ip: true,
-            uuid: true,
-            creditCard: true,
-            camelCase: true,
-            kebabCase: true,
-            snakeCase: true,
-            capitalized: true,
-            lowerCase: true,
-            upperCase: true,
-            min: 5,
-            max: 10,
-            dateBetween: [
-                new Date('2017-12-01'), // start date
-                new Date('2017-12-23')  // end date
-            ]
-        }
-    }
-})
-```
-
-#### Customize error message
-The validators error message are customizable through `msg` property like below.
-
-```javascript
-{
-    validate: {
-        email: {
-            msg: 'your custom error message'
-        },
-        min: {
-            args: 5,
-            msg: 'an error'
-        },
-        dateBetween: {
-            args: [
-                new Date('2017-12-01'), // start date
-                new Date('2017-12-23')  // end date
-            ],
-            msg: 'an other error'
-        }
-    }
-}
-```
-
-- Inside all custom validator function and custom type function are passed others 2 arguments: 
-    - `data`, a copy of origin data object
-    - `be`, a library used for several validations. More info on <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>
-    
-Example
-
-```javascript
-new Valify({
-    color0: 'string',
-    color1: {
-        type: (value, data, be) => {
-            return be.string(value)
-        },
-        validate: {
-            checkColor(value, data, be) {
-                if (value !== 'red')
-                    throw new Error('the color must be red!');
-                
-                if (value === data.color0)
-                    throw new Error('the color must be different of color0!');
-            }
-        }
-    }
-})
-```    
 
 ### Nested models
 It's possible also add nested model, for example you could have an array field like below:
@@ -408,8 +269,7 @@ Valify.addType('mycustom1', (value, data) => {
 });
 
 // it's also possible returns a string as error like below
-Valify.addType('mycustom2', (value, data) => {
-    console.log(data);
+Valify.addType('mycustom2', (value) => {
     if (value !== 10)
         return 'ops... must be 10'
 });
@@ -458,6 +318,26 @@ try {
 } 
 ```
 
+#### Arguments in custom type
+- Inside all custom type function are passed 3 arguments: 
+    - `value`, current value
+    - `data`, a copy of origin data object
+    - `be`, a library used for several validations. More info on <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>
+    
+Example
+
+```javascript
+new Valify({
+    color0: 'string',
+    color1: (value, data, be) => {
+        if (!be.string(value))
+            return 'must be a string';
+        if (value === data.color0)
+            return 'must be different of color0';
+    }
+})
+```  
+
 ### Locale
 You can set locale string in two ways:
 
@@ -480,7 +360,6 @@ Valify.setLocale({
 |`TYPE_FUNCTION_FAIL`|`"{path}" receives: {dataField}`|
 |`FIELD_REQUIRED`|`"{path}" is required`|
 |`DATA_REQUIRED`|`Data is required and must be an object`|
-|`VALIDATOR_FAIL`|`"{path}" fail, "{validator}" returns false`|
 |`FIELD_CANNOT_EMPTY`|`"{path}" cannot be empty`|
 
 ##### 2) Local, into field settings
@@ -502,7 +381,6 @@ const userModel = new Valify({
     - **`TYPE_FAIL`**
     - **`TYPE_ARRAY_FAIL`**
     - **`FIELD_REQUIRED`**
-    - **`VALIDATOR_FAIL`**
     - **`FIELD_CANNOT_EMPTY`**
 
 ### Available types
@@ -543,8 +421,14 @@ All types that you can use:
 - Extra    
     - `alphanumeric`
     - `any`
+    - `datestring`
+    - `email`
     - `float`
     - `int`
+    - `ip`
+    - `timestring`
+    - `uuid`
+    - `url`
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/Valify/blob/master/CHANGELOG.md">here</a>
