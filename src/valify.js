@@ -1,7 +1,6 @@
 const ValifyError = require('./error');
 const check = require('./check-types');
 const types = require('./types');
-const validator = require('./validator');
 const locale = Object.assign({}, require('./locale'));
 const extend = require('defaulty');
 const format = require('string-template');
