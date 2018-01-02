@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - **Breaking changes**
     - **Changed** in locale strings {field} with {path}
     - **Changed** `convert` position, now is before all checks
+    - **Removed** validators, use custom types instead
 
 [3.3.1] - 2017-12-28
 - **Added** new type `any`

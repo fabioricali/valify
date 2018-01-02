@@ -141,8 +141,6 @@ class Valify {
                 // #7 check empty
                 this.checkAllowEmpty(field, data);
 
-                // #8 validator
-                //this.checkValidator(field, data);
             }
         }
 
@@ -391,61 +389,6 @@ class Valify {
         }
     }
 
-    /**
-     * Check over validator
-     * @param field
-     * @param data
-     * @private
-     * @ignore
-     */
-    checkValidator(field, data) {
-        if (!be.object(this.model[field].validate)) return;
-
-        let validate = this.model[field].validate;
-
-        for (let i in validate) {
-            if (!validate.hasOwnProperty(i))
-                continue;
-
-            if (!be.function(validate[i])) {
-
-                let args = (be.object(validate[i]) && validate[i].args)
-                    ? validate[i].args
-                    : validate[i];
-
-                if (be.array(args)) {
-                    args.unshift(data[field]);
-                } else {
-                    args = [data[field], args];
-                }
-
-                if (!validator[i].fn.apply(this, args)) {
-                    let param = Valify.printArgs(args);
-                    param['field'] = field;
-                    this.addError(
-                        validate[i].msg || validator[i].msg, param
-                    );
-                }
-                // custom validator
-            } else if (be.function(validate[i])) {
-                try {
-                    if (!Valify.stringAsError(validate[i].call(this, data[field], Object.assign({}, data), be))) {
-                        this.addError(
-                            this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {
-                                field,
-                                validator: i
-                            }
-                        );
-                    }
-                } catch (e) {
-                    this.addError(
-                        e.message, {field}
-                    );
-                }
-            }
-        }
-
-    }
 
     /**
      * Checks if is a Valify model
@@ -472,7 +415,6 @@ class Valify {
             required: true,
             default: null,
             convert: null,
-            validate: null,
             onError: null,
             allowNull: null,
             allowEmpty: true,
@@ -480,7 +422,6 @@ class Valify {
                 FIELD_REQUIRED: null,
                 TYPE_FAIL: null,
                 TYPE_ARRAY_FAIL: null,
-                VALIDATOR_FAIL: null,
                 FIELD_CANNOT_EMPTY: null
             }
         })
