@@ -20,6 +20,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Default values](#default-values)
 - [Nested models](#nested-models)
 - [Promises](#using-promise)
+- [Detect unknown fields](#detect-unknown-fields)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
     - [Arguments](#arguments-in-custom-type)
@@ -222,6 +223,33 @@ userModel(data).then(()=>{
         }
      */
 });
+
+```
+
+### Detect unknown fields
+If you need to define a strict model where all the fields correspond to those defined, you can set `detectUnknown` to true.
+
+```javascript
+
+const userModel = new Valify({
+    firstName: 'string',
+    lastName: 'string',
+    email: 'email'
+}, {
+    detectUnknown: true
+});
+
+try {
+    userModel({
+        firstName: 'Mike',
+        lastName: 'Storm',
+        email: 'test@test.net',
+        role: 'admin',
+        age: 26,
+    })
+} catch (e) {
+    console.log(e.message); //Unknown fields were detected: role, age
+}
 
 ```
 
