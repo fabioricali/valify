@@ -389,6 +389,7 @@ Valify.setLocale({
 |`FIELD_REQUIRED`|`"{path}" is required`|
 |`DATA_REQUIRED`|`Data is required and must be an object`|
 |`FIELD_CANNOT_EMPTY`|`"{path}" cannot be empty`|
+|`UNKNOWN_DETECTED`|`Unknown fields were detected: {unknown}`|
 
 ##### 2) Local, into field settings
 ```javascript
