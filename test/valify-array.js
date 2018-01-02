@@ -162,10 +162,7 @@ describe('valify-array', function () {
                 firstName: 'string',
                 lastName: 'string',
                 email: {
-                    type: 'string',
-                    validate: {
-                        email: true
-                    }
+                    type: 'email'
                 }
             })]
         });
@@ -198,10 +195,7 @@ describe('valify-array', function () {
                 firstName: 'string',
                 lastName: 'string',
                 email: {
-                    type: 'string',
-                    validate: {
-                        email: true
-                    }
+                    type: 'email'
                 }
             })]
         });
@@ -225,10 +219,7 @@ describe('valify-array', function () {
                         firstName: 'string',
                         lastName: 'string',
                         email: {
-                            type: 'string',
-                            validate: {
-                                email: true
-                            }
+                            type: 'email'
                         }
                     })
                 ],
@@ -284,10 +275,7 @@ describe('valify-array', function () {
                 firstName: 'string',
                 lastName: 'string',
                 email: {
-                    type: 'string',
-                    validate: {
-                        email: true
-                    }
+                    type: 'email'
                 }
             })]
         });
