@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [unreleased]
 - **Added** `path` property to error object
 - **Added** `type` property to error object
+- **Added** `detectUnknown` property to model definition
 - **Fixed** repeated errors in nested model scenario
 - **Breaking changes**
     - **Changed** in locale strings {field} with {path}
