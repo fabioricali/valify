@@ -376,7 +376,7 @@ class Valify {
                         if (!be.string(type[i].message))
                             type[i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
-                        if (!Valify.stringAsError(type[i].fn.call(this, data[field], be))) {
+                        if (!Valify.stringAsError(type[i].fn.call(this, data[field], data, be))) {
                             this.addError(
                                 type[i].message, {
                                     field,

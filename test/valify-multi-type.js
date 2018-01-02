@@ -108,7 +108,7 @@ describe('valify-multi-type', function () {
         const userModel = new Model({
             lastName: {
                 type: [
-                    (value, validation) => validation.camelCase(value),
+                    (value, data, validation) => validation.camelCase(value),
                     'string must be in camelCase format'
                 ]
             }

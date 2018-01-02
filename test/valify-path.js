@@ -51,10 +51,7 @@ describe('valify-path', function () {
                 firstName: 'string',
                 lastName: 'string',
                 email: {
-                    type: 'string',
-                    validate: {
-                        email: true
-                    }
+                    type: 'email'
                 }
             })]
         });
@@ -92,10 +89,7 @@ describe('valify-path', function () {
                         firstName: 'string',
                         lastName: 'string',
                         email: {
-                            type: 'string',
-                            validate: {
-                                email: true
-                            }
+                            type: 'email'
                         }
                     })
                 ]
@@ -135,10 +129,7 @@ describe('valify-path', function () {
                         firstName: 'string',
                         lastName: 'string',
                         email: {
-                            type: 'string',
-                            validate: {
-                                email: true
-                            }
+                            type: 'email'
                         }
                     })
                 ],
@@ -166,19 +157,11 @@ describe('valify-path', function () {
                         firstName: 'string',
                         lastName: 'string',
                         email: {
-                            type: 'string',
-                            validate: {
-                                email: true
-                            }
+                            type: 'email'
                         }
                     })
                 ],
-                validate: {
-                    checkEmpty(value, data, be) {
-                        if (be.empty(value))
-                            throw new Error('cannot be empty');
-                    }
-                }
+                allowEmpty: false
             }
         });
 
@@ -254,10 +237,7 @@ describe('valify-path', function () {
                         p2: [
                             new Model({
                                 p3: {
-                                    type: 'string',
-                                    validate: {
-                                        email: true
-                                    }
+                                    type: 'email'
                                 }
                             })
                         ]

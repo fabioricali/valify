@@ -208,9 +208,11 @@ describe('valify-nested', function () {
             lastName: 'string',
             record: new Model({
                 id: {
-                    type: 'int',
-                    validate: {
-                        max: 10
+                    type: (value, data, be) => {
+                        if (!be.int(value))
+                            return 'must be a number';
+                        if (value >= 10)
+                            return `the number must be lesser than or equal to 10 instead it is ${value}`;
                     }
                 },
                 name: 'string'

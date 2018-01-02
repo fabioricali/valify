@@ -126,10 +126,7 @@ describe('valify-array', function () {
                 firstName: 'string',
                 lastName: 'string',
                 email: {
-                    type: 'string',
-                    validate: {
-                        email: true
-                    }
+                    type: 'email'
                 }
             })]
         });
@@ -153,7 +150,7 @@ describe('valify-array', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if (e.message === '"gmail.com" is a not valid email' && e.fields[0].field === 'email' && e.fields[0].message === e.message)
+            if (e.message === '"record.1.email" expects "email" type but receives: "gmail.com"' && e.fields[0].field === 'email' && e.fields[0].message === e.message)
                 done();
         }
     });
@@ -245,7 +242,7 @@ describe('valify-array', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if(e.message === '"record" is required')
+            if (e.message === '"record" is required')
                 done();
         }
     });
@@ -259,19 +256,11 @@ describe('valify-array', function () {
                         firstName: 'string',
                         lastName: 'string',
                         email: {
-                            type: 'string',
-                            validate: {
-                                email: true
-                            }
+                            type: 'email'
                         }
                     })
                 ],
-                validate: {
-                    checkEmpty(value, data, be){
-                        if(be.empty(value))
-                            throw new Error('cannot be empty');
-                    }
-                }
+                allowEmpty: false
             }
         });
 
@@ -283,7 +272,7 @@ describe('valify-array', function () {
         } catch (e) {
             console.log(e.message);
             console.log(e.fields);
-            if(e.message === 'cannot be empty')
+            if (e.message === '"record" cannot be empty')
                 done();
         }
     });
