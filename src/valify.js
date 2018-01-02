@@ -21,7 +21,8 @@ class Valify {
     constructor(model, opts = {}) {
 
         this.opts = extend.copy(opts, {
-            usePromise: false
+            usePromise: false,
+            strict: false
         });
 
         this.model = Object.assign({}, model);
