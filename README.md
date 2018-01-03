@@ -27,6 +27,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
     - [Arguments](#arguments-in-custom-type)
 - [Locale](#locale)
 - [Types](#available-types)
+- [Upgrade to V4](#upgrade-to-v4)
 
 ### Installation
 ```
@@ -475,6 +476,12 @@ All types that you can use:
     - `timestring`
     - `uuid`
     - `url`
+
+### Upgrade to V4
+- **Breaking changes**
+    - **Changed** in locale strings {field} with {path}
+    - **Changed** `convert` position, now is before all checks
+    - **Removed** validators, use custom types instead
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/Valify/blob/master/CHANGELOG.md">here</a>
