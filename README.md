@@ -23,6 +23,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Detect unknown fields](#detect-unknown-fields)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
+    - [Use multiple rules together](#use-multiple-rules-together)
     - [Arguments](#arguments-in-custom-type)
 - [Locale](#locale)
 - [Types](#available-types)
@@ -345,6 +346,22 @@ try {
     console.log(e.message, e.fields);
 } 
 ```
+
+#### Use multiple rules together
+If you need to define multiple checks in one type, you can do this:
+
+```javascript
+new Valify({
+    myString: value => {
+        if (typeof value !== 'string')
+            return 'must be a string';
+        if (value.length < 5)
+            return 'must be greater than 5 chars';
+        if (value.length > 10)
+            return 'must be less than 10 chars';
+    }
+})
+```  
 
 #### Arguments in custom type
 - Inside all custom type function are passed 3 arguments: 
