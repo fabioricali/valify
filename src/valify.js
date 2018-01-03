@@ -369,7 +369,7 @@ class Valify {
 
             } else {
 
-                deprecate('multi-type function is deprecated, please use validators instead');
+                deprecate('multi-type function is deprecated, please use a custom type function with more rules');
 
                 for (let i in type) {
                     if (type.hasOwnProperty(i) && (be.object(type[i]) || be.function(type[i]))) {
