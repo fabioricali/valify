@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 3.3.1  
+// [AIV]  Valify Build version: 4.0.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6633,20 +6633,16 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
  * @type {{ALPHANUMERIC: string, ARGUMENT: string, ARRAY: string, BOOLEAN: string, BUFFER: string, DATE: string, ERROR: string, FLOAT: string, FLOAT32ARRAY: string, FLOAT64ARRAY: string, FUNCTION: string, GENERATORFUNCTION: string, INT: string, INT16ARRAY: string, INT32ARRAY: string, INT8ARRAY: string, MAP: string, NULL: string, NUMBER: string, OBJECT: string, PROMISE: string, REGEXP: string, SET: string, STRING: string, SYMBOL: string, UINT16ARRAY: string, UINT32ARRAY: string, UINT8ARRAY: string, UINT8CLAMPEDARRAY: string, UNDEFINED: string, WEAKMAP: string, WEAKSET: string}}
  */
 module.exports = {
-    ALPHANUMERIC: 'alphanumeric',
-    ANY: 'any',
     ARGUMENTS: 'arguments',
     ARRAY: 'array',
     BOOLEAN: 'boolean',
     BUFFER: 'buffer',
     DATE: 'date',
     ERROR: 'error',
-    FLOAT: 'float',
     FLOAT32ARRAY: 'float32array',
     FLOAT64ARRAY: 'float64array',
     FUNCTION: 'function',
     GENERATORFUNCTION: 'generatorfunction',
-    INT: 'int',
     INT16ARRAY: 'int16array',
     INT32ARRAY: 'int32array',
     INT8ARRAY: 'int8array',
@@ -6665,7 +6661,19 @@ module.exports = {
     UINT8CLAMPEDARRAY: 'uint8clampedarray',
     UNDEFINED: 'undefined',
     WEAKMAP: 'weakmap',
-    WEAKSET: 'weakset'
+    WEAKSET: 'weakset',
+
+    // Extra
+    ALPHANUMERIC: 'alphanumeric',
+    ANY: 'any',
+    DATESTRING: 'datestring',
+    EMAIL: 'email',
+    FLOAT: 'float',
+    INT: 'int',
+    IP: 'ip',
+    TIMESTRING: 'timestring',
+    UUID: 'uuid',
+    URL: 'url'
 };
 
 /***/ }),
@@ -6693,12 +6701,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var ValifyError = __webpack_require__(4);
 var check = __webpack_require__(5);
 var types = __webpack_require__(1);
-var validator = __webpack_require__(7);
-var locale = Object.assign({}, __webpack_require__(8));
-var extend = __webpack_require__(9);
-var format = __webpack_require__(10);
+var locale = Object.assign({}, __webpack_require__(7));
+var extend = __webpack_require__(8);
+var format = __webpack_require__(9);
 var be = __webpack_require__(0);
-var deprecate = __webpack_require__(11);
+var deprecate = __webpack_require__(10);
 
 /**
  * @class Valify
@@ -6718,7 +6725,8 @@ var Valify = function () {
         _classCallCheck(this, Valify);
 
         this.opts = extend.copy(opts, {
-            usePromise: false
+            usePromise: false,
+            detectUnknown: false
         });
 
         this.model = Object.assign({}, model);
@@ -6733,6 +6741,8 @@ var Valify = function () {
             fields: []
         };
 
+        this.path = [];
+
         this._valid_ = this.valid.bind(this);
         this._valid_.owner = this;
 
@@ -6742,23 +6752,39 @@ var Valify = function () {
     /**
      * Add error to list
      * @param message
-     * @param field
+     * @param obj
      */
 
 
     _createClass(Valify, [{
         key: 'addError',
-        value: function addError(message, field) {
-            if (this.errors.message === '') this.errors.message = message;
-            if (field !== undefined) {
-                this.errors.fields.push({
-                    field: field,
-                    message: message
-                });
+        value: function addError(message) {
+            var obj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-                if (be.function(this.model[field].onError)) {
-                    this.model[field].onError.call(this, message);
-                }
+
+            obj.path = Object.assign([], this.path);
+
+            if (obj.field !== undefined) obj.path.push(obj.field);
+
+            if (obj.index !== undefined) obj.path.push(obj.index);
+
+            obj.path = obj.path.join('.');
+
+            message = format(message, obj);
+
+            if (this.errors.message === '') this.errors.message = message;
+
+            if (obj.field === undefined) return;
+
+            this.errors.fields.push({
+                path: obj.path,
+                message: message,
+                field: obj.field,
+                type: this.model[obj.field].type
+            });
+
+            if (be.function(this.model[obj.field].onError)) {
+                this.model[obj.field].onError.call(this, message);
             }
         }
 
@@ -6772,7 +6798,7 @@ var Valify = function () {
         value: function catchError(errors) {
             if (this.errors.message === '') this.errors.message = errors.message;
             for (var i in errors.fields) {
-                if (errors.fields.hasOwnProperty(i)) this.errors.fields.push(errors.fields[i]);
+                if (errors.fields.hasOwnProperty(i) && !this.errors.fields.includes(errors.fields[i])) this.errors.fields.push(errors.fields[i]);
             }
         }
 
@@ -6785,12 +6811,14 @@ var Valify = function () {
 
     }, {
         key: 'valid',
-        value: function valid(data) {
+        value: function valid(data, nested) {
             var _this = this;
 
-            var nested = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
             var type = void 0;
+
+            if (nested) {
+                this.path = Object.assign([], nested);
+            }
 
             if (!be.object(data)) this.addError(locale.DATA_REQUIRED);else {
                 for (var field in this.model) {
@@ -6800,29 +6828,36 @@ var Valify = function () {
                     this.model[field] = this.normalize(field);
                     type = this.model[field].type;
 
-                    // #0 detect short required string
+                    // #1 detect short required string
                     type = this.detectShortRequired(type, field);
 
-                    // #1 check allow null
-                    if (this.checkAllowNull(field, data)) continue;
-
-                    // #2 check unknown type
-                    if (this.checkUnknownType(type, field)) continue;
-
-                    // #3 check required
-                    if (this.checkRequired(field, data)) continue;
-
-                    // #4 apply convert function
+                    // #2 apply convert function
                     this.applyConvert(field, data);
 
-                    // #5 check type
+                    // #3 check allow null
+                    if (this.checkAllowNull(field, data)) continue;
+
+                    // #4 check unknown type
+                    if (this.checkUnknownType(type, field)) continue;
+
+                    // #5 check required
+                    if (this.checkRequired(field, data)) continue;
+
+                    // #6 check type
                     this.checkType(type, field, data);
 
-                    // #6 check empty
+                    // #7 check empty
                     this.checkAllowEmpty(field, data);
+                }
 
-                    // #7 validator
-                    this.checkValidator(field, data);
+                if (this.opts.detectUnknown) {
+                    var unknown = [];
+                    for (var i in data) {
+                        if (data.hasOwnProperty(i) && !this.model[i]) unknown.push(i);
+                    }
+                    if (unknown.length) {
+                        this.addError(locale.UNKNOWN_DETECTED, { unknown: unknown.join(', ') });
+                    }
                 }
             }
 
@@ -6831,7 +6866,10 @@ var Valify = function () {
                     if (_this.errors.message !== '') reject(_this.errors);else resolve(data);
                 });
             } else {
-                if (this.errors.message !== '') throw new ValifyError(this.errors.message, this.errors.fields);else return data;
+                if (this.errors.message !== '') {
+                    //if(this.errors.fields.length <=3)
+                    throw new ValifyError(this.errors.message, this.errors.fields);
+                } else return data;
             }
         }
 
@@ -6871,7 +6909,7 @@ var Valify = function () {
         key: 'checkAllowEmpty',
         value: function checkAllowEmpty(field, data) {
             if (!this.model[field].allowEmpty && be.empty(data[field])) {
-                this.addError(format(this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, { field: field }), field);
+                this.addError(this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, { field: field });
             }
         }
 
@@ -6903,7 +6941,7 @@ var Valify = function () {
         key: 'checkUnknownType',
         value: function checkUnknownType(type, field) {
             if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
-                this.addError(format(locale.UNKNOWN_TYPE, { type: type }), field);
+                this.addError(locale.UNKNOWN_TYPE, { type: type, field: field });
                 return true;
             }
 
@@ -6938,7 +6976,7 @@ var Valify = function () {
         value: function checkRequired(field, data) {
             if (!data.hasOwnProperty(field)) {
                 if (this.model[field].default === null && this.model[field].required) {
-                    this.addError(format(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, { field: field }), field);
+                    this.addError(this.model[field].locale.FIELD_REQUIRED || locale.FIELD_REQUIRED, { field: field });
                     return true;
                 } else if (this.model[field].required === false) {
                     return true;
@@ -6963,6 +7001,12 @@ var Valify = function () {
     }, {
         key: 'checkType',
         value: function checkType(type, field, data, parent) {
+
+            var index = void 0;
+            if (be.object(parent)) {
+                index = parent.index;
+            }
+
             if (be.string(type)) {
                 try {
                     if (!Valify.stringAsError(check[type](data[field], be))) {
@@ -6971,19 +7015,23 @@ var Valify = function () {
                             field = parent.field;
                             data = parent.data;
                         }
-                        this.addError(format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
+                        this.addError(this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                             field: field,
                             type: type,
-                            dataField: JSON.stringify(data[field])
-                        }), field);
+                            dataField: JSON.stringify(data[field]),
+                            index: index
+                        });
                     }
                 } catch (errors) {
-                    this.addError(errors.message, field);
+                    this.addError(errors.message, { field: field, index: index });
                 }
             } else if (be.function(type)) {
                 if (Valify.isInstance(type)) {
                     try {
-                        type.call(this, data[field], true);
+                        var path = Object.assign([], this.path);
+                        if (parent) path.push(parent.field);
+                        path.push(field);
+                        type.call(this, data[field], path);
                     } catch (errors) {
                         this.catchError(errors);
                     }
@@ -6995,16 +7043,17 @@ var Valify = function () {
                                 field = parent.field;
                                 data = parent.data;
                             }
-                            this.addError(format(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                            this.addError(this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                                 field: field,
-                                dataField: JSON.stringify(data[field])
-                            }), field);
+                                dataField: JSON.stringify(data[field]),
+                                index: index
+                            });
                         }
                     } catch (errors) {
                         if (be.object(parent)) {
                             field = parent.field;
                         }
-                        this.addError(errors.message, field);
+                        this.addError(errors.message, { field: field, index: index });
                     }
                 }
             } else if (be.array(type)) {
@@ -7012,21 +7061,22 @@ var Valify = function () {
                 if (type.length === 1) {
 
                     if (!be.array(data[field])) {
-                        this.addError(format(this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
+                        this.addError(this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
                             field: field,
                             type: type,
-                            dataField: JSON.stringify(data[field])
-                        }), field);
+                            dataField: JSON.stringify(data[field]),
+                            index: index
+                        });
                     } else {
                         for (var i in data[field]) {
                             if (data[field].hasOwnProperty(i)) {
-                                this.checkType(type[0], i, data[field], { type: type, field: field, data: data });
+                                this.checkType(type[0], i, data[field], { type: type, field: field, data: data, index: i });
                             }
                         }
                     }
                 } else {
 
-                    deprecate('multi-type function is deprecated, please use validators instead');
+                    deprecate('multi-type function is deprecated, please use a custom type function with more rules');
 
                     for (var _i in type) {
                         if (type.hasOwnProperty(_i) && (be.object(type[_i]) || be.function(type[_i]))) {
@@ -7040,59 +7090,14 @@ var Valify = function () {
 
                             if (!be.string(type[_i].message)) type[_i].message = this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL;
 
-                            if (!Valify.stringAsError(type[_i].fn.call(this, data[field], be))) {
-                                this.addError(format(type[_i].message, {
+                            if (!Valify.stringAsError(type[_i].fn.call(this, data[field], data, be))) {
+                                this.addError(type[_i].message, {
                                     field: field,
-                                    dataField: JSON.stringify(data[field])
-                                }), field);
+                                    dataField: JSON.stringify(data[field]),
+                                    index: index
+                                });
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        /**
-         * Check over validator
-         * @param field
-         * @param data
-         * @private
-         * @ignore
-         */
-
-    }, {
-        key: 'checkValidator',
-        value: function checkValidator(field, data) {
-            if (!be.object(this.model[field].validate)) return;
-
-            var validate = this.model[field].validate;
-
-            for (var i in validate) {
-                if (!validate.hasOwnProperty(i)) continue;
-
-                if (!be.function(validate[i])) {
-
-                    var args = be.object(validate[i]) && validate[i].args ? validate[i].args : validate[i];
-
-                    if (be.array(args)) {
-                        args.unshift(data[field]);
-                    } else {
-                        args = [data[field], args];
-                    }
-
-                    if (!validator[i].fn.apply(this, args)) this.addError(format(validate[i].msg || validator[i].msg, Valify.printArgs(args)), field);
-
-                    // custom validator
-                } else if (be.function(validate[i])) {
-                    try {
-                        if (!Valify.stringAsError(validate[i].call(this, data[field], Object.assign({}, data), be))) {
-                            this.addError(format(this.model[field].locale.VALIDATOR_FAIL || locale.VALIDATOR_FAIL, {
-                                field: field,
-                                validator: i
-                            }), field);
-                        }
-                    } catch (e) {
-                        this.addError(format(e.message), field);
                     }
                 }
             }
@@ -7129,7 +7134,6 @@ var Valify = function () {
                 required: true,
                 default: null,
                 convert: null,
-                validate: null,
                 onError: null,
                 allowNull: null,
                 allowEmpty: true,
@@ -7137,7 +7141,6 @@ var Valify = function () {
                     FIELD_REQUIRED: null,
                     TYPE_FAIL: null,
                     TYPE_ARRAY_FAIL: null,
-                    VALIDATOR_FAIL: null,
                     FIELD_CANNOT_EMPTY: null
                 }
             });
@@ -7283,22 +7286,16 @@ var TYPES = __webpack_require__(1);
 
 var check = [];
 
-check[TYPES.ALPHANUMERIC] = be.alphanumeric.bind(undefined);
-check[TYPES.ANY] = function () {
-  return true;
-};
 check[TYPES.ARGUMENTS] = be.argument.bind(undefined);
 check[TYPES.ARRAY] = be.array.bind(undefined);
 check[TYPES.BOOLEAN] = be.boolean.bind(undefined);
 check[TYPES.BUFFER] = be.buffer.bind(undefined);
 check[TYPES.DATE] = be.date.bind(undefined);
 check[TYPES.ERROR] = be.error.bind(undefined);
-check[TYPES.FLOAT] = be.float.bind(undefined);
 check[TYPES.FLOAT32ARRAY] = be.float32Array.bind(undefined);
 check[TYPES.FLOAT64ARRAY] = be.float64Array.bind(undefined);
 check[TYPES.FUNCTION] = be.function.bind(undefined);
 check[TYPES.GENERATORFUNCTION] = be.generatorFunction.bind(undefined);
-check[TYPES.INT] = be.int.bind(undefined);
 check[TYPES.INT8ARRAY] = be.int8Array.bind(undefined);
 check[TYPES.INT16ARRAY] = be.int16Array.bind(undefined);
 check[TYPES.INT32ARRAY] = be.int32Array.bind(undefined);
@@ -7318,6 +7315,19 @@ check[TYPES.UINT8CLAMPEDARRAY] = be.uint8ClampedArray.bind(undefined);
 check[TYPES.UNDEFINED] = be.undefined.bind(undefined);
 check[TYPES.WEAKMAP] = be.weakMap.bind(undefined);
 check[TYPES.WEAKSET] = be.weakSet.bind(undefined);
+
+check[TYPES.ALPHANUMERIC] = be.alphanumeric.bind(undefined);
+check[TYPES.ANY] = function () {
+  return true;
+};
+check[TYPES.DATESTRING] = be.dateString.bind(undefined);
+check[TYPES.EMAIL] = be.email.bind(undefined);
+check[TYPES.FLOAT] = be.float.bind(undefined);
+check[TYPES.INT] = be.int.bind(undefined);
+check[TYPES.IP] = be.ip.bind(undefined);
+check[TYPES.TIMESTRING] = be.timeString.bind(undefined);
+check[TYPES.UUID] = be.uuid.bind(undefined);
+check[TYPES.URL] = be.url.bind(undefined);
 
 module.exports = check;
 
@@ -7358,94 +7368,19 @@ module.exports = function (module) {
 "use strict";
 
 
-var be = __webpack_require__(0);
-
 module.exports = {
-    //String
-    email: {
-        fn: be.email.bind(undefined),
-        msg: '{0} is a not valid email'
-    },
-    url: {
-        fn: be.url.bind(undefined),
-        msg: '{0} is a not valid url'
-    },
-    ip: {
-        fn: be.ip.bind(undefined),
-        msg: '{0} is a not valid IP'
-    },
-    uuid: {
-        fn: be.uuid.bind(undefined),
-        msg: '{0} is a not valid UUID'
-    },
-    creditCard: {
-        fn: be.creditCard.bind(undefined),
-        msg: '{0} is a not valid credit card'
-    },
-    camelCase: {
-        fn: be.camelCase.bind(undefined),
-        msg: 'the string must be in the camelCase format'
-    },
-    kebabCase: {
-        fn: be.kebabCase.bind(undefined),
-        msg: 'the string must be in the kebabCase format'
-    },
-    snakeCase: {
-        fn: be.snakeCase.bind(undefined),
-        msg: 'the string must be in the snakeCase format'
-    },
-    capitalized: {
-        fn: be.capitalized.bind(undefined),
-        msg: 'the string must be capitalized instead it is {0}'
-    },
-    lowerCase: {
-        fn: be.lowerCase.bind(undefined),
-        msg: 'the string must be lowerCase instead it is {0}'
-    },
-    upperCase: {
-        fn: be.upperCase.bind(undefined),
-        msg: 'the string must be upperCase instead it is {0}'
-    },
-    //Number
-    min: {
-        fn: be.min.bind(undefined),
-        msg: 'the number must be greater than or equal to {1} instead it is {0}'
-    },
-    max: {
-        fn: be.max.bind(undefined),
-        msg: 'the number must be lesser than or equal to {1} instead it is {0}'
-    },
-    //Date
-    dateBetween: {
-        fn: be.dateBetween.bind(undefined),
-        msg: 'the date must be between {1} and {2} instead it is {0}'
-    }
+    UNKNOWN_TYPE: 'Unknown type: "{type}"',
+    TYPE_FAIL: '"{path}" expects "{type}" type but receives: {dataField}',
+    TYPE_ARRAY_FAIL: '"{path}" expects array of "{type}" type but receives: {dataField}',
+    TYPE_FUNCTION_FAIL: '"{path}" receives: {dataField}',
+    FIELD_REQUIRED: '"{path}" is required',
+    FIELD_CANNOT_EMPTY: '"{path}" cannot be empty',
+    DATA_REQUIRED: 'Data is required and must be an object',
+    UNKNOWN_DETECTED: 'Unknown fields were detected: {unknown}'
 };
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Locale object
- * @type {{UNKNOWN_TYPE: string, TYPE_FAIL: string, TYPE_FUNCTION_FAIL: string, FIELD_REQUIRED: string, DATA_REQUIRED: string}}
- */
-module.exports = {
-    UNKNOWN_TYPE: 'Unknown type: "{type}"',
-    TYPE_FAIL: '{field} expects {type} but receives: {dataField}',
-    VALIDATOR_FAIL: '{field} fail, {validator} returns false',
-    TYPE_ARRAY_FAIL: '{field} expects array of {type} but receives: {dataField}',
-    TYPE_FUNCTION_FAIL: '{field} receives: {dataField}',
-    FIELD_REQUIRED: '{field} is required',
-    FIELD_CANNOT_EMPTY: '{field} cannot be empty',
-    DATA_REQUIRED: 'Data is required and must be an object'
-};
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7504,7 +7439,7 @@ module.exports.copy = copy;
 //# sourceMappingURL=defaulty.js.map
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7549,7 +7484,7 @@ function template(string) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
