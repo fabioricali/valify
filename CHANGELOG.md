@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+[unreleased]
+- **Added** new extra type: `alpha`
+- **Changed** upgrade assertions lib to last version
+
 [4.0.0] - 2018-01-03
 - **Added** `path` property to error object
 - **Added** `type` property to error object
