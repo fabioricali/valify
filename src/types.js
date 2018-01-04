@@ -34,6 +34,7 @@ module.exports = {
     WEAKSET: 'weakset',
 
     // Extra
+    ALPHA: 'alpha',
     ALPHANUMERIC: 'alphanumeric',
     ANY: 'any',
     DATESTRING: 'datestring',
