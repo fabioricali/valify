@@ -466,6 +466,7 @@ All types that you can use:
     - `weakset`
     
 - Extra    
+    - `alpha`
     - `alphanumeric`
     - `any`
     - `datestring`
