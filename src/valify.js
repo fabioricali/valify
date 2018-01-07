@@ -20,6 +20,12 @@ class Valify {
      */
     constructor(model, opts = {}) {
 
+        if (!be.object(model))
+            throw new Error('Model must be an object');
+
+        if (!be.object(opts))
+            throw new Error('Options must be an object');
+
         this.opts = extend.copy(opts, {
             usePromise: false,
             detectUnknown: false

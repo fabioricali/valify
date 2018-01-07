@@ -617,4 +617,37 @@ describe('valify', function () {
         });
 
     });
+
+    it('should be return error, wrong model', function (done) {
+
+        try {
+            const userModel = new Model([]);
+            userModel({
+                aNumber: ''
+            });
+            done('error');
+        }catch (e) {
+            console.log(e.message);
+            if (e.message === 'Model must be an object')
+                done();
+        }
+
+    });
+
+    it('should be return error, wrong option', function (done) {
+
+        try {
+            const userModel = new Model({}, []);
+            userModel({
+                aNumber: ''
+            });
+            done('error');
+        }catch (e) {
+            console.log(e.message);
+            if (e.message === 'Options must be an object')
+                done();
+        }
+
+    });
+
 });
