@@ -9,7 +9,7 @@ describe('valify-static', function () {
             be.err.false(result);
         });
         it('should return true', function () {
-            let myModel = new Model();
+            let myModel = new Model({});
             let result = Model.isInstance(myModel);
             be.err.true(result);
         });
