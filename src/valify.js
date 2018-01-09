@@ -6,6 +6,7 @@ const extend = require('defaulty');
 const format = require('string-template');
 const be = require('bejs');
 const deprecate = require('depreca');
+const clone = require('clone');
 
 /**
  * @class Valify
@@ -31,7 +32,7 @@ class Valify {
             detectUnknown: false
         });
 
-        this.model = Object.assign({}, model);
+        this.model = clone(model);
 
         /**
          * Errors list
@@ -169,7 +170,6 @@ class Valify {
             });
         } else {
             if (this.errors.message !== '') {
-                //if(this.errors.fields.length <=3)
                 throw new ValifyError(this.errors.message, this.errors.fields);
             }else
                 return data;
@@ -253,7 +253,7 @@ class Valify {
      */
     applyConvert(field, data) {
         if (be.function(this.model[field].convert))
-            data[field] = this.model[field].convert.call(this, data[field], Object.assign({}, data));
+            data[field] = this.model[field].convert.call(this, data[field], clone(data));
     }
 
     /**
@@ -331,7 +331,7 @@ class Valify {
             } else {
                 try {
 
-                    if (!Valify.stringAsError(type.call(this, data[field], Object.assign({}, data), be))) {
+                    if (!Valify.stringAsError(type.call(this, data[field], clone(data), be))) {
                         if (be.object(parent)) {
                             field = parent.field;
                             data = parent.data;
