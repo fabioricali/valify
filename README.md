@@ -128,7 +128,7 @@ const data = {
 };
 
 try {
-    userModel(data); //=> {name: 'Mike Ricali', role: 'editor'}
+    userModel(data); //=> {name: 'Mike Ricali'}
 } catch(e) {
     console.log(e.message, e.fields);
 }
@@ -142,13 +142,15 @@ It's possible also add nested model, for example you could have an array field l
 const userModel = new Valify({
     firstName: 'string',
     lastName: 'string',
-    records: [new Valify({
-        id: 'int',
-        accessOn: 'date',
-        otherNested: new Valify({
-            color: 'string'
+    records: [
+        new Valify({
+            id: 'int',
+            accessOn: 'date',
+            otherNested: new Valify({
+                color: 'string'
+            })
         })
-    })]
+    ]
 });
 
 // A data object
