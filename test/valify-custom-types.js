@@ -112,6 +112,43 @@ describe('valify-custom-types', function () {
             }
         ]);
 
-        console.log(Model.TYPES)
+        be.err.true(Model.typeExists('myType10'));
+        be.err.true(Model.typeExists('myType20'));
+    });
+
+    it('add multiple types, wrong types object, should be return an error', function (done) {
+        try {
+            Model.addTypes(() => true);
+        } catch (e) {
+            if (e.message === 'types must be an array')
+                done();
+        }
+    });
+
+    it('add multiple types, wrong name type, should be return an error', function (done) {
+        try {
+            Model.addTypes([
+                {
+                }
+            ]);
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'name must be a string')
+                done();
+        }
+    });
+
+    it('add multiple types, wrong fn type, should be return an error', function (done) {
+        try {
+            Model.addTypes([
+                {
+                    name: 'myTypee'
+                }
+            ]);
+        } catch (e) {
+            console.log(e.message);
+            if (e.message === 'fn must be a function')
+                done();
+        }
     });
 });
