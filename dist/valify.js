@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.0.2  
+// [AIV]  Valify Build version: 4.1.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -7238,6 +7238,8 @@ var Valify = function () {
     }, {
         key: 'addType',
         value: function addType(name, fn) {
+            if (!be.string(name)) throw new TypeError('name must be a string');
+
             if (be.emptyString(name)) throw new Error('Name cannot be empty');
 
             if (Valify.typeExists(name)) throw new Error('Type ' + name + ' already exists');
@@ -7245,6 +7247,24 @@ var Valify = function () {
             if (!be.function(fn)) throw new TypeError('fn must be a function');
 
             check[name] = fn.bind(this);
+        }
+
+        /**
+         * Adds multiple types
+         * @param types
+         */
+
+    }, {
+        key: 'addTypes',
+        value: function addTypes() {
+            var types = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+            if (!be.array(types)) throw new TypeError('types must be an array');
+
+            types.forEach(function (type) {
+                if (!be.object(type)) throw new TypeError('type must be an object');
+                Valify.addType(type.name, type.fn);
+            });
         }
 
         /**
