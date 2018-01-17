@@ -474,6 +474,9 @@ class Valify {
      * @param fn
      */
     static addType(name, fn) {
+        if (!be.string(name))
+            throw new TypeError('name must be a string');
+
         if (be.emptyString(name))
             throw new Error('Name cannot be empty');
 
@@ -484,6 +487,21 @@ class Valify {
             throw new TypeError('fn must be a function');
 
         check[name] = fn.bind(this);
+    }
+
+    /**
+     * Adds multiple types
+     * @param types
+     */
+    static addTypes(types = []) {
+        if (!be.array(types))
+            throw new TypeError('types must be an array');
+
+        types.forEach(type => {
+            if (!be.object(type))
+                throw new TypeError('type must be an object');
+            Valify.addType(type.name, type.fn);
+        })
     }
 
     /**

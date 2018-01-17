@@ -99,4 +99,19 @@ describe('valify-custom-types', function () {
         });
 
     });
+
+    it('add multiple types', function () {
+        Model.addTypes([
+            {
+                name: 'myType10',
+                fn: value => value === 'hello'
+            },
+            {
+                name: 'myType20',
+                fn: value => value === 'world'
+            }
+        ]);
+
+        console.log(Model.TYPES)
+    });
 });
