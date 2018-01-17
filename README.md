@@ -306,7 +306,7 @@ Valify.addType('mycustom2', (value) => {
         return 'ops... must be 10'
 });
 
-// One methods to add several types
+// One method to add several types
 Valify.addTypes([
     {
         name: 'mycustom3',
