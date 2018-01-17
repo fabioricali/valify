@@ -292,7 +292,7 @@ console.log(data.firstName, data.lastName, data.age, typeof data.age); //=> MIKE
 ### Define custom type
 There are different ways to define custom types:
 
-##### 1) Globally, using static method `addType`
+##### 1) Globally, using static method `addType` or `addTypes` if you want add more than one type
 ```javascript
 
 Valify.addType('mycustom1', (value, data) => {
@@ -305,6 +305,18 @@ Valify.addType('mycustom2', (value) => {
     if (value !== 10)
         return 'ops... must be 10'
 });
+
+// One methods to add several types
+Valify.addTypes([
+    {
+        name: 'mycustom3',
+        fn: value => value === 'hello'
+    },
+    {
+        name: 'mycustom4',
+        fn: value => value === 'world'
+    }
+]);
 
 // Define a model
 const userModel = new Valify({
