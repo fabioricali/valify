@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.1.0  
+// [AIV]  Valify Build version: 4.1.1  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6874,6 +6874,9 @@ var Valify = function () {
             }
 
             if (!be.object(data)) this.addError(locale.DATA_REQUIRED);else {
+
+                if (typeof data.hasOwnProperty === 'undefined') throw new TypeError('Data object must be created with prototype, otherwise copy object with Object.assign({}, yourDataObject)');
+
                 for (var field in this.model) {
 
                     if (!this.model.hasOwnProperty(field)) continue;
