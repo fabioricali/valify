@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.1.1  
+// [AIV]  Valify Build version: 4.2.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6755,6 +6755,7 @@ var format = __webpack_require__(9);
 var be = __webpack_require__(0);
 var deprecate = __webpack_require__(10);
 var clone = __webpack_require__(11);
+var detectType = __webpack_require__(17);
 
 /**
  * @class Valify
@@ -6779,7 +6780,8 @@ var Valify = function () {
 
         this.opts = extend.copy(opts, {
             usePromise: false,
-            detectUnknown: false
+            detectUnknown: false,
+            autoCast: false
         });
 
         this.model = clone(model);
@@ -6886,6 +6888,8 @@ var Valify = function () {
 
                     // #1 detect short required string
                     type = this.detectShortRequired(type, field);
+
+                    if (this.opts.autoCast) Valify.castToPrimitiveType(field, data);
 
                     // #2 apply convert function
                     this.applyConvert(field, data);
@@ -7300,6 +7304,18 @@ var Valify = function () {
                 args[i] = JSON.stringify(args[i]);
             }
             return args;
+        }
+
+        /**
+         * Cast a string (where possible) to a primitive type
+         * @param field
+         * @param data
+         */
+
+    }, {
+        key: 'castToPrimitiveType',
+        value: function castToPrimitiveType(field, data) {
+            if (data.hasOwnProperty(field)) data[field] = detectType(data[field]);
         }
     }]);
 
@@ -9829,6 +9845,47 @@ var toString = {}.toString;
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stereotype = function stereotype(obj) {
+
+  if (typeof obj !== 'string') {
+    return obj;
+  }
+
+  switch (obj) {
+    case 'undefined':
+      return undefined;
+    case 'null':
+      return null;
+    case 'NaN':
+      return NaN;
+    case 'Infinity':
+      return Infinity;
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+  }
+
+  var num = parseFloat(obj);
+  if (!isNaN(num) && isFinite(obj)) {
+    if (obj.toLowerCase().indexOf('0x') === 0) {
+      return parseInt(obj, 16);
+    }
+    return num;
+  }
+
+  return obj;
+};
+
+exports = module.exports = stereotype;
 
 /***/ })
 /******/ ]);
