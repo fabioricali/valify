@@ -21,6 +21,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Nested models](#nested-models)
 - [Promises](#using-promise)
 - [Detect unknown fields](#detect-unknown-fields)
+- [Auto cast](#auto-cast)
 - [Manipulate data](#manipulate-data)
 - [Define custom types](#define-custom-type)
     - [Use multiple rules together](#use-multiple-rules-together)
@@ -253,6 +254,41 @@ try {
     })
 } catch (e) {
     console.log(e.message); //Unknown fields were detected: role, age
+}
+
+```
+
+### Auto cast
+Sometimes you may need to cast a string (where possible) to a primitive type. You can set `autoCast` to true.
+
+```javascript
+
+const userModel = new Valify({
+    firstName: 'string',
+    lastName: 'string',
+    email: 'email',
+    aBoolean: 'boolean',
+    aNumber: 'number',
+    aUndefined: 'undefined',
+    aNull: 'null'
+}, {
+    autoCast: true
+});
+
+try {
+    userModel({
+        firstName: 'Mike',
+        lastName: 'Storm',
+        email: 'test@test.net',
+        role: 'admin',
+        aBoolean: 'true',
+        aNumber: '52',
+        aUndefined: 'undefined',
+        aNull: 'null'
+    })
+    //... done
+} catch (e) {
+    
 }
 
 ```
