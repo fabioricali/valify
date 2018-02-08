@@ -662,9 +662,10 @@ describe('valify', function () {
                 lastName: 'string'
             });
             userModel(data);
-            done();
+            done('error');
         }catch (e) {
-            done(e.message);
+            console.log(e.message);
+            done();
         }
 
     });

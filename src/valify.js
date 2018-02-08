@@ -116,6 +116,10 @@ class Valify {
         if (!be.object(data))
             this.addError(locale.DATA_REQUIRED);
         else {
+
+            if (typeof data.hasOwnProperty === 'undefined')
+                throw new TypeError('Data object must be created with prototype, otherwise copy object with Object.assign({}, yourDataObject)');
+
             for (let field in this.model) {
 
                 if (!this.model.hasOwnProperty(field))
