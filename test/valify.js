@@ -650,4 +650,23 @@ describe('valify', function () {
 
     });
 
+    it('data without proto', function (done) {
+
+        try {
+            const data = Object.create(null);
+            data.firstName = 'Mike';
+            data.lastName = 'Red';
+
+            const userModel = new Model({
+                firstName: 'string',
+                lastName: 'string'
+            });
+            userModel(data);
+            done();
+        }catch (e) {
+            done(e.message);
+        }
+
+    });
+
 });
