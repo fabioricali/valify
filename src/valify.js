@@ -7,6 +7,7 @@ const format = require('string-template');
 const be = require('bejs');
 const deprecate = require('depreca');
 const clone = require('clone');
+const detectType = require('stereotype');
 
 /**
  * @class Valify
@@ -29,7 +30,8 @@ class Valify {
 
         this.opts = extend.copy(opts, {
             usePromise: false,
-            detectUnknown: false
+            detectUnknown: false,
+            autoCast: false
         });
 
         this.model = clone(model);
@@ -130,6 +132,9 @@ class Valify {
 
                 // #1 detect short required string
                 type = this.detectShortRequired(type, field);
+
+                if (this.opts.autoCast)
+                    Valify.castToPrimitiveType(field, data);
 
                 // #2 apply convert function
                 this.applyConvert(field, data);
@@ -535,6 +540,15 @@ class Valify {
         return args;
     }
 
+    /**
+     * Cast a string (where possible) to a primitive type
+     * @param field
+     * @param data
+     */
+    static castToPrimitiveType(field, data) {
+        if (data.hasOwnProperty(field))
+            data[field] = detectType(data[field]);
+    }
 }
 
 module.exports = Valify;
