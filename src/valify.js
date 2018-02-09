@@ -262,7 +262,7 @@ class Valify {
      */
     applyConvert(field, data) {
         if (be.function(this.model[field].convert))
-            data[field] = this.model[field].convert.call(this, data[field], clone(data));
+            data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
     }
 
     /**
