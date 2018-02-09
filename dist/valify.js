@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.2.0  
+// [AIV]  Valify Build version: 4.2.1  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -7018,7 +7018,7 @@ var Valify = function () {
     }, {
         key: 'applyConvert',
         value: function applyConvert(field, data) {
-            if (be.function(this.model[field].convert)) data[field] = this.model[field].convert.call(this, data[field], clone(data));
+            if (be.function(this.model[field].convert)) data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
         }
 
         /**
