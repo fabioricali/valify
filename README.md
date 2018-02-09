@@ -325,6 +325,12 @@ userModel(data);
 console.log(data.firstName, data.lastName, data.age, typeof data.age); //=> MIKE RICALI 25 number
 ```
 
+- Convert function returns: 
+    - `value`, current value
+    - `data`, a copy of origin data object
+    - `be`, a library used for several validations. More info on <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>
+    
+
 ### Define custom type
 There are different ways to define custom types:
 
