@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.2.1] - 2018-02-09
+- **Added** `bejs` as argument to `convert` function
+
 [4.2.0] - 2018-02-08
 - **Added** `autoCast` option to model definition, now it's possible cast a string (where possible) to a primitive type
 
