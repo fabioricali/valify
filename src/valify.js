@@ -1,3 +1,4 @@
+require('./polyfill');
 const ValifyError = require('./error');
 const check = require('./check-types');
 const types = require('./types');
