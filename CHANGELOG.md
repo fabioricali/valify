@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.2.3] - 2018-02-22
+- **Added** polyfill endsWith
+
 [4.2.2] - 2018-02-22
-- **Added** polyfill object assign
+- **Added** polyfill Object.assign
 
 [4.2.1] - 2018-02-09
 - **Added** `bejs` as argument to `convert` function
