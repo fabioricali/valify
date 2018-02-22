@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.2.1  
+// [AIV]  Valify Build version: 4.2.2  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6746,16 +6746,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ValifyError = __webpack_require__(5);
-var check = __webpack_require__(6);
+__webpack_require__(5);
+var ValifyError = __webpack_require__(6);
+var check = __webpack_require__(7);
 var types = __webpack_require__(2);
-var locale = Object.assign({}, __webpack_require__(7));
-var extend = __webpack_require__(8);
-var format = __webpack_require__(9);
+var locale = Object.assign({}, __webpack_require__(8));
+var extend = __webpack_require__(9);
+var format = __webpack_require__(10);
 var be = __webpack_require__(0);
-var deprecate = __webpack_require__(10);
-var clone = __webpack_require__(11);
-var detectType = __webpack_require__(17);
+var deprecate = __webpack_require__(11);
+var clone = __webpack_require__(12);
+var detectType = __webpack_require__(18);
 
 /**
  * @class Valify
@@ -7333,6 +7334,47 @@ module.exports.LOCALE = locale;
 "use strict";
 
 
+if (!Object.assign) {
+    Object.defineProperty(Object, 'assign', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function value(target, firstSource) {
+            'use strict';
+
+            if (target === undefined || target === null) {
+                throw new TypeError('Cannot convert first argument to object');
+            }
+
+            var to = Object(target);
+            for (var i = 1; i < arguments.length; i++) {
+                var nextSource = arguments[i];
+                if (nextSource === undefined || nextSource === null) {
+                    continue;
+                }
+                nextSource = Object(nextSource);
+
+                var keysArray = Object.keys(Object(nextSource));
+                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                    var nextKey = keysArray[nextIndex];
+                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                    if (desc !== undefined && desc.enumerable) {
+                        to[nextKey] = nextSource[nextKey];
+                    }
+                }
+            }
+            return to;
+        }
+    });
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -7366,7 +7408,7 @@ var ValifyError = function (_Error) {
 module.exports = ValifyError;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7423,7 +7465,7 @@ check[TYPES.URL] = be.url.bind(undefined);
 module.exports = check;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7441,7 +7483,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7500,7 +7542,7 @@ module.exports.copy = copy;
 //# sourceMappingURL=defaulty.js.map
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7545,7 +7587,7 @@ function template(string) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7592,7 +7634,7 @@ module.exports.once = once;
 module.exports._list = _list;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7845,10 +7887,10 @@ var clone = function () {
 if (( false ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
   module.exports = clone;
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).Buffer, __webpack_require__(1)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer, __webpack_require__(1)(module)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7862,9 +7904,9 @@ if (( false ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
 
 
 
-var base64 = __webpack_require__(14);
-var ieee754 = __webpack_require__(15);
-var isArray = __webpack_require__(16);
+var base64 = __webpack_require__(15);
+var ieee754 = __webpack_require__(16);
+var isArray = __webpack_require__(17);
 
 exports.Buffer = Buffer;
 exports.SlowBuffer = SlowBuffer;
@@ -9589,10 +9631,10 @@ function blitBuffer(src, dst, offset, length) {
 function isnan(val) {
   return val !== val; // eslint-disable-line no-self-compare
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9622,7 +9664,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9742,7 +9784,7 @@ function fromByteArray(uint8) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9834,7 +9876,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9847,7 +9889,7 @@ module.exports = Array.isArray || function (arr) {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
