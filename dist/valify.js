@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.2.3  
+// [AIV]  Valify Build version: 4.3.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6782,7 +6782,8 @@ var Valify = function () {
         this.opts = extend.copy(opts, {
             usePromise: false,
             detectUnknown: false,
-            autoCast: false
+            autoCast: false,
+            returnImmutable: false
         });
 
         this.model = clone(model);
@@ -6880,6 +6881,8 @@ var Valify = function () {
 
                 if (typeof data.hasOwnProperty === 'undefined') throw new TypeError('Data object must be created with prototype, otherwise copy object with Object.assign({}, yourDataObject)');
 
+                data = this.opts.returnImmutable ? clone(data) : data;
+
                 for (var field in this.model) {
 
                     if (!this.model.hasOwnProperty(field)) continue;
@@ -6924,12 +6927,16 @@ var Valify = function () {
 
             if (this.opts.usePromise && !nested) {
                 return new Promise(function (resolve, reject) {
-                    if (_this.errors.message !== '') reject(_this.errors);else resolve(data);
+                    if (_this.errors.message !== '') reject(_this.errors);else {
+                        resolve(data);
+                    }
                 });
             } else {
                 if (this.errors.message !== '') {
                     throw new ValifyError(this.errors.message, this.errors.fields);
-                } else return data;
+                } else {
+                    return data;
+                }
             }
         }
 
