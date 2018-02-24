@@ -32,7 +32,8 @@ class Valify {
         this.opts = extend.copy(opts, {
             usePromise: false,
             detectUnknown: false,
-            autoCast: false
+            autoCast: false,
+            returnImmutable: false
         });
 
         this.model = clone(model);
@@ -123,6 +124,8 @@ class Valify {
             if (typeof data.hasOwnProperty === 'undefined')
                 throw new TypeError('Data object must be created with prototype, otherwise copy object with Object.assign({}, yourDataObject)');
 
+            data = this.opts.returnImmutable ? clone(data) : data;
+
             for (let field in this.model) {
 
                 if (!this.model.hasOwnProperty(field))
@@ -175,14 +178,16 @@ class Valify {
             return new Promise((resolve, reject) => {
                 if (this.errors.message !== '')
                     reject(this.errors);
-                else
+                else {
                     resolve(data);
+                }
             });
         } else {
             if (this.errors.message !== '') {
                 throw new ValifyError(this.errors.message, this.errors.fields);
-            }else
+            }else {
                 return data;
+            }
         }
     }
 
