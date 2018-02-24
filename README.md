@@ -23,6 +23,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Detect unknown fields](#detect-unknown-fields)
 - [Auto cast](#auto-cast)
 - [Manipulate data](#manipulate-data)
+- [Immutability](#immutability)
 - [Define custom types](#define-custom-type)
     - [Use multiple rules together](#use-multiple-rules-together)
     - [Arguments](#arguments-in-custom-type)
@@ -330,6 +331,30 @@ console.log(data.firstName, data.lastName, data.age, typeof data.age); //=> MIKE
     - `data`, a copy of origin data object
     - `be`, a library used for several validations. More info on <a href="https://be.js.org/docs.html"><strong>beJS</strong></a>
     
+
+### Immutability
+Valify model returns also the data that you have passed for the validation, if you want an immutable data, set `returnImmutable` to true.
+```javascript
+const userModel = new Valify({
+    firstName: 'string',
+    lastName: {
+        type: 'string',
+        convert: value => value.toUpperCase()
+    },
+    email: 'email'
+}, {returnImmutable: true});
+
+const data = {
+    firstName: 'Mike',
+    lastName: 'Storm',
+    email: 'test@test.net'
+};
+
+const newData = userModel(data);
+
+console.log(data.lastName, newData.lastName);
+//=> Storm, STORM
+```
 
 ### Define custom type
 There are different ways to define custom types:
