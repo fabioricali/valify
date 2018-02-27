@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.4.1] - 2018-02-27
+- **Fixed** immutable issue on nested models
+
 [4.4.0] - 2018-02-27
 - **Added** `overwriteUndefined` option to model definition
 
