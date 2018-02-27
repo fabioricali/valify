@@ -82,14 +82,13 @@ try {
 ### Model options
 |Property|Type|Default|Description|
 |-|-|-|-|
-|`usePromise`|`boolean`|`false`|[Details](#using-promise)|
-|`detectUnknown`|`boolean`|`false`|[Details](#detect-unknown-fields)|
-|`autoCast`|`boolean`|`false`|[Details](#auto-cast)|
-|`returnImmutable`|`boolean`|`false`|[Details](#immutability)|
-|`overwriteUndefined`|`boolean`|`false`|[Details](#undefined-values)|
+|`usePromise`|`boolean`|`false`|If you need to use with Promise must just add usePromise to model settings. [Details](#using-promise)|
+|`detectUnknown`|`boolean`|`false`|If you need to define a strict model where all the fields correspond to those defined, you can set detectUnknown to true. [Details](#detect-unknown-fields)|
+|`autoCast`|`boolean`|`false`|Sometimes you may need to cast a string (where possible) to a primitive type. You can set autoCast to true. [Details](#auto-cast)|
+|`returnImmutable`|`boolean`|`false`|Valify model returns also the data that you have passed for the validation, if you want an immutable data, set returnImmutable to true. [Details](#immutability)|
+|`overwriteUndefined`|`boolean`|`false`|If you need manage undefined value with a default value, set overwriteUndefined to true, obviously works only if default is set. [Details](#undefined-values)|
 
 ### Field options
-
 |Property|Type|Default|Description|
 |-|-|-|-|
 |`type`|`object`,`array`,`string`,`function`|`null`|Type of control|
