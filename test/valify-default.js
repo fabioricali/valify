@@ -86,7 +86,7 @@ describe('valify-default', function () {
         done();
     });
 
-    it('should be return ok, extend default value, passing as var', function (done) {
+    it('should be return ok, extend default value, returnImmutable true', function (done) {
 
         const source = new Model({
             title: 'string',
@@ -94,6 +94,8 @@ describe('valify-default', function () {
                 type: 'string',
                 default: ' - '
             }
+        }, {
+            returnImmutable: true
         });
 
         const userModel = new Model({
@@ -102,7 +104,7 @@ describe('valify-default', function () {
                 type: [source]
             }
         }, {
-            //extendDefault: true
+            returnImmutable: true
         });
 
 
