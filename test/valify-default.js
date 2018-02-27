@@ -53,7 +53,6 @@ describe('valify-default', function () {
         }
     });
 
-
     it('should be return ok, extend default value', function (done) {
 
         const userModel = new Model({
@@ -66,6 +65,41 @@ describe('valify-default', function () {
                         default: ' - '
                     }
                 })]
+            }
+        }, {
+            //extendDefault: true
+        });
+
+
+        let result = userModel({
+            aNumber: 24,
+            sources: [
+                {
+                    title: 'hello'
+                }
+            ]
+        });
+
+        console.log(result);
+
+        if (result.sources[0].metadataSplitter === ' - ')
+        done();
+    });
+
+    it('should be return ok, extend default value, passing as var', function (done) {
+
+        const source = new Model({
+            title: 'string',
+            metadataSplitter: {
+                type: 'string',
+                default: ' - '
+            }
+        });
+
+        const userModel = new Model({
+            aNumber: 'int',
+            sources: {
+                type: [source]
             }
         }, {
             //extendDefault: true
