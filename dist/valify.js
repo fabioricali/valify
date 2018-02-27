@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.3.0  
+// [AIV]  Valify Build version: 4.4.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6783,7 +6783,8 @@ var Valify = function () {
             usePromise: false,
             detectUnknown: false,
             autoCast: false,
-            returnImmutable: false
+            returnImmutable: false,
+            overwriteUndefined: false
         });
 
         this.model = clone(model);
@@ -6894,6 +6895,8 @@ var Valify = function () {
                     type = this.detectShortRequired(type, field);
 
                     if (this.opts.autoCast) Valify.castToPrimitiveType(field, data);
+
+                    if (this.opts.overwriteUndefined) this.applyDefaultToUndefined(field, data);
 
                     // #2 apply convert function
                     this.applyConvert(field, data);
@@ -7027,6 +7030,18 @@ var Valify = function () {
         key: 'applyConvert',
         value: function applyConvert(field, data) {
             if (be.function(this.model[field].convert)) data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
+        }
+
+        /**
+         * Apply default value to undefined
+         * @param field
+         * @param data
+         */
+
+    }, {
+        key: 'applyDefaultToUndefined',
+        value: function applyDefaultToUndefined(field, data) {
+            if (data[field] === undefined && this.model[field].default !== undefined) data[field] = this.model[field].default;
         }
 
         /**
