@@ -125,7 +125,7 @@ class Valify {
             if (typeof data.hasOwnProperty === 'undefined')
                 throw new TypeError('Data object must be created with prototype, otherwise copy object with Object.assign({}, yourDataObject)');
 
-            data = this.opts.returnImmutable ? clone(data) : data;
+            data = this.opts.returnImmutable && !nested ? clone(data) : data;
 
             for (let field in this.model) {
 

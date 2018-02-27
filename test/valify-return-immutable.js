@@ -56,5 +56,87 @@ describe('valify-return-immutable', function () {
         be.err(done).equal(data, newData);
     });
 
+    it('should be return ok, inner record', function (done) {
 
+        const source = new Model({
+            title: {
+                type: 'string',
+                convert: value => value.toUpperCase()
+            },
+            metadataSplitter: {
+                type: 'string',
+                default: ' - '
+            }
+        }, {
+            returnImmutable: true
+        });
+
+        const userModel = new Model({
+            aNumber: 'int',
+            sources: {
+                type: [source]
+            }
+        }, {
+            returnImmutable: true
+        });
+
+
+        let o = {
+            title: 'hello'
+        };
+
+        let result = userModel({
+            aNumber: 24,
+            sources: [
+                o
+            ]
+        });
+
+        console.log(o);
+        console.log(result);
+
+        if (o.title !== result.sources[0].title && result.sources[0].metadataSplitter === ' - ')
+            done();
+    });
+
+    it('should be return ok, inner record, test 2', function (done) {
+
+        const source = new Model({
+            title: {
+                type: 'string',
+                convert: value => value.toUpperCase()
+            },
+            metadataSplitter: {
+                type: 'string',
+                default: ' - '
+            }
+        }, {
+            returnImmutable: true
+        });
+
+        const userModel = new Model({
+            aNumber: 'int',
+            sources: {
+                type: [source]
+            }
+        }, {
+            returnImmutable: true
+        });
+
+
+        let o = [{
+            title: 'hello'
+        }];
+
+        let result = userModel({
+            aNumber: 24,
+            sources: o
+        });
+
+        console.log(o);
+        console.log(result);
+
+        if (o[0].title !== result.sources[0].title && result.sources[0].metadataSplitter === ' - ')
+            done();
+    });
 });
