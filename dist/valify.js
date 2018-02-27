@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.4.0  
+// [AIV]  Valify Build version: 4.4.1  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6882,7 +6882,7 @@ var Valify = function () {
 
                 if (typeof data.hasOwnProperty === 'undefined') throw new TypeError('Data object must be created with prototype, otherwise copy object with Object.assign({}, yourDataObject)');
 
-                data = this.opts.returnImmutable ? clone(data) : data;
+                data = this.opts.returnImmutable && !nested ? clone(data) : data;
 
                 for (var field in this.model) {
 
