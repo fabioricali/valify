@@ -52,4 +52,38 @@ describe('valify-default', function () {
             done(e.message);
         }
     });
+
+
+    it('should be return ok, extend default value', function (done) {
+
+        const userModel = new Model({
+            aNumber: 'int',
+            sources: {
+                type: [new Model({
+                    title: 'string',
+                    metadataSplitter: {
+                        type: 'string',
+                        default: ' - '
+                    }
+                })]
+            }
+        }, {
+            //extendDefault: true
+        });
+
+
+        let result = userModel({
+            aNumber: 24,
+            sources: [
+                {
+                    title: 'hello'
+                }
+            ]
+        });
+
+        console.log(result);
+
+        if (result.sources[0].metadataSplitter === ' - ')
+        done();
+    });
 });
