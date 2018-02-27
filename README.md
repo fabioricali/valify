@@ -15,6 +15,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Installation](#installation)
     - [Browser](#browser)
 - [Basic usage](#basic-usage)
+- [Model options](#model-options)
 - [Field options](#field-options)
 - [Error object](#error-object)
 - [Default values](#default-values)
@@ -24,6 +25,7 @@ Valify was created to easily validate data structures. With a simple syntax it i
 - [Auto cast](#auto-cast)
 - [Manipulate data](#manipulate-data)
 - [Immutability](#immutability)
+- [Undefined values](#undefined-values)
 - [Define custom types](#define-custom-type)
     - [Use multiple rules together](#use-multiple-rules-together)
     - [Arguments](#arguments-in-custom-type)
@@ -76,6 +78,15 @@ try {
     console.log(e.message, e.fields);
 }
 ```
+
+### Model options
+|Property|Type|Default|Description|
+|-|-|-|-|
+|`usePromise`|`boolean`|`false`|[Details](#using-promise)|
+|`detectUnknown`|`boolean`|`false`|[Details](#detect-unknown-fields)|
+|`autoCast`|`boolean`|`false`|[Details](#auto-cast)|
+|`returnImmutable`|`boolean`|`false`|[Details](#immutability)|
+|`overwriteUndefined`|`boolean`|`false`|[Details](#undefined-values)|
 
 ### Field options
 
@@ -354,6 +365,30 @@ const newData = userModel(data);
 
 console.log(data.lastName, newData.lastName);
 //=> Storm, STORM
+```
+
+### Undefined values
+If you need manage undefined value with a default value, set `overwriteUndefined` to true, obviously works only if `default` is set.
+```javascript
+const userModel = new Valify({
+    aNumber: 'int',
+    lastName: {
+        type: 'string',
+        default: 'Mike'
+    }
+},{
+    overwriteUndefined: true
+});
+
+const a = ['hello'];
+
+try {
+    userModel({
+        aNumber: 24,
+        lastName: a[1] //=> index at 1 is undefined but will be applied default value "mike"
+    });
+    done();
+} catch (e) {}
 ```
 
 ### Define custom type

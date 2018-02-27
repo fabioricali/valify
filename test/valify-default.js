@@ -26,4 +26,30 @@ describe('valify-default', function () {
             done(e.message);
         }
     });
+
+    it('should be return ok, set undefined', function (done) {
+
+        const userModel = new Model({
+            aNumber: 'int',
+            lastName: {
+                type: 'string',
+                default: 'Mike',
+                required: true
+            }
+        },{
+            overwriteUndefined: true
+        });
+
+        const a = ['hello'];
+
+        try {
+            userModel({
+                aNumber: 24,
+                lastName: a[1]
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
 });

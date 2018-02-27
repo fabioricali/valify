@@ -33,7 +33,8 @@ class Valify {
             usePromise: false,
             detectUnknown: false,
             autoCast: false,
-            returnImmutable: false
+            returnImmutable: false,
+            overwriteUndefined: false
         });
 
         this.model = clone(model);
@@ -139,6 +140,9 @@ class Valify {
 
                 if (this.opts.autoCast)
                     Valify.castToPrimitiveType(field, data);
+
+                if (this.opts.overwriteUndefined)
+                    this.applyDefaultToUndefined(field, data);
 
                 // #2 apply convert function
                 this.applyConvert(field, data);
@@ -269,6 +273,16 @@ class Valify {
     applyConvert(field, data) {
         if (be.function(this.model[field].convert))
             data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
+    }
+
+    /**
+     * Apply default value to undefined
+     * @param field
+     * @param data
+     */
+    applyDefaultToUndefined(field, data) {
+        if(data[field] === undefined && this.model[field].default !== undefined)
+            data[field] = this.model[field].default;
     }
 
     /**
