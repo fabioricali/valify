@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.4.1  
+// [AIV]  Valify Build version: 4.4.2  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -7338,7 +7338,15 @@ var Valify = function () {
     }, {
         key: 'castToPrimitiveType',
         value: function castToPrimitiveType(field, data) {
-            if (data.hasOwnProperty(field)) data[field] = detectType(data[field]);
+            if (data.hasOwnProperty(field)) {
+                if (Array.isArray(data[field])) {
+                    data[field] = data[field].map(function (val) {
+                        return detectType(val);
+                    });
+                } else {
+                    data[field] = detectType(data[field]);
+                }
+            }
         }
     }]);
 
