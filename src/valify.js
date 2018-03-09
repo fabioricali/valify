@@ -566,8 +566,13 @@ class Valify {
      * @param data
      */
     static castToPrimitiveType(field, data) {
-        if (data.hasOwnProperty(field))
-            data[field] = detectType(data[field]);
+        if (data.hasOwnProperty(field)) {
+            if (Array.isArray(data[field])) {
+                data[field] = data[field].map(val => detectType(val));
+            } else {
+                data[field] = detectType(data[field]);
+            }
+        }
     }
 }
 
