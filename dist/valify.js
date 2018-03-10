@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.4.2  
+// [AIV]  Valify Build version: 4.4.3  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
