@@ -261,4 +261,86 @@ describe('valify-nested', function () {
             done(e.message);
         }
     });
+
+    it('should be return ok, required false', function (done) {
+
+        const record = new Model({
+            id: 'int',
+            name: 'string'
+        });
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: {
+                type: record,
+                required: false
+            }
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: 'Reds'
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
+    it('should be return ok, required false and array of nested', function (done) {
+
+        const record = new Model({
+            id: 'int',
+            name: 'string'
+        });
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: {
+                type: [record],
+                required: false
+            }
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: 'Reds'
+            });
+            done();
+        } catch (e) {
+            done(e.message);
+        }
+    });
+
+    it('should be return fail, required false and array of nested', function (done) {
+
+        const record = new Model({
+            id: 'int',
+            name: 'string'
+        });
+
+        const userModel = new Model({
+            firstName: 'string',
+            lastName: 'string',
+            record: {
+                type: [record],
+                required: true
+            }
+        });
+
+        try {
+            userModel({
+                firstName: 'Mike',
+                lastName: 'Reds'
+            });
+            done('error');
+        } catch (e) {
+            console.log(e);
+            done();
+        }
+    });
 });

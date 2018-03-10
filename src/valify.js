@@ -338,7 +338,7 @@ class Valify {
                         this.model[field].locale.TYPE_FAIL || locale.TYPE_FAIL, {
                             field,
                             type,
-                            dataField: JSON.stringify(data[field]),
+                            dataField: Valify.stringify(data[field]),
                             index
                         }
                     );
@@ -368,7 +368,7 @@ class Valify {
                         this.addError(
                             this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
                                 field,
-                                dataField: JSON.stringify(data[field]),
+                                dataField: Valify.stringify(data[field]),
                                 index
                             }
                         );
@@ -390,7 +390,7 @@ class Valify {
                         this.model[field].locale.TYPE_ARRAY_FAIL || locale.TYPE_ARRAY_FAIL, {
                             field,
                             type,
-                            dataField: JSON.stringify(data[field]),
+                            dataField: Valify.stringify(data[field]),
                             index
                         }
                     );
@@ -423,7 +423,7 @@ class Valify {
                             this.addError(
                                 type[i].message, {
                                     field,
-                                    dataField: JSON.stringify(data[field]),
+                                    dataField: Valify.stringify(data[field]),
                                     index
                                 }
                             );
@@ -573,6 +573,15 @@ class Valify {
                 data[field] = detectType(data[field]);
             }
         }
+    }
+
+    /**
+     * Stringify value
+     * @param value
+     * @returns {string}
+     */
+    static stringify(value) {
+        return typeof value === 'undefined' ? 'undefined' : JSON.stringify(value);
     }
 }
 
