@@ -138,31 +138,33 @@ class Valify {
                 // #1 detect short required string
                 type = this.detectShortRequired(type, field);
 
+                // #2 apply auto-cast
                 if (this.opts.autoCast)
                     Valify.castToPrimitiveType(field, data);
 
+                // #3 overwrite undefined value
                 if (this.opts.overwriteUndefined)
                     this.applyDefaultToUndefined(field, data);
 
-                // #2 apply convert function
+                // #4 apply convert function
                 this.applyConvert(field, data);
 
-                // #3 check allow null
+                // #5 check allow null
                 if (this.checkAllowNull(field, data))
                     continue;
 
-                // #4 check unknown type
+                // #6 check unknown type
                 if (this.checkUnknownType(type, field))
                     continue;
 
-                // #5 check required
+                // #7 check required
                 if (this.checkRequired(field, data))
                     continue;
 
-                // #6 check type
+                // #8 check type
                 this.checkType(type, field, data);
 
-                // #7 check empty
+                // #9 check empty
                 this.checkAllowEmpty(field, data);
             }
 
