@@ -670,4 +670,22 @@ describe('valify', function () {
 
     });
 
+    it('undefined value... message', function (done) {
+
+        const userModel = new Model({
+            lastName: 'string'
+        });
+
+        try {
+            userModel({
+                lastName: undefined
+            })
+        } catch (e) {
+            console.log(e.fields);
+            if (e.message === '"lastName" expects "string" type but receives: undefined')
+                done();
+        }
+
+    });
+
 });
