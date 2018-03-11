@@ -688,4 +688,22 @@ describe('valify', function () {
 
     });
 
+    it('null value... message', function (done) {
+
+        const userModel = new Model({
+            lastName: 'string'
+        });
+
+        try {
+            userModel({
+                lastName: null
+            })
+        } catch (e) {
+            console.log(e.fields);
+            if (e.message === '"lastName" expects "string" type but receives: null')
+                done();
+        }
+
+    });
+
 });
