@@ -115,13 +115,15 @@ describe('valify', function () {
 
     it('should be return ok, done from callback convert', function (done) {
 
+        const now = new Date();
         const userModel = new Model({
             createdOn: {
                 type: 'date',
-                default: new Date(),
+                default: now,
                 convert: (value) => {
-                    done();
-                    console.log('arg', value);
+                    if (now.toDateString() === value.toDateString())
+                        done();
+                    console.log('arg', now, value);
                 }
             },
             firstName: 'string',
@@ -130,7 +132,7 @@ describe('valify', function () {
 
         userModel({
             firstName: 'Mike',
-            lastName: 525
+            lastName: 'Ricali'
         });
 
     });

@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+[4.5.0] - 2018-06-21
+- **Changed** if value is not defined now `default` is also passed to `convert` function
+
 [4.4.4] - 2018-03-11
 - **Fixed** undefined value now is converted to string for error message
 

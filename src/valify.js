@@ -273,8 +273,12 @@ class Valify {
      * @ignore
      */
     applyConvert(field, data) {
-        if (be.function(this.model[field].convert))
-            data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
+        if (be.function(this.model[field].convert)) {
+            if(data[field] === undefined && this.model[field].default !== undefined)
+                data[field] = this.model[field].convert.call(this, this.model[field].default, clone(data), be);
+            else
+                data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
+        }
     }
 
     /**
