@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.4.4  
+// [AIV]  Valify Build version: 4.5.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -7031,7 +7031,9 @@ var Valify = function () {
     }, {
         key: 'applyConvert',
         value: function applyConvert(field, data) {
-            if (be.function(this.model[field].convert)) data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
+            if (be.function(this.model[field].convert)) {
+                if (data[field] === undefined && this.model[field].default !== undefined) data[field] = this.model[field].convert.call(this, this.model[field].default, clone(data), be);else data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
+            }
         }
 
         /**
