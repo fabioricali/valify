@@ -180,6 +180,8 @@ class Valify {
             }
         }
 
+        console.log('ooooooo')
+
         if (this.opts.usePromise && !nested) {
             return new Promise((resolve, reject) => {
                 if (this.errors.message !== '')
@@ -191,7 +193,7 @@ class Valify {
         } else {
             if (this.errors.message !== '') {
                 throw new ValifyError(this.errors.message, this.errors.fields);
-            }else {
+            } else {
                 return data;
             }
         }
@@ -227,7 +229,7 @@ class Valify {
      * @ignore
      */
     checkAllowEmpty(field, data) {
-        if (!this.model[field].allowEmpty && be.empty(data[field])){
+        if (!this.model[field].allowEmpty && be.empty(data[field])) {
             this.addError(
                 this.model[field].locale.FIELD_CANNOT_EMPTY || locale.FIELD_CANNOT_EMPTY, {field}
             );
@@ -274,7 +276,7 @@ class Valify {
      */
     applyConvert(field, data) {
         if (be.function(this.model[field].convert)) {
-            if(data[field] === undefined && this.model[field].default !== undefined)
+            if (data[field] === undefined && this.model[field].default !== undefined)
                 data[field] = this.model[field].convert.call(this, this.model[field].default, clone(data), be);
             else
                 data[field] = this.model[field].convert.call(this, data[field], clone(data), be);
@@ -287,7 +289,7 @@ class Valify {
      * @param data
      */
     applyDefaultToUndefined(field, data) {
-        if(data[field] === undefined && this.model[field].default !== undefined)
+        if (data[field] === undefined && this.model[field].default !== undefined)
             data[field] = this.model[field].default;
     }
 
@@ -356,7 +358,7 @@ class Valify {
             if (Valify.isInstance(type)) {
                 try {
                     let path = Object.assign([], this.path);
-                    if(parent)
+                    if (parent)
                         path.push(parent.field);
                     path.push(field);
                     type.call(this, data[field], path);
@@ -365,19 +367,31 @@ class Valify {
                 }
             } else {
                 try {
+                    //let func = type.call(this, data[field], clone(data), be);
 
-                    if (!Valify.stringAsError(type.call(this, data[field], clone(data), be))) {
-                        if (be.object(parent)) {
-                            field = parent.field;
-                            data = parent.data;
-                        }
-                        this.addError(
-                            this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
-                                field,
-                                dataField: Valify.stringify(data[field]),
-                                index
+                    let func = type.toString()
+
+                    if (/Promise/g.test(func)) {
+                        //console.log(type.toString())
+                        type.call(this, data[field], clone(data), be)
+                            .then()
+                            .catch(e => {
+                                console.log(e)
+                            })
+                    } else {
+                        if (!Valify.stringAsError(type.call(this, data[field], clone(data), be))) {
+                            if (be.object(parent)) {
+                                field = parent.field;
+                                data = parent.data;
                             }
-                        );
+                            this.addError(
+                                this.model[field].locale.TYPE_FAIL || locale.TYPE_FUNCTION_FAIL, {
+                                    field,
+                                    dataField: Valify.stringify(data[field]),
+                                    index
+                                }
+                            );
+                        }
                     }
                 } catch (errors) {
                     if (be.object(parent)) {
