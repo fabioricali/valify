@@ -41,8 +41,8 @@ class Valify {
 
         /**
          * Errors list
-         * @type {{last: string, fields: Array}}
          * @ignore
+         * @type {{message: string, fields: Array}}
          */
         this.errors = {
             message: '',
@@ -51,7 +51,7 @@ class Valify {
 
         this.path = [];
 
-        this._valid_ = this.valid.bind(this);
+        this._valid_ = this.opts.usePromise ? this.validPromise.bind(this) : this.valid.bind(this);
         this._valid_.owner = this;
 
         return this._valid_;
@@ -180,8 +180,6 @@ class Valify {
             }
         }
 
-        console.log('ooooooo')
-
         if (this.opts.usePromise && !nested) {
             return new Promise((resolve, reject) => {
                 if (this.errors.message !== '')
@@ -197,6 +195,26 @@ class Valify {
                 return data;
             }
         }
+    }
+
+    validPromise(data, nested) {
+        if (nested)
+            return this.valid(data, nested);
+        else
+            return new Promise(async (resolve, reject) => {
+                try {
+                    //const resultData = await this.valid(data, nested);
+                    //setTimeout(() => {
+                        if (this.errors.message !== '') {
+                            reject(new ValifyError(this.errors.message, this.errors.fields));
+                        } else {
+                            resolve(resultData);
+                        }
+                    //});
+                } catch (e) {
+                    reject(e)
+                }
+            });
     }
 
     /**
@@ -257,7 +275,7 @@ class Valify {
      * @ignore
      */
     checkUnknownType(type, field) {
-        if (!Valify.typeExists(type) && !be.function(type) && !be.array(type)) {
+        if (!Valify.typeExists(type) && !be.function(type) && !be.array(type) && !be.asyncFunction(type)) {
             this.addError(
                 locale.UNKNOWN_TYPE, {type, field}
             );
@@ -354,7 +372,7 @@ class Valify {
             } catch (errors) {
                 this.addError(errors.message, {field, index});
             }
-        } else if (be.function(type)) {
+        } else if (be.function(type) || be.asyncFunction(type)) {
             if (Valify.isInstance(type)) {
                 try {
                     let path = Object.assign([], this.path);
@@ -367,16 +385,19 @@ class Valify {
                 }
             } else {
                 try {
-                    //let func = type.call(this, data[field], clone(data), be);
-
-                    let func = type.toString()
+                    let func = type.toString();
 
                     if (/Promise/g.test(func)) {
-                        //console.log(type.toString())
                         type.call(this, data[field], clone(data), be)
                             .then()
                             .catch(e => {
-                                console.log(e)
+                                this.addError(
+                                    e, {
+                                        field,
+                                        dataField: Valify.stringify(data[field]),
+                                        index
+                                    }
+                                );
                             })
                     } else {
                         if (!Valify.stringAsError(type.call(this, data[field], clone(data), be))) {
