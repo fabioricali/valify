@@ -34,7 +34,8 @@ class Valify {
             detectUnknown: false,
             autoCast: false,
             returnImmutable: false,
-            overwriteUndefined: false
+            overwriteUndefined: false,
+            appendToError: {}
         });
 
         this.model = clone(model);
@@ -190,7 +191,7 @@ class Valify {
             });
         } else {
             if (this.errors.message !== '') {
-                throw new ValifyError(this.errors.message, this.errors.fields);
+                throw new ValifyError(this.errors.message, this.errors.fields, this.opts.appendToError);
             }else {
                 return data;
             }

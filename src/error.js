@@ -5,6 +5,7 @@ class ValifyError extends Error {
             Error.captureStackTrace(this, ValifyError);
         }
         this.fields = args[1];
+        Object.assign(this, args[2]);
     }
 }
 

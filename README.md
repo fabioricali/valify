@@ -87,6 +87,7 @@ try {
 |`autoCast`|`boolean`|`false`|Sometimes you may need to cast a string (where possible) to a primitive type. You can set autoCast to true. [Details](#auto-cast)|
 |`returnImmutable`|`boolean`|`false`|Valify model returns also the data that you have passed for the validation, if you want an immutable data, set returnImmutable to true. [Details](#immutability)|
 |`overwriteUndefined`|`boolean`|`false`|If you need manage undefined value with a default value, set overwriteUndefined to true, obviously works only if default is set. [Details](#undefined-values)|
+|`appendToError`|`object`|{}|If you need to add custom properties to error stack|
 
 ### Field options
 |Property|Type|Default|Description|
