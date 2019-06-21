@@ -1,4 +1,4 @@
-// [AIV]  Valify Build version: 4.5.0  
+// [AIV]  Valify Build version: 4.6.0  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -6784,7 +6784,8 @@ var Valify = function () {
             detectUnknown: false,
             autoCast: false,
             returnImmutable: false,
-            overwriteUndefined: false
+            overwriteUndefined: false,
+            appendToError: {}
         });
 
         this.model = clone(model);
@@ -6938,7 +6939,7 @@ var Valify = function () {
                 });
             } else {
                 if (this.errors.message !== '') {
-                    throw new ValifyError(this.errors.message, this.errors.fields);
+                    throw new ValifyError(this.errors.message, this.errors.fields, this.opts.appendToError);
                 } else {
                     return data;
                 }
@@ -7454,6 +7455,7 @@ var ValifyError = function (_Error) {
             Error.captureStackTrace(_this, ValifyError);
         }
         _this.fields = args[1];
+        Object.assign(_this, args[2]);
         return _this;
     }
 
